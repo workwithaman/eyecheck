@@ -1,0 +1,73 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { routes } from '../data/site';
+---
+
+<Layout title={"Reading Glasses Test: Find Your Strength Online | EyeCheck.app"} active="tests">
+	<div class="inner">
+	<div class="wrap crumb">Home › Eye tests › Reading glasses test</div>
+	<section class="wrap narrow" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:14px">
+	  <h1>Reading Glasses Test: What Strength Do You Need?</h1>
+	  <p class="muted">[Answer-first intro: a near-vision check at reading distance that suggests a starting strength for over-the-counter readers (+1.00 to +3.00), about 2 minutes.]</p>
+	  <span class="note">[Avatar] Medically reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	</section>
+	
+	<section class="wrap narrow" style="padding-bottom:40px">
+	  <div class="tool">
+	    <span class="eyebrow">Interactive test · React island</span>
+	    <p style="font-weight:600">Hold your device at normal reading distance ([X] cm). Tap the smallest line you can read comfortably.</p>
+	    <div style="display:flex;flex-direction:column">
+	      <div class="line"><span style="font-size:26px">[Sample sentence]</span><button class="btn">This one</button></div>
+	      <div class="line"><span style="font-size:20px">[Sample sentence]</span><button class="btn">This one</button></div>
+	      <div class="line"><span style="font-size:15px">[Sample sentence]</span><button class="btn">This one</button></div>
+	      <div class="line"><span style="font-size:11px">[Sample sentence]</span><button class="btn">This one</button></div>
+	    </div>
+	    <div class="ph" style="height:100px;border-style:dashed">[Result: “Suggested starting strength: +[X.XX]” + age context + “book an eye exam if…”]</div>
+	  </div>
+	  <p class="note" style="margin-top:12px">[Calibration note: card-size calibration for screen scale. Disclaimer.]</p>
+	</section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:16px">
+	  <span class="eyebrow">Video overview</span>
+	  <h2>Video: how to find your reading glasses strength</h2>
+	  <p class="muted">[60–90 sec: holding the device at reading distance, choosing the smallest clear line, what the suggested strength means. Reviewed by [NAME], OD.]</p>
+	  <div class="ph" style="aspect-ratio:16/9;width:100%;border-radius:12px;flex-direction:column;gap:12px">
+	    <span style="width:76px;height:76px;border-radius:38px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></span>
+	    <span>[Poster frame · 1:00]</span>
+	  </div>
+	  <div style="display:flex;flex-wrap:wrap;gap:8px 20px" class="note"><span>Captions on by default</span><span>▸ Read transcript (in HTML, expandable)</span><span>Click-to-load: no YouTube script until play</span></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:14px">
+	  <h2>Reading glasses strength by age</h2>
+	  <div style="overflow-x:auto"><table>
+	    <tr><th>Age</th><th>Typical starting strength</th></tr>
+	    <tr><td>40–44</td><td>[+X.XX]</td></tr><tr><td>45–49</td><td>[+X.XX]</td></tr><tr><td>50–59</td><td>[+X.XX]</td></tr><tr><td>60+</td><td>[+X.XX]</td></tr>
+	  </table></div>
+	  <span class="note">Values from a cited clinical source, reviewed by the optometrist.</span>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:28px">
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Signs you need reading glasses</h2><p class="muted">[Checklist: holding phone further away, eye strain, headaches]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Why near vision changes after 40</h2><p class="muted">[Presbyopia in brief; link to /blog/presbyopia-symptoms]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Readers vs prescription glasses</h2><p class="muted">[When drugstore readers are fine and when they are not]</p></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:8px">
+	  <h2 style="margin-bottom:12px">Reading glasses test FAQ</h2>
+	  <div class="faq"><span>How do I know what strength reading glasses I need?</span><span>+</span></div>
+	  <div class="faq"><span>Can wearing the wrong strength damage my eyes?</span><span>+</span></div>
+	  <div class="faq"><span>Is +1.00 or +1.50 better to start with?</span><span>+</span></div>
+	  <div class="faq"><span>Do I still need an eye exam?</span><span>+</span></div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Related tests</h2>
+	  <div class="grid3">
+	    <a href={routes.visualAcuity} class="card" style="text-decoration:none"><h3>Visual acuity test</h3><span class="note">→ /visual-acuity-test</span></a>
+	    <a href={routes.astigmatism} class="card" style="text-decoration:none"><h3>Astigmatism test</h3><span class="note">→ /astigmatism-test</span></a>
+	    <a href={routes.blog + 'how-often-eye-exam'} class="card" style="text-decoration:none"><h3>How often to get an eye exam</h3><span class="note">→ /blog/how-often-eye-exam</span></a>
+	  </div>
+	</div></section>
+	</div>
+</Layout>

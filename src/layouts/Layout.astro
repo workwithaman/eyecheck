@@ -5,11 +5,12 @@ import Footer from '../components/Footer.astro';
 
 interface Props {
 	title: string;
-	description: string;
+	description?: string;
+	noindex?: boolean;
 	active?: 'tests' | 'charts' | 'orgs' | 'blog' | 'about' | '';
 }
 
-const { title, description, active = '' } = Astro.props;
+const { title, description, noindex = false, active = '' } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
 ---
 
@@ -22,10 +23,11 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
-		<meta name="description" content={description} />
+		{description && <meta name="description" content={description} />}
+		{noindex && <meta name="robots" content="noindex, nofollow" />}
 		{canonical && <link rel="canonical" href={canonical} />}
 		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
+		{description && <meta property="og:description" content={description} />}
 		<meta property="og:type" content="website" />
 		{canonical && <meta property="og:url" content={canonical} />}
 		<link rel="preconnect" href="https://fonts.googleapis.com" />

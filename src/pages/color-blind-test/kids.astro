@@ -1,0 +1,78 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { routes } from '../../data/site';
+---
+
+<Layout title={"Color Blind Test for Kids & Preschoolers (Free) | EyeCheck.app"} active="tests">
+	<div class="inner">
+	<div class="wrap crumb">Home › Eye tests › Color blind test › For kids</div>
+	<section class="wrap narrow" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:14px">
+	  <h1>Color Blind Test for Kids and Preschoolers</h1>
+	  <p class="muted">[Answer-first intro for parents: shape-based test, no reading or numbers needed, from about age 3, takes 2 minutes with a parent sitting alongside.]</p>
+	  <span class="note">[Avatar] Medically reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	</section>
+	
+	<section class="wrap narrow" style="padding-bottom:40px">
+	  <div class="tool">
+	    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><span class="eyebrow">Interactive test · React island</span><span class="note">Picture [2] of [N]</span></div>
+	    <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:center">
+	      <div class="ph" style="width:280px;height:280px;border-radius:140px;flex:0 0 auto">[Dot plate hiding a shape]</div>
+	      <div style="flex:1 1 260px;display:flex;flex-direction:column;gap:14px">
+	        <p style="font-weight:600">Ask your child: which shape can you see?</p>
+	        <div style="display:flex;flex-wrap:wrap;gap:12px">
+	          <button class="shape"><span class="ph" style="width:40px;height:40px;border-radius:20px;padding:0"></span>Circle</button>
+	          <button class="shape"><span class="ph" style="width:40px;height:40px;padding:0"></span>Square</button>
+	          <button class="shape"><span class="ph" style="width:40px;height:40px;padding:0;font-size:10px">★</span>Star</button>
+	          <button class="shape">Nothing</button>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="ph" style="height:100px;border-style:dashed">[Parent-facing result: “No signs of color vision difficulty” / “Your child may have trouble with red-green colors: what to do next”]</div>
+	  </div>
+	  <p class="note" style="margin-top:12px">[Disclaimer. Older child or adult? → /color-blind-test]</p>
+	</section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:16px">
+	  <span class="eyebrow">Video overview</span>
+	  <h2>Video: testing your child’s color vision at home</h2>
+	  <p class="muted">[60–90 sec, filmed with a real parent and child: setting up, letting the child point to shapes, reading the result together. Reviewed by [NAME], OD.]</p>
+	  <div class="ph" style="aspect-ratio:16/9;width:100%;border-radius:12px;flex-direction:column;gap:12px">
+	    <span style="width:76px;height:76px;border-radius:38px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></span>
+	    <span>[Poster frame · 1:30]</span>
+	  </div>
+	  <div style="display:flex;flex-wrap:wrap;gap:8px 20px" class="note"><span>Captions on by default</span><span>▸ Read transcript (in HTML, expandable)</span><span>Click-to-load: no YouTube script until play</span><span>Parental consent for any child on camera</span></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>How to test your child’s color vision at home</h2>
+	  <div class="grid3">
+	    <div class="card"><span class="eyebrow">1</span><h3>Pick a calm moment</h3><p class="muted">[Good light, full brightness]</p></div>
+	    <div class="card"><span class="eyebrow">2</span><h3>Let them point</h3><p class="muted">[No hints or praise per answer]</p></div>
+	    <div class="card"><span class="eyebrow">3</span><h3>Read the result together</h3><p class="muted">[What to do next]</p></div>
+	  </div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:28px">
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Signs of color blindness in children</h2><p class="muted">[Checklist parents can recognise]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>What age can a child take a color blind test?</h2><p class="muted">[From about 3; why numbers-based tests don’t work for preschoolers]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Helping a color blind child at school</h2><p class="muted">[Tips for parents and teachers; link to /schools]</p></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:8px">
+	  <h2 style="margin-bottom:12px">Color blind test for kids: FAQ</h2>
+	  <div class="faq"><span>Can you test a 2-year-old for color blindness?</span><span>+</span></div>
+	  <div class="faq"><span>Is color blindness inherited?</span><span>+</span></div>
+	  <div class="faq"><span>Should I tell my child’s teacher?</span><span>+</span></div>
+	  <div class="faq"><span>Where can my child get a full color vision exam?</span><span>+</span></div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>More for parents</h2>
+	  <div class="grid3">
+	    <a href={routes.lazyEye} class="card" style="text-decoration:none"><h3>Lazy eye test</h3><span class="note">→ /lazy-eye-test</span></a>
+	    <a href={routes.chartPediatric} class="card" style="text-decoration:none"><h3>Pediatric eye chart</h3><span class="note">→ /eye-charts/pediatric</span></a>
+	    <a href={routes.blog + 'pediatric-vision-screening'} class="card" style="text-decoration:none"><h3>Pediatric vision screening guide</h3><span class="note">→ /blog/pediatric-vision-screening</span></a>
+	  </div>
+	</div></section>
+	</div>
+</Layout>

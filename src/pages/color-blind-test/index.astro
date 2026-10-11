@@ -1,0 +1,76 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { routes } from '../../data/site';
+---
+
+<Layout title={"Color Blind Test: Free Online Ishihara-Style Test | EyeCheck.app"} active="tests">
+	<div class="inner">
+	<div class="wrap crumb">Home › Eye tests › Color blind test</div>
+	<section class="wrap narrow" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:14px">
+	  <h1>Color Blind Test (Free Online Ishihara-Style Test)</h1>
+	  <p class="muted">[Answer-first intro, 40–60 words: checks red-green and blue-yellow color vision with [N] plates, about 3 minutes, result shows likely type.]</p>
+	  <span class="note">[Avatar] Medically reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	</section>
+	
+	<section class="wrap narrow" style="padding-bottom:40px">
+	  <div class="tool">
+	    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><span class="eyebrow">Interactive test · React island</span><span class="note">Plate [3] of [N]</span></div>
+	    <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:center">
+	      <div class="ph" style="width:300px;height:300px;border-radius:150px;flex:0 0 auto">[Dot plate]</div>
+	      <div style="flex:1 1 260px;display:flex;flex-direction:column;gap:14px">
+	        <label>What number do you see?<input type="text" inputmode="numeric"></label>
+	        <div style="display:flex;flex-wrap:wrap;gap:12px"><button class="btn solid">Next</button><button class="btn">I can’t see a number</button></div>
+	      </div>
+	    </div>
+	    <div class="ph" style="height:110px;border-style:dashed">[Result card: normal color vision / likely red-green (protan or deutan) / likely tritan + severity + see an eye doctor]</div>
+	  </div>
+	  <p class="note" style="margin-top:12px">[Screen brightness tip + disclaimer. Testing a child under 6? → /color-blind-test/kids]</p>
+	</section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:16px">
+	  <span class="eyebrow">Video overview</span>
+	  <h2>Video: how the color blind test works</h2>
+	  <p class="muted">[60–90 sec: screen brightness, reading the plates, what red-green vs blue-yellow results mean. Reviewed by [NAME], OD.]</p>
+	  <div class="ph" style="aspect-ratio:16/9;width:100%;border-radius:12px;flex-direction:column;gap:12px">
+	    <span style="width:76px;height:76px;border-radius:38px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></span>
+	    <span>[Poster frame · 1:15]</span>
+	  </div>
+	  <div style="display:flex;flex-wrap:wrap;gap:8px 20px" class="note"><span>Captions on by default</span><span>▸ Read transcript (in HTML, expandable)</span><span>Click-to-load: no YouTube script until play</span></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Types of color blindness</h2>
+	  <div class="grid3">
+	    <div class="card"><div class="ph" style="height:90px">[Color strip]</div><h3>Deutan (green-weak)</h3><p class="muted">[Most common]</p></div>
+	    <div class="card"><div class="ph" style="height:90px">[Color strip]</div><h3>Protan (red-weak)</h3><p class="muted">[Short description]</p></div>
+	    <div class="card"><div class="ph" style="height:90px">[Color strip]</div><h3>Tritan (blue-yellow)</h3><p class="muted">[Rare]</p></div>
+	  </div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:28px">
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>How the Ishihara color blind test works</h2><p class="muted">[History + how plates work; targets “ishihara color blind test”]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Red-green color blind test</h2><p class="muted">[Which plates check red-green; targets “red green color blind test”]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>What is a chroma color blind test?</h2><p class="muted">[Explain the term; targets “color blind test chroma”]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Reverse color blind test</h2><p class="muted">[Plates only color-blind people can read; targets “reverse color blind test”]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>How common is color blindness?</h2><p class="muted">[Prevalence men vs women, cited]</p></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:8px">
+	  <h2 style="margin-bottom:12px">Color blind test FAQ</h2>
+	  <div class="faq"><span>Is this color blind test free?</span><span>+</span></div>
+	  <div class="faq"><span>How accurate is an online color blind test?</span><span>+</span></div>
+	  <div class="faq"><span>Can color blindness be cured?</span><span>+</span></div>
+	  <div class="faq"><span>Why do I see a different number from my friend?</span><span>+</span></div>
+	  <div class="faq"><span>Can women be color blind?</span><span>+</span></div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Related tests</h2>
+	  <div class="grid3">
+	    <a href={routes.colorBlindKids} class="card" style="text-decoration:none"><h3>Color blind test for kids</h3><span class="note">→ /color-blind-test/kids</span></a>
+	    <a href={routes.visualAcuity} class="card" style="text-decoration:none"><h3>Visual acuity test</h3><span class="note">→ /visual-acuity-test</span></a>
+	    <a href={routes.astigmatism} class="card" style="text-decoration:none"><h3>Astigmatism test</h3><span class="note">→ /astigmatism-test</span></a>
+	  </div>
+	</div></section>
+	</div>
+</Layout>

@@ -42,6 +42,10 @@ export const routes = {
 	help: '/help',
 	privacy: '/privacy-policy',
 	terms: '/tos',
+	result: '/result',
+	thankYou: '/thank-you',
+	unsubscribe: '/unsubscribe',
+	testimonial: '/testimonial',
 };
 
 export const tests = [

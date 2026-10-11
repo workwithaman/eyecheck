@@ -1,0 +1,82 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { routes } from '../data/site';
+---
+
+<Layout title={"Visual Acuity Test: Free Online Check | EyeCheck.app"} active="tests">
+	<div class="inner">
+	<div class="wrap crumb">Home › Eye tests › Visual acuity test</div>
+	<section class="wrap narrow" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:14px">
+	  <h1>Visual Acuity Test: Check How Sharp Your Vision Is</h1>
+	  <p class="muted">[Answer-first intro, 40–60 words: what visual acuity means, what score you get (6/6, 20/20), about 5 minutes per test.]</p>
+	  <span class="note">[Avatar] Medically reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	</section>
+	
+	<section class="wrap narrow" style="padding-bottom:40px">
+	  <div class="tool">
+	    <span class="eyebrow">Interactive test · React island</span>
+	    <div style="display:flex;flex-wrap:wrap;gap:16px">
+	      <button class="card" style="flex:1 1 220px;align-items:center;font:inherit;background:var(--surface)"><div class="ph" style="width:100%;height:90px">[Shapes]</div><h3>Ages 3–7</h3></button>
+	      <button class="card" style="flex:1 1 220px;align-items:center;font:inherit;background:var(--surface)"><div class="ph" style="width:100%;height:90px">[Landolt C]</div><h3>Ages 8+</h3></button>
+	    </div>
+	    <div class="ph" style="height:200px;border-style:dashed">[Setup check (screen size, distance) then Start → Unity test full screen → result per eye in 6/x and 20/x]</div>
+	    <button class="btn solid" style="align-self:flex-start">Start visual acuity test</button>
+	  </div>
+	  <p class="note" style="margin-top:12px">[Disclaimer: a screening, not a diagnosis.]</p>
+	</section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:16px">
+	  <span class="eyebrow">Video overview</span>
+	  <h2>Video: how the visual acuity test works</h2>
+	  <p class="muted">[60–90 sec: screen calibration, sitting distance, answering the Landolt C, reading 6/x and 20/x. Reviewed by [NAME], OD.]</p>
+	  <div class="ph" style="aspect-ratio:16/9;width:100%;border-radius:12px;flex-direction:column;gap:12px">
+	    <span style="width:76px;height:76px;border-radius:38px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></span>
+	    <span>[Poster frame · 1:30]</span>
+	  </div>
+	  <div style="display:flex;flex-wrap:wrap;gap:8px 20px" class="note"><span>Captions on by default</span><span>▸ Read transcript (in HTML, expandable)</span><span>Click-to-load: no YouTube script until play</span></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>How the visual acuity test works</h2>
+	  <div class="grid3">
+	    <div class="card"><span class="eyebrow">1</span><h3>Calibrate your screen</h3><p class="muted">[Why it matters]</p></div>
+	    <div class="card"><span class="eyebrow">2</span><h3>Identify shrinking symbols</h3><p class="muted">[Landolt C: which way is the gap?]</p></div>
+	    <div class="card"><span class="eyebrow">3</span><h3>Get a score per eye</h3><p class="muted">[6/x and 20/x]</p></div>
+	  </div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:14px">
+	  <h2>What your visual acuity score means</h2>
+	  <div style="overflow-x:auto"><table>
+	    <tr><th>Score (metric)</th><th>Score (US)</th><th>What it means</th></tr>
+	    <tr><td>6/6</td><td>20/20</td><td>[Typical healthy vision]</td></tr>
+	    <tr><td>6/12</td><td>20/40</td><td>[Meaning + driving threshold note]</td></tr>
+	    <tr><td>6/60</td><td>20/200</td><td>[Meaning + see an eye doctor]</td></tr>
+	  </table></div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:28px">
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>What is visual acuity?</h2><p class="muted">[2 short paragraphs]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>What does 20/20 vision mean?</h2><p class="muted">[Snellen fraction explained]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Normal visual acuity by age</h2><p class="muted">[Children vs adults table or list]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Landolt C vs Snellen chart</h2><p class="muted">[Why we use Landolt C; link to /eye-charts/snellen]</p></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:8px">
+	  <h2 style="margin-bottom:12px">Visual acuity test FAQ</h2>
+	  <div class="faq"><span>What is a normal visual acuity score?</span><span>+</span></div>
+	  <div class="faq"><span>Can I test my visual acuity at home?</span><span>+</span></div>
+	  <div class="faq"><span>Is 20/40 vision bad?</span><span>+</span></div>
+	  <div class="faq"><span>What is the difference between an acuity test and an eye exam?</span><span>+</span></div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Related tests</h2>
+	  <div class="grid3">
+	    <a href={routes.astigmatism} class="card" style="text-decoration:none"><h3>Astigmatism test</h3><span class="note">→ /astigmatism-test</span></a>
+	    <a href={routes.readingGlasses} class="card" style="text-decoration:none"><h3>Reading glasses test</h3><span class="note">→ /reading-glasses-test</span></a>
+	    <a href={routes.chartSnellen} class="card" style="text-decoration:none"><h3>Printable Snellen chart</h3><span class="note">→ /eye-charts/snellen</span></a>
+	  </div>
+	</div></section>
+	</div>
+</Layout>

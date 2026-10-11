@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { routes } from '../data/site';
+---
+
+<Layout title={"Eye Astigmatism Test: Free Online Dial Test | EyeCheck.app"} active="tests">
+	<div class="inner">
+	<div class="wrap crumb">Home › Eye tests › Astigmatism test</div>
+	<section class="wrap narrow" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:14px">
+	  <h1>Eye Astigmatism Test (Free, Online)</h1>
+	  <p class="muted">[Answer-first intro, 40–60 words: what this test checks, that it takes about 1 minute, and that it uses the clock-dial chart eye doctors use.]</p>
+	  <span class="note">[Avatar] Medically reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	</section>
+	
+	<section class="wrap narrow" style="padding-bottom:40px">
+	  <div class="tool">
+	    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><span class="eyebrow">Interactive test · React island</span><span class="note">Step [1] of [3]</span></div>
+	    <div class="ph" style="height:340px;border-radius:8px">[Astigmatism dial / fan chart, sized to screen]</div>
+	    <p style="font-weight:600">Cover your left eye. Do any lines look darker or sharper than others?</p>
+	    <div style="display:flex;flex-wrap:wrap;gap:12px"><button class="btn">All lines look the same</button><button class="btn">Some lines look darker</button></div>
+	    <div class="ph" style="height:120px;border-style:dashed">[Step 3: red-green duochrome check. Then result card: “No signs of astigmatism” / “Possible astigmatism, see an eye doctor” + per-eye summary]</div>
+	  </div>
+	  <p class="note" style="margin-top:12px">[Disclaimer: a screening, not a diagnosis.]</p>
+	</section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:16px">
+	  <span class="eyebrow">Video overview</span>
+	  <h2>Video: how the astigmatism test works</h2>
+	  <p class="muted">[60–90 sec: what the dial shows, how to cover one eye, what “darker lines” means. Reviewed by [NAME], OD.]</p>
+	  <div class="ph" style="aspect-ratio:16/9;width:100%;border-radius:12px;flex-direction:column;gap:12px">
+	    <span style="width:76px;height:76px;border-radius:38px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></span>
+	    <span>[Poster frame · 1:00]</span>
+	  </div>
+	  <div style="display:flex;flex-wrap:wrap;gap:8px 20px" class="note"><span>Captions on by default</span><span>▸ Read transcript (in HTML, expandable)</span><span>Click-to-load: no YouTube script until play</span></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>How to take the astigmatism test at home</h2>
+	  <div class="grid3">
+	    <div class="card"><span class="eyebrow">1</span><h3>Sit about [X] cm away</h3><p class="muted">[Glasses on if you wear them]</p></div>
+	    <div class="card"><span class="eyebrow">2</span><h3>Test one eye at a time</h3><p class="muted">[Cover the other eye]</p></div>
+	    <div class="card"><span class="eyebrow">3</span><h3>Compare the lines</h3><p class="muted">[What to look for]</p></div>
+	  </div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:14px">
+	  <h2>Understanding your result</h2>
+	  <div style="display:flex;flex-wrap:wrap;gap:16px">
+	    <div class="card" style="flex:1 1 240px"><h3>All lines equal</h3><p class="muted">[What it suggests]</p></div>
+	    <div class="card" style="flex:1 1 240px"><h3>Some lines darker</h3><p class="muted">[What it suggests + book an exam]</p></div>
+	  </div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:28px">
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>What is astigmatism?</h2><p class="muted">[2 short paragraphs + simple eye diagram]</p><div class="ph" style="height:180px">[Diagram: round vs oval cornea]</div></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>How the astigmatism test chart works</h2><p class="muted">[Dial chart explained; targets “astigmatism test chart”]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>The red-green astigmatism test</h2><p class="muted">[Duochrome explained; targets “red green astigmatism test”]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Astigmatism symptoms to watch for</h2><p class="muted">[Bulleted list, 5–6 symptoms]</p></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:8px">
+	  <h2 style="margin-bottom:12px">Astigmatism test FAQ</h2>
+	  <div class="faq"><span>Can you test for astigmatism at home?</span><span>+</span></div>
+	  <div class="faq"><span>How accurate is an online astigmatism test?</span><span>+</span></div>
+	  <div class="faq"><span>What does astigmatism look like?</span><span>+</span></div>
+	  <div class="faq"><span>Can astigmatism get worse?</span><span>+</span></div>
+	  <div class="faq"><span>Do I need glasses for astigmatism?</span><span>+</span></div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Related tests</h2>
+	  <div class="grid3">
+	    <a href={routes.visualAcuity} class="card" style="text-decoration:none"><h3>Visual acuity test</h3><span class="note">→ /visual-acuity-test</span></a>
+	    <a href={routes.readingGlasses} class="card" style="text-decoration:none"><h3>Reading glasses test</h3><span class="note">→ /reading-glasses-test</span></a>
+	    <a href={routes.eyeCharts} class="card" style="text-decoration:none"><h3>Printable eye charts</h3><span class="note">→ /eye-charts</span></a>
+	  </div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center">
+	  <h2>Check your full vision next</h2><a href={routes.start} class="btn solid">Start free eye test</a>
+	</div></section>
+	</div>
+</Layout>

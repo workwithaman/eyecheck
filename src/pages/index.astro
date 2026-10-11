@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { site, routes, tests, orgs } from '../data/site';
+import { posts as blogPosts } from '../data/blog';
 
 const title = 'Free Online Eye Test & Eye Test App | EyeCheck.app';
 const description =
@@ -20,9 +21,9 @@ const testimonials = [
 ];
 
 const posts = [
-	{ topic: 'Screen time', title: 'The 20-20-20 rule for eye strain', href: routes.blog },
-	{ topic: 'Children’s vision', title: 'Pediatric vision screening: what parents should know', href: routes.blog },
-	{ topic: 'Adult vision', title: 'How often should you get an eye exam?', href: routes.blog },
+	{ topic: 'Screen time', title: 'The 20-20-20 rule for eye strain', href: routes.blog + blogPosts[0].slug },
+	{ topic: 'Children’s vision', title: 'Pediatric vision screening: what parents should know', href: routes.blog + blogPosts[1].slug },
+	{ topic: 'Adult vision', title: 'How often should you get an eye exam?', href: routes.blog + blogPosts[2].slug },
 ];
 
 const faqs = [

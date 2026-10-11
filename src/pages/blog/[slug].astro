@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { routes } from '../../data/site';
+import { posts, type Post } from '../../data/blog';
+
+export function getStaticPaths() {
+	return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+interface Props {
+	post: Post;
+}
+
+const { post } = Astro.props;
+// Only the first post is drawn in the wireframes; the rest fall back to placeholders.
+const summary = post.summary ?? '[Answer-first summary]';
+const toc = post.toc ?? ['[Section]', '[Section]', '[Section]', '[Section]', '[Section]'];
+const sections = post.sections ?? Array.from({ length: 5 }, () => ['[Section heading]', '[Body paragraph]']);
+---
+
+<Layout title={`${post.title} | EyeCheck.app`} active="blog">
+	<div class="inner">
+		<div class="wrap crumb">Home › Blog › {post.category}</div>
+		<article>
+			<header class="wrap" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:14px;max-width:860px">
+				<span class="eyebrow">{post.category}</span>
+				<h1>{post.title}</h1>
+				<p class="muted">{summary}</p>
+				<div style="display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center" class="note">
+					<span class="ph" style="width:36px;height:36px;border-radius:18px;padding:0"></span>
+					<span>By [AUTHOR]</span><span>Reviewed by [NAME], OD</span><span>Updated [DATE]</span><span>[N] min read</span>
+				</div>
+				<div class="ph" style="height:340px;border-radius:10px">[Hero image]</div>
+			</header>
+
+			<div class="wrap" style="display:flex;flex-wrap:wrap;gap:40px;padding-bottom:48px">
+				<nav class="toc" aria-label="In this article" style="flex:0 1 220px;border-top:2px solid var(--ink);padding-top:10px">
+					<span class="eyebrow">In this article</span>
+					{toc.map((item) => <a href="#">{item}</a>)}
+				</nav>
+				<div style="flex:999 1 560px;min-width:0;max-width:720px;display:flex;flex-direction:column;gap:22px">
+					<h2>{sections[0][0]}</h2><p class="muted">{sections[0][1]}</p>
+					<h2>{sections[1][0]}</h2><p class="muted">{sections[1][1]}</p>
+					<div class="ph" style="height:180px">[Inline illustration]</div>
+					<h2>{sections[2][0]}</h2><p class="muted">{sections[2][1]}</p>
+					<div class="card" style="background:var(--surface-2);flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between">
+						<div style="display:flex;flex-direction:column;gap:6px;flex:1 1 280px"><h3>Blurry or tired eyes?</h3><span class="muted">Check your vision in 5 minutes.</span></div>
+						<a href={routes.start} class="btn solid">Start free eye test</a>
+					</div>
+					<h2>{sections[3][0]}</h2><p class="muted">{sections[3][1]}</p>
+					<h2>{sections[4][0]}</h2><p class="muted">{sections[4][1]}</p>
+					<div style="border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Sources</span><p class="note">[1] [AAO …] [2] [AOA …]</p></div>
+				</div>
+			</div>
+		</article>
+
+		<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+			<h2>Related</h2>
+			<div class="grid3">
+				<a href={routes.blog} class="card"><div class="ph" style="height:120px">[Image]</div><h3>[Related post]</h3></a>
+				<a href={routes.blog} class="card"><div class="ph" style="height:120px">[Image]</div><h3>[Related post]</h3></a>
+				<a href={routes.home} class="card"><div class="ph" style="height:120px">[Tool]</div><h3>[Related test page]</h3></a>
+			</div>
+		</div></section>
+	</div>
+</Layout>

@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { routes } from '../data/site';
+---
+
+<Layout title={"How We Test: EyeCheck Methodology & Accuracy"} active="about">
+	<div class="inner">
+	<div class="wrap crumb">Home › How we test</div>
+	<section class="wrap" style="padding-top:20px;padding-bottom:32px;display:flex;flex-direction:column;gap:14px;max-width:860px;margin-left:auto;margin-right:auto">
+	  <h1>How EyeCheck Tests Your Vision</h1>
+	  <p class="muted">[Intro: what our tests are built on, who reviews them, and what an online screening can and cannot tell you.]</p>
+	  <span class="note">Reviewed by [NAME], OD · Last updated [DATE]</span>
+	  <div style="display:flex;flex-wrap:wrap;gap:16px">
+	    <div class="card" style="flex:1 1 300px"><h3>What EyeCheck is</h3><p class="muted">[A screening tool that flags possible problems]</p></div>
+	    <div class="card" style="flex:1 1 300px"><h3>What EyeCheck is not</h3><p class="muted">[Not a diagnosis, prescription or full eye exam]</p></div>
+	  </div>
+	</section>
+	
+	<section class="wrap" style="display:flex;flex-wrap:wrap;gap:40px;padding-bottom:48px">
+	  <nav class="toc" aria-label="On this page" style="flex:0 1 220px;border-top:2px solid var(--ink);padding-top:10px">
+	    <span class="eyebrow">On this page</span>
+	    <a href="#">What each test measures</a><a href="#">Screen calibration</a><a href="#">Scoring and referral</a><a href="#">Accuracy and limits</a><a href="#">Clinical review</a><a href="#">Your data</a><a href="#">Sources</a>
+	  </nav>
+	  <div style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:28px">
+	    <div class="block"><h2>What each test measures</h2>
+	      <div style="overflow-x:auto"><table>
+	        <tr><th>Test</th><th>Measures</th><th>Method</th><th>Limits</th></tr>
+	        <tr><td>Visual acuity</td><td>[Detail vision]</td><td>[Landolt C / shapes]</td><td>[ ]</td></tr>
+	        <tr><td>Astigmatism</td><td>[ ]</td><td>[Dial + duochrome]</td><td>[ ]</td></tr>
+	        <tr><td>Color vision</td><td>[ ]</td><td>[Pseudo-isochromatic plates]</td><td>[ ]</td></tr>
+	        <tr><td>Near vision</td><td>[ ]</td><td>[Reading card]</td><td>[ ]</td></tr>
+	      </table></div>
+	    </div>
+	    <div class="block"><h2>How we calibrate your screen and distance</h2><p class="muted">[Screen-size check, distance guidance, why it matters]</p><div class="ph" style="height:140px">[Diagram]</div></div>
+	    <div class="block"><h2>Scoring and when we recommend an eye exam</h2><p class="muted">[Thresholds by age group, written with the reviewer]</p></div>
+	    <div class="block"><h2>Accuracy and limitations</h2><p class="muted">[Validation evidence if any: [STUDY / INTERNAL DATA]. Known limits: lighting, screen, cooperation of young children]</p></div>
+	    <div class="block"><h2>Our clinical review process</h2><p class="muted">[Who reviews, how often, editorial policy]</p><a href={routes.medicalReview}>Meet our medical reviewer →</a></div>
+	    <div class="block"><h2>What happens to your data</h2><p class="muted">[Session deleted after 7 days unless you opt into reminders; link to privacy policy]</p></div>
+	    <div class="block" style="border-bottom:0"><h2>Sources</h2><p class="muted">[Numbered citations: AAO, AOA, peer-reviewed papers]</p></div>
+	  </div>
+	</section>
+	</div>
+</Layout>

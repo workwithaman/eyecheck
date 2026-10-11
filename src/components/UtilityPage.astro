@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+interface Props {
+	title: string;
+	heading: string;
+}
+
+const { title, heading } = Astro.props;
+---
+
+<Layout title={`${title} | EyeCheck.app`} noindex>
+	<div class="inner">
+		<section class="wrap" style="padding-top:40px;padding-bottom:56px;max-width:640px">
+			<div class="panel">
+				<h2>{heading}</h2>
+				<slot />
+			</div>
+		</section>
+	</div>
+</Layout>

@@ -1,0 +1,38 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { routes } from '../../data/site';
+---
+
+<Layout title={"Eye Health Blog: Guides for Parents & Adults | EyeCheck.app"} active="blog">
+	<div class="inner">
+	<div class="wrap crumb">Home › Blog</div>
+	<section class="wrap" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:16px">
+	  <h1>Eye Health Blog</h1>
+	  <p class="muted">[One line: practical, medically reviewed guides on vision for families.]</p>
+	  <nav aria-label="Categories" style="display:flex;flex-wrap:wrap;gap:10px">
+	    <a href="#" class="chip on">All</a><a href="#" class="chip">Children’s vision</a><a href="#" class="chip">Adult vision</a><a href="#" class="chip">Screen time</a>
+	  </nav>
+	</section>
+	
+	<section class="wrap" style="padding-bottom:28px">
+	  <a href={routes.blog + '20-20-20-rule'} class="card" style="flex-direction:row;flex-wrap:wrap;gap:28px;align-items:center">
+	    <div class="ph" style="flex:1 1 380px;height:260px">[Featured image]</div>
+	    <div style="flex:1 1 380px;display:flex;flex-direction:column;gap:10px">
+	      <span class="note">Featured · Screen time</span>
+	      <h2>The 20-20-20 Rule for Eye Strain</h2>
+	      <p class="muted">[Excerpt, 1–2 lines]</p>
+	      <span class="note">[Date] · Reviewed by [NAME], OD · [N] min read</span>
+	    </div>
+	  </a>
+	</section>
+	
+	<section class="wrap" style="padding-bottom:56px">
+	  <div class="grid3">
+	    <a href={routes.blog + 'pediatric-vision-screening'} class="card"><div class="ph" style="height:160px">[Image]</div><span class="note">Children’s vision</span><h3>Pediatric Vision Screening: What Parents Should Know</h3><span class="note">[Date] · [N] min</span></a>
+	    <a href={routes.blog + 'how-often-eye-exam'} class="card"><div class="ph" style="height:160px">[Image]</div><span class="note">Adult vision</span><h3>How Often Should You Get an Eye Exam?</h3><span class="note">[Date] · [N] min</span></a>
+	    <a href={routes.blog + 'presbyopia-symptoms'} class="card"><div class="ph" style="height:160px">[Image]</div><span class="note">Adult vision</span><h3>Presbyopia Symptoms: Signs You Need Reading Glasses</h3><span class="note">New post · [Date]</span></a>
+	  </div>
+	  <nav aria-label="Pagination" style="display:flex;gap:10px;justify-content:center;margin-top:32px"><a href="#" class="chip on">1</a><a href="#" class="chip">2</a><a href="#" class="chip">Next</a></nav>
+	</section>
+	</div>
+</Layout>

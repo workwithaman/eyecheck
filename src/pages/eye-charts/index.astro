@@ -1,0 +1,64 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { routes } from '../../data/site';
+---
+
+<Layout title={"Free Printable Eye Charts (PDF) | EyeCheck.app"} active="charts">
+	<div class="inner">
+	<div class="wrap crumb">Home › Eye charts</div>
+	<section class="wrap" style="padding-top:20px;padding-bottom:32px;display:flex;flex-wrap:wrap;gap:32px;align-items:center">
+	  <div style="flex:1 1 460px;display:flex;flex-direction:column;gap:14px">
+	    <h1>Free Printable Eye Charts (PDF)</h1>
+	    <p class="muted">[Answer-first intro: print out an eye chart for home, school or clinic use. Each chart is sized for accurate printing on Letter and A4, with instructions.]</p>
+	    <span class="note">[Avatar] Reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	  </div>
+	  <div class="ph" style="flex:1 1 340px;height:240px">[Fanned chart thumbnails]</div>
+	</section>
+	
+	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Choose a chart</h2>
+	  <div class="grid3">
+	    <div class="card"><div class="ph" style="height:180px">[Snellen thumbnail]</div><h3>Snellen eye chart</h3><p class="muted">Best for: adults, readers</p><div style="display:flex;flex-wrap:wrap;gap:8px"><a href="#" class="btn solid">Download PDF</a><a href={routes.chartSnellen} class="btn">Details</a></div></div>
+	    <div class="card"><div class="ph" style="height:180px">[10-ft thumbnail]</div><h3>10-foot eye chart</h3><p class="muted">Best for: small rooms</p><div style="display:flex;flex-wrap:wrap;gap:8px"><a href="#" class="btn solid">Download PDF</a><a href={routes.chart10Feet} class="btn">Details</a></div></div>
+	    <div class="card"><div class="ph" style="height:180px">[Pediatric thumbnail]</div><h3>Pediatric eye chart</h3><p class="muted">Best for: ages 3–6</p><div style="display:flex;flex-wrap:wrap;gap:8px"><a href="#" class="btn solid">Download PDF</a><a href={routes.chartPediatric} class="btn">Details</a></div></div>
+	    <div class="card"><div class="ph" style="height:180px">[Tumbling E thumbnail]</div><h3>Tumbling E chart</h3><p class="muted">Best for: non-readers</p><div style="display:flex;flex-wrap:wrap;gap:8px"><a href="#" class="btn solid">Download PDF</a><a href={routes.chartTumblingE} class="btn">Details</a></div></div>
+	    <div class="card" style="border-style:dashed"><div class="ph" style="height:180px">[DMV chart · phase 2]</div><h3>DMV eye chart</h3><p class="muted">Phase 2 · dmv eye chart test 2,900</p></div>
+	  </div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>How to use a printed eye chart at home</h2>
+	  <div class="grid3">
+	    <div class="card"><span class="eyebrow">1</span><h3>Print at 100% scale</h3><p class="muted">[Check the ruler line]</p></div>
+	    <div class="card"><span class="eyebrow">2</span><h3>Measure the distance</h3><p class="muted">[10 or 20 feet]</p></div>
+	    <div class="card"><span class="eyebrow">3</span><h3>Test one eye at a time</h3><p class="muted">[Record the smallest line]</p></div>
+	  </div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:14px">
+	  <h2>Which eye chart should I use?</h2>
+	  <div style="overflow-x:auto"><table>
+	    <tr><th>Chart</th><th>Distance</th><th>Who it suits</th></tr>
+	    <tr><td>Snellen</td><td>20 ft</td><td>[Adults who read letters]</td></tr>
+	    <tr><td>10-foot</td><td>10 ft</td><td>[Smaller rooms]</td></tr>
+	    <tr><td>Pediatric (LEA-style shapes)</td><td>10 ft</td><td>[Preschoolers]</td></tr>
+	    <tr><td>Tumbling E</td><td>10 / 20 ft</td><td>[Non-readers, any language]</td></tr>
+	  </table></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:14px">
+	  <h2>Free for schools, nurses and clinics</h2>
+	  <p class="muted">[Free to print and share. Link back if you use it.]</p>
+	  <div class="ph" style="height:70px;justify-content:flex-start">[Copyable “link to this chart” HTML snippet]</div>
+	  <a href={routes.schools} class="btn" style="align-self:flex-start">Vision screening for schools</a>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:8px">
+	  <h2 style="margin-bottom:12px">Printable eye chart FAQ</h2>
+	  <div class="faq"><span>How far away should an eye chart be?</span><span>+</span></div>
+	  <div class="faq"><span>Will the chart be accurate if I print it at home?</span><span>+</span></div>
+	  <div class="faq"><span>What line should I be able to read?</span><span>+</span></div>
+	  <div class="faq"><span>No printer? Can I test online instead?</span><span>+</span></div>
+	</div></section>
+	</div>
+</Layout>

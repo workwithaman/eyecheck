@@ -221,6 +221,172 @@ a.card:hover {
 	}
 }
 
+/* Inner pages: the shared skeleton patterns from the wireframes */
+.inner h1 {
+	font-size: 40px;
+	line-height: 46px;
+	letter-spacing: -0.01em;
+}
+.inner h2 {
+	font-size: 26px;
+	line-height: 32px;
+}
+.inner .sec {
+	padding: 48px 0;
+	border-top: 1px solid var(--line);
+}
+.narrow {
+	max-width: 860px;
+}
+.muted {
+	color: var(--slate);
+}
+.note {
+	font-family: var(--font-mono);
+	font-size: 12px;
+	line-height: 18px;
+	color: var(--muted);
+}
+.crumb {
+	padding-top: 18px;
+	color: var(--muted);
+	font-size: 13px;
+	line-height: 20px;
+}
+.inner .ph {
+	border: 1px solid var(--lens-line);
+}
+.inner button.card {
+	cursor: pointer;
+}
+.tool,
+.panel {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+	padding: 28px;
+	border: 2px solid var(--ink);
+	border-radius: 12px;
+}
+.panel {
+	gap: 14px;
+	border: 1px solid var(--line);
+}
+.faq,
+.q,
+.line {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 16px;
+	padding: 18px 0;
+	border-bottom: 1px solid var(--line);
+	font-weight: 600;
+}
+.q,
+.line {
+	flex-wrap: wrap;
+	gap: 12px;
+	padding: 12px 0;
+	font-weight: 400;
+}
+.grp {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding-bottom: 28px;
+}
+.block {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding-bottom: 28px;
+	border-bottom: 1px solid var(--line);
+}
+.toc a {
+	display: block;
+	padding: 8px 0;
+	font-size: 15px;
+	line-height: 22px;
+	text-decoration: none;
+}
+.chip {
+	display: inline-flex;
+	align-items: center;
+	min-height: 40px;
+	padding: 0 16px;
+	border: 1.5px solid var(--ink);
+	border-radius: 20px;
+	color: var(--ink);
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+}
+.chip.on {
+	background: var(--ink);
+	color: var(--surface);
+}
+.shape {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	min-width: 96px;
+	min-height: 96px;
+	border: 2px solid var(--ink);
+	border-radius: 12px;
+	background: var(--surface);
+	font: inherit;
+	font-weight: 600;
+}
+.inner label {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	font-size: 14px;
+	line-height: 20px;
+	font-weight: 600;
+}
+.inner input,
+.inner textarea {
+	min-height: 44px;
+	padding: 0 12px;
+	border: 1px solid var(--muted);
+	border-radius: 6px;
+	font: inherit;
+	font-weight: 400;
+}
+.inner textarea {
+	min-height: 110px;
+	padding: 10px 12px;
+}
+.inner table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 15px;
+}
+.inner td,
+.inner th {
+	padding: 10px 12px;
+	border: 1px solid var(--line);
+	text-align: left;
+	vertical-align: top;
+}
+.inner th {
+	background: var(--surface-2);
+}
+
+@media (max-width: 720px) {
+	.inner h1 {
+		font-size: 30px;
+		line-height: 36px;
+	}
+	.tool {
+		padding: 18px;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;

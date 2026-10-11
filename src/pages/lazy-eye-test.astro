@@ -1,0 +1,66 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { routes } from '../data/site';
+---
+
+<Layout title={"Lazy Eye Test: Check Your Child for Amblyopia | EyeCheck.app"} active="tests">
+	<div class="inner">
+	<div class="wrap crumb">Home › Eye tests › Lazy eye test</div>
+	<section class="wrap narrow" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:14px">
+	  <h1>Lazy Eye Test: Spot the Signs of Amblyopia Early</h1>
+	  <p class="muted">[Answer-first intro: a short checklist plus a one-eye-at-a-time vision check that can flag a difference between the eyes. Early detection matters because treatment works best in young children.]</p>
+	  <span class="note">[Avatar] Medically reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	</section>
+	
+	<section class="wrap narrow" style="padding-bottom:40px">
+	  <div class="tool">
+	    <span class="eyebrow">Part 1 · Parent checklist (React island)</span>
+	    <div style="display:flex;flex-direction:column">
+	      <div class="q"><span>Does one eye drift in or out?</span><div style="display:flex;gap:8px"><button class="btn">Yes</button><button class="btn">No</button></div></div>
+	      <div class="q"><span>Does your child squint or shut one eye?</span><div style="display:flex;gap:8px"><button class="btn">Yes</button><button class="btn">No</button></div></div>
+	      <div class="q"><span>Do they tilt their head to look at things?</span><div style="display:flex;gap:8px"><button class="btn">Yes</button><button class="btn">No</button></div></div>
+	      <div class="q"><span>[2–3 more reviewed questions]</span><div style="display:flex;gap:8px"><button class="btn">Yes</button><button class="btn">No</button></div></div>
+	    </div>
+	    <span class="eyebrow">Part 2 · Check each eye</span>
+	    <div class="ph" style="height:110px;border-style:dashed">[Runs the shapes acuity test one eye at a time. Flags a gap of 2+ lines between eyes.]</div>
+	    <button class="btn solid" style="align-self:flex-start">Start eye-by-eye check</button>
+	    <div class="ph" style="height:80px;border-style:dashed">[Result: “No signs found” / “Book a children’s eye exam”: never says “your child has amblyopia”]</div>
+	  </div>
+	</section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:16px">
+	  <span class="eyebrow">Video overview</span>
+	  <h2>Video: spotting a lazy eye in your child</h2>
+	  <p class="muted">[60–90 sec: the warning signs to watch for, running the eye-by-eye check, when to book a children’s eye exam. Reviewed by [NAME], OD.]</p>
+	  <div class="ph" style="aspect-ratio:16/9;width:100%;border-radius:12px;flex-direction:column;gap:12px;background:#e2e2e2">
+	    <span style="width:76px;height:76px;border-radius:38px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></span>
+	    <span>[Poster frame · 1:30]</span>
+	  </div>
+	  <div style="display:flex;flex-wrap:wrap;gap:8px 20px" class="note"><span>Captions on by default</span><span>▸ Read transcript (in HTML, expandable)</span><span>Click-to-load: no YouTube script until play</span><span>Parental consent for any child on camera</span></div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:28px">
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>What is a lazy eye (amblyopia)?</h2><p class="muted">[2 short paragraphs + diagram]</p><div class="ph" style="height:160px">[Diagram]</div></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Signs of lazy eye in children</h2><p class="muted">[Checklist with short explanations]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Lazy eye vs crossed eyes</h2><p class="muted">[Amblyopia vs strabismus]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Why early treatment matters</h2><p class="muted">[Treatment window, patching and glasses in brief, cited]</p></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:8px">
+	  <h2 style="margin-bottom:12px">Lazy eye test FAQ</h2>
+	  <div class="faq"><span>At what age should a child be checked for lazy eye?</span><span>+</span></div>
+	  <div class="faq"><span>Can adults have a lazy eye?</span><span>+</span></div>
+	  <div class="faq"><span>Can a lazy eye be fixed?</span><span>+</span></div>
+	  <div class="faq"><span>Can an online test diagnose amblyopia?</span><span>+</span></div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>More for parents</h2>
+	  <div class="grid3">
+	    <a href={routes.colorBlindKids} class="card" style="text-decoration:none"><h3>Color blind test for kids</h3><span class="note">→ /color-blind-test/kids</span></a>
+	    <a href={routes.chartPediatric} class="card" style="text-decoration:none"><h3>Pediatric eye chart</h3><span class="note">→ /eye-charts/pediatric</span></a>
+	    <a href={routes.schools} class="card" style="text-decoration:none"><h3>For schools</h3><span class="note">→ /schools</span></a>
+	  </div>
+	</div></section>
+	</div>
+</Layout>

@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { routes } from '../data/site';
+---
+
+<Layout title={"Start Your Free Eye Test | EyeCheck.app"}>
+	<div class="inner">
+	<div class="wrap crumb">Home › Start eye test</div>
+	<section class="wrap" style="padding-top:20px;padding-bottom:32px;display:flex;flex-direction:column;gap:12px;max-width:860px;margin-left:auto;margin-right:auto">
+	  <h1>Start Your Free Eye Test</h1>
+	  <p class="muted">[One line: three quick steps, then the test runs full screen. About 5 minutes.]</p>
+	</section>
+	
+	<section class="wrap" style="max-width:860px;display:flex;flex-direction:column;gap:20px;padding-bottom:48px">
+	  <div class="card">
+	    <span class="eyebrow">Step 1 of 3</span>
+	    <h2>Who is taking the test?</h2>
+	    <div style="display:flex;flex-wrap:wrap;gap:16px">
+	      <button class="card" style="flex:1 1 240px;align-items:center;font:inherit;background:var(--surface);cursor:pointer"><div class="ph" style="width:100%;height:110px">[Shapes illustration]</div><h3>Child, ages 3–7</h3><span class="muted">Picture shapes</span></button>
+	      <button class="card" style="flex:1 1 240px;align-items:center;font:inherit;background:var(--surface);cursor:pointer;border-width:2px;border-color:var(--ink)"><div class="ph" style="width:100%;height:110px">[Landolt C illustration]</div><h3>Ages 8 and up</h3><span class="muted">Landolt C rings</span></button>
+	    </div>
+	  </div>
+	
+	  <div class="card">
+	    <span class="eyebrow">Step 2 of 3</span>
+	    <h2>Check your setup</h2>
+	    <div class="grid3">
+	      <div style="display:flex;flex-direction:column;gap:8px"><div class="ph" style="height:100px">[Screen size icon]</div><h3>Screen [X]″ or larger</h3><p class="muted">[Laptop or desktop works best]</p></div>
+	      <div style="display:flex;flex-direction:column;gap:8px"><div class="ph" style="height:100px">[Distance icon]</div><h3>Sit [X] m away</h3><p class="muted">[How to measure]</p></div>
+	      <div style="display:flex;flex-direction:column;gap:8px"><div class="ph" style="height:100px">[Mouse icon]</div><h3>Wireless mouse or keyboard</h3><p class="muted">[To answer from a distance]</p></div>
+	    </div>
+	  </div>
+	
+	  <div class="card">
+	    <span class="eyebrow">Step 3 of 3 · optional</span>
+	    <h2>Get your report by email</h2>
+	    <div style="display:flex;flex-wrap:wrap;gap:16px">
+	      <label style="flex:1 1 240px">First name<input type="text"></label>
+	      <label style="flex:1 1 240px">Email<input type="email"></label>
+	    </div>
+	    <span class="note">Consent checkbox + privacy link. Saved via /user/save-info only after Start.</span>
+	  </div>
+	
+	  <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+	    <button class="btn solid">Start test</button>
+	    <span class="muted" style="font-size:14px">Opens full screen. Press Esc to exit.</span>
+	  </div>
+	  <div class="ph" style="height:180px;border-style:dashed">[After Start: Unity WebGL test in a full-screen overlay (shape or landolt build). Results posted to /user/update-results, then redirect to /result]</div>
+	</section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="max-width:860px;display:flex;flex-direction:column;gap:14px">
+	  <h2>Before you start</h2>
+	  <p class="muted">[3–4 short tips: wear your usual glasses, good lighting, test each eye separately.]</p>
+	  <p class="muted">No screen big enough? <a href={routes.eyeCharts}>Print an eye chart instead</a>.</p>
+	  <p class="note">[Disclaimer: screening, not a diagnosis.] Links: /how-we-test, /help</p>
+	</div></section>
+	</div>
+</Layout>

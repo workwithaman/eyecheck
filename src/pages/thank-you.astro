@@ -1,0 +1,9 @@
+---
+import UtilityPage from '../components/UtilityPage.astro';
+import { routes } from '../data/site';
+---
+
+<UtilityPage title="Thank you" heading="Thank you">
+	<p class="muted">[Confirms report sent / donation received]</p>
+	<a href={routes.home} class="btn solid" style="align-self:flex-start">Try another test</a>
+</UtilityPage>

@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { routes } from '../data/site';
+---
+
+<Layout title={"About EyeCheck.app: Free Vision Screening for Everyone (fix the audit’s title error)"} active="about">
+	<div class="inner">
+	<div class="wrap crumb">Home › About</div>
+	<section class="wrap" style="padding-top:20px;padding-bottom:44px;display:flex;flex-wrap:wrap;gap:36px;align-items:center">
+	  <div style="flex:1 1 460px;display:flex;flex-direction:column;gap:14px">
+	    <h1>About EyeCheck.app</h1>
+	    <p class="muted">[Mission in 2 sentences: free vision screening anyone can access, so problems are caught early.]</p>
+	  </div>
+	  <div class="ph" style="flex:1 1 380px;height:280px">[Image: our story]</div>
+	</section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:12px">
+	  <h2>Our story</h2><p class="muted">[Why EyeCheck was started, by whom, key milestones]</p>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Who’s behind EyeCheck</h2>
+	  <div class="grid3">
+	    <div class="card"><div class="ph" style="height:140px">[Photo]</div><h3>[Founder name]</h3><span class="muted">[Role]</span></div>
+	    <div class="card"><div class="ph" style="height:140px">[Photo]</div><h3>[Medical reviewer]</h3><span class="muted">[OD] · <a href="#">Profile</a></span></div>
+	    <div class="card"><div class="ph" style="height:140px">[Logo]</div><h3>[Partner organisation]</h3><span class="muted">[Role]</span></div>
+	  </div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Our impact</h2>
+	  <div style="display:flex;flex-wrap:wrap;gap:20px">
+	    <div class="card" style="flex:1 1 220px"><span style="font-size:36px;font-weight:700">[N]</span><span class="muted">People screened</span></div>
+	    <div class="card" style="flex:1 1 220px"><span style="font-size:36px;font-weight:700">[N]</span><span class="muted">Referred to an eye doctor</span></div>
+	    <div class="card" style="flex:1 1 220px"><span style="font-size:36px;font-weight:700">[N]</span><span class="muted">Countries</span></div>
+	  </div>
+	  <div class="ph" style="height:120px">[UN Sustainable Development Goals we support: SDG 3, 4, 8, 10 icons]</div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:12px">
+	  <h2>How we keep our tests accurate</h2>
+	  <p class="muted">[2 lines + link]</p>
+	  <a href={routes.howWeTest} class="btn" style="align-self:flex-start">How we test</a>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:16px">
+	  <h2>Contact us</h2>
+	  <div style="display:flex;flex-wrap:wrap;gap:16px"><label style="flex:1 1 240px">Name<input type="text"></label><label style="flex:1 1 240px">Email<input type="email"></label></div>
+	  <label>Message<textarea></textarea></label>
+	  <button class="btn solid" style="align-self:flex-start">Send message</button>
+	  <span class="note">Or email support@eyecheck.app</span>
+	</div></section>
+	</div>
+</Layout>

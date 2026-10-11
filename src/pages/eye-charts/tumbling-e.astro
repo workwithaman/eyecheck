@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { routes } from '../../data/site';
+---
+
+<Layout title={"Tumbling E Eye Chart (Free Printable PDF) | EyeCheck.app"} active="charts">
+	<div class="inner">
+	<div class="wrap crumb">Home › Eye charts › Tumbling E chart</div>
+	<section class="wrap" style="padding-top:20px;padding-bottom:36px;display:flex;flex-wrap:wrap;gap:32px">
+	  <div class="ph" style="flex:1 1 380px;height:520px">[Tumbling E chart preview]</div>
+	  <div style="flex:1 1 380px;display:flex;flex-direction:column;gap:16px">
+	    <h1>Tumbling E Eye Chart (Free Printable PDF)</h1>
+	    <p class="muted">[Answer-first: the person points which way the “E” faces, so no reading or shared language is needed. Good for young children and community screening.]</p>
+	    <div class="card">
+	      <span class="eyebrow">Download</span>
+	      <div style="display:flex;flex-wrap:wrap;gap:10px"><a href="#" class="btn solid">10 ft · Letter</a><a href="#" class="btn solid">10 ft · A4</a><a href="#" class="btn">20 ft version</a></div>
+	      <span class="note">Print at 100% · [file size]</span>
+	    </div>
+	    <span class="note">[Avatar] Reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	  </div>
+	</section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:28px">
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>How to use a tumbling E chart</h2><p class="muted">[Hand-signal method; practise first; one eye at a time]</p><div class="ph" style="height:150px">[Illustration: four hand directions]</div></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Who the tumbling E chart is for</h2><p class="muted">[Children, non-readers, multilingual groups; link to /charity-support]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Tumbling E vs Landolt C</h2><p class="muted">[How it relates to our online test; link to /visual-acuity-test]</p></div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:8px">
+	  <h2 style="margin-bottom:12px">Tumbling E chart FAQ</h2>
+	  <div class="faq"><span>Is a tumbling E chart as accurate as a Snellen chart?</span><span>+</span></div>
+	  <div class="faq"><span>What age can use a tumbling E chart?</span><span>+</span></div>
+	  <div class="faq"><span>How do I score a tumbling E test?</span><span>+</span></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Other printable charts</h2>
+	  <div class="grid3">
+	    <a href={routes.chartPediatric} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Thumb]</div><h3>Pediatric chart</h3></a>
+	    <a href={routes.chartSnellen} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Thumb]</div><h3>Snellen chart</h3></a>
+	    <a href={routes.chart10Feet} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Thumb]</div><h3>10-foot chart</h3></a>
+	    <a href={routes.start} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Online test]</div><h3>No printer? Test online</h3></a>
+	  </div>
+	</div></section>
+	</div>
+</Layout>

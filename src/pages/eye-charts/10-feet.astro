@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { routes } from '../../data/site';
+---
+
+<Layout title={"Printable 10-Foot Eye Chart (Free PDF) | EyeCheck.app"} active="charts">
+	<div class="inner">
+	<div class="wrap crumb">Home › Eye charts › 10-foot chart</div>
+	<section class="wrap" style="padding-top:20px;padding-bottom:36px;display:flex;flex-wrap:wrap;gap:32px">
+	  <div class="ph" style="flex:1 1 380px;height:520px">[10-foot chart preview, full page]</div>
+	  <div style="flex:1 1 380px;display:flex;flex-direction:column;gap:16px">
+	    <h1>Printable 10-Foot Eye Chart (Free PDF)</h1>
+	    <p class="muted">[Answer-first: a letter chart scaled for 10 feet, so it fits a normal room. Same results as a 20-foot chart when printed at 100%.]</p>
+	    <div class="card">
+	      <span class="eyebrow">Download</span>
+	      <div style="display:flex;flex-wrap:wrap;gap:10px"><a href="#" class="btn solid">PDF · US Letter</a><a href="#" class="btn solid">PDF · A4</a></div>
+	      <span class="note">Print at 100% · check the 1-inch ruler · [file size]</span>
+	    </div>
+	    <span class="note">[Avatar] Reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	  </div>
+	</section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:28px">
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>How to set up a 10-foot eye test</h2><p class="muted">[Measure 10 ft, eye-level, lighting, one eye at a time]</p><div class="ph" style="height:150px">[Room setup diagram]</div></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>10-foot vs 20-foot eye charts</h2><p class="muted">[Why the scaled chart gives equivalent results; link to /eye-charts/snellen]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Reading your results</h2><p class="muted">[Line-to-score table; link to /visual-acuity-test]</p></div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:8px">
+	  <h2 style="margin-bottom:12px">10-foot eye chart FAQ</h2>
+	  <div class="faq"><span>Is a 10-foot eye chart as accurate as a 20-foot one?</span><span>+</span></div>
+	  <div class="faq"><span>What size should a 10-foot chart print at?</span><span>+</span></div>
+	  <div class="faq"><span>Can I use a mirror to double the distance?</span><span>+</span></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Other printable charts</h2>
+	  <div class="grid3">
+	    <a href={routes.chartSnellen} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Thumb]</div><h3>Snellen chart</h3></a>
+	    <a href={routes.chartPediatric} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Thumb]</div><h3>Pediatric chart</h3></a>
+	    <a href={routes.chartTumblingE} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Thumb]</div><h3>Tumbling E chart</h3></a>
+	    <a href={routes.start} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Online test]</div><h3>No printer? Test online</h3></a>
+	  </div>
+	</div></section>
+	</div>
+</Layout>

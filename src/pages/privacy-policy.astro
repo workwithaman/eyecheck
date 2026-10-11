@@ -1,0 +1,20 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+
+const sections = [
+	{ heading: '1. Data we collect', body: '[Legal text]' },
+	{ heading: '2. How we use it', body: '[Legal text]' },
+	{ heading: '3. Cookies & consent', body: '[GA4 + AdSense + Consent Mode v2 described accurately]' },
+	{ heading: '4. Retention', tocLabel: '4. Retention (7 days)', body: '[Legal text]' },
+	{ heading: '5. Children’s data', body: '[COPPA / GDPR-K wording: legal review needed]' },
+	{ heading: '6. Your rights', body: '[Legal text]' },
+	{ heading: '7. Contact', body: '[Legal text]' },
+];
+---
+
+<LegalPage
+	title="Privacy Policy"
+	crumb="Privacy policy"
+	summary="[Plain-language summary box: what we collect, why, how long, your rights]"
+	sections={sections}
+/>

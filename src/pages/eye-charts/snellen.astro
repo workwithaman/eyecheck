@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { routes } from '../../data/site';
+---
+
+<Layout title={"Printable Snellen Chart (Free PDF) | EyeCheck.app"} active="charts">
+	<div class="inner">
+	<div class="wrap crumb">Home › Eye charts › Snellen chart</div>
+	<section class="wrap" style="padding-top:20px;padding-bottom:36px;display:flex;flex-wrap:wrap;gap:32px">
+	  <div class="ph" style="flex:1 1 380px;height:520px">[Snellen chart preview, full page]</div>
+	  <div style="flex:1 1 380px;display:flex;flex-direction:column;gap:16px">
+	    <h1>Printable Snellen Chart (Free PDF)</h1>
+	    <p class="muted">[Answer-first: the standard letter chart used by eye doctors, sized to print accurately for 20 feet.]</p>
+	    <div class="card">
+	      <span class="eyebrow">Download</span>
+	      <div style="display:flex;flex-wrap:wrap;gap:10px"><a href="#" class="btn solid">PDF · US Letter</a><a href="#" class="btn solid">PDF · A4</a></div>
+	      <span class="note">Print at 100% · check the 1-inch ruler · [file size]</span>
+	    </div>
+	    <span class="note">[Avatar] Reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	  </div>
+	</section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:28px">
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>How to use a Snellen chart at home</h2><p class="muted">[Numbered steps: distance, lighting, one eye at a time, record the line]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>How to read Snellen chart results</h2><p class="muted">[20/20, 20/40 etc. explained; link to /visual-acuity-test]</p></div>
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>Snellen chart size and distance</h2><p class="muted">[Why print scale matters; 20 ft vs 10 ft version → /eye-charts/10-feet]</p></div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:8px">
+	  <h2 style="margin-bottom:12px">Snellen chart FAQ</h2>
+	  <div class="faq"><span>How far should you stand from a Snellen chart?</span><span>+</span></div>
+	  <div class="faq"><span>What line is 20/20 on a Snellen chart?</span><span>+</span></div>
+	  <div class="faq"><span>Can I use a Snellen chart on my phone screen?</span><span>+</span></div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Other printable charts</h2>
+	  <div class="grid3">
+	    <a href={routes.chart10Feet} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Thumb]</div><h3>10-foot chart</h3></a>
+	    <a href={routes.chartPediatric} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Thumb]</div><h3>Pediatric chart</h3></a>
+	    <a href={routes.chartTumblingE} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Thumb]</div><h3>Tumbling E chart</h3></a>
+	    <a href={routes.start} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Online test]</div><h3>No printer? Test online</h3></a>
+	  </div>
+	</div></section>
+	</div>
+</Layout>

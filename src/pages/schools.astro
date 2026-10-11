@@ -1,0 +1,29 @@
+---
+import AudiencePage from '../components/AudiencePage.astro';
+
+const copy = {
+	"crumb": "Schools",
+	"h1": "Free Vision Screening for Schools",
+	"intro": "[Who it’s for (teachers, school nurses), what it costs, how many students per hour.]",
+	"photo": "[Photo: classroom screening]",
+	"whyTitle": "Why screen vision in schools",
+	"howTitle": "How school screening works",
+	"steps": [
+		"Set up a station",
+		"Screen each student",
+		"Share results with parents"
+	],
+	"resourcesTitle": "Free resources for schools",
+	"story": "[Quote + school name + number of students screened]",
+	"faqTitle": "School vision screening FAQ",
+	"faqs": [
+		"Is it really free for schools?",
+		"What equipment do we need?",
+		"How is student data handled?"
+	],
+	"orgLabel": "School",
+	"sizeLabel": "Number of students"
+};
+---
+
+<AudiencePage {...copy} />

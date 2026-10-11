@@ -1,0 +1,40 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+interface Props {
+	title: string;
+	crumb: string;
+	summary: string;
+	sections: { heading: string; tocLabel?: string; body: string }[];
+}
+
+const { title, crumb, summary, sections } = Astro.props;
+---
+
+<Layout title={`${title} | EyeCheck.app`}>
+	<div class="inner">
+		<div class="wrap crumb">Home › {crumb}</div>
+		<section class="wrap" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:10px;max-width:860px;margin-left:auto;margin-right:auto">
+			<h1>{title}</h1>
+			<span class="note">Effective [DATE] · Last updated [DATE]</span>
+			<p class="muted">{summary}</p>
+		</section>
+
+		<section class="wrap" style="display:flex;flex-wrap:wrap;gap:40px;padding-bottom:56px">
+			<nav class="toc" aria-label="Sections" style="flex:0 1 220px;border-top:2px solid var(--ink);padding-top:10px">
+				<span class="eyebrow">Sections</span>
+				{sections.map((s, i) => <a href={`#section-${i + 1}`}>{s.tocLabel ?? s.heading}</a>)}
+			</nav>
+			<div style="flex:999 1 560px;min-width:0;max-width:720px;display:flex;flex-direction:column;gap:22px">
+				{
+					sections.map((s, i) => (
+						<>
+							<h2 id={`section-${i + 1}`}>{s.heading}</h2>
+							<p class="muted">{s.body}</p>
+						</>
+					))
+				}
+			</div>
+		</section>
+	</div>
+</Layout>

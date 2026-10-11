@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title={"Donate: Help Fund Free Vision Screening | EyeCheck.app"} active="orgs">
+	<div class="inner">
+	<div class="wrap crumb">Home › Donate</div>
+	<section class="wrap" style="padding-top:20px;padding-bottom:44px;display:flex;flex-wrap:wrap;gap:36px;align-items:center">
+	  <div style="flex:1 1 460px;display:flex;flex-direction:column;gap:14px">
+	    <h1>Help Fund Free Vision Screening</h1>
+	    <p class="muted">[Why donations matter, what they pay for, who benefits.]</p>
+	  </div>
+	  <div class="card" style="flex:1 1 360px">
+	    <h3>Choose an amount</h3>
+	    <div style="display:flex;flex-wrap:wrap;gap:10px"><button class="btn">$[10]</button><button class="btn">$[25]</button><button class="btn">$[50]</button><button class="btn">Other</button></div>
+	    <a href="#" class="btn solid">Donate securely with Stripe</a>
+	    <span class="note">Opens Stripe payment link · [Tax status if applicable]</span>
+	  </div>
+	</section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>What your donation does</h2>
+	  <div class="grid3">
+	    <div class="card"><span style="font-size:30px;font-weight:700">$[X]</span><p class="muted">[Screens N children]</p></div>
+	    <div class="card"><span style="font-size:30px;font-weight:700">$[X]</span><p class="muted">[Equips one school]</p></div>
+	    <div class="card"><span style="font-size:30px;font-weight:700">$[X]</span><p class="muted">[Funds a charity programme]</p></div>
+	  </div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:12px">
+	  <h2>Where the money goes</h2>
+	  <p class="muted">[Transparency: hosting, development, outreach. Who runs EyeCheck.]</p>
+	  <div class="ph" style="height:120px">[Simple breakdown bar, real figures only]</div>
+	</div></section>
+	</div>
+</Layout>

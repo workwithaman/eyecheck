@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { routes } from '../data/site';
+---
+
+<Layout title={"Your eye test results | EyeCheck.app"} noindex>
+	<div class="inner">
+	<section class="wrap" style="padding-top:48px;padding-bottom:32px;display:flex;flex-direction:column;gap:12px">
+	  <span class="eyebrow">Screening complete · [Date]</span>
+	  <h1>Your eye test results</h1>
+	  <p class="muted">[One line: what was tested (age group, chart type).]</p>
+	</section>
+	
+	<section class="wrap" style="display:flex;flex-direction:column;gap:20px;padding-bottom:40px">
+	  <div style="display:flex;flex-wrap:wrap;gap:20px">
+	    <div class="card" style="flex:1 1 300px"><span class="eyebrow">Right eye</span><span style="font-size:44px;font-weight:700">6/[X]</span><span class="muted">20/[X] (US notation)</span><span class="ph" style="height:40px">[Status: within normal range / see an eye doctor]</span></div>
+	    <div class="card" style="flex:1 1 300px"><span class="eyebrow">Left eye</span><span style="font-size:44px;font-weight:700">6/[X]</span><span class="muted">20/[X] (US notation)</span><span class="ph" style="height:40px">[Status: within normal range / see an eye doctor]</span></div>
+	  </div>
+	  <div class="card" style="background:var(--surface-2)"><h3>What your result means</h3><p class="muted">[Plain-language explanation for this score band and age group. Clear “book a full eye exam if…” guidance.]</p></div>
+	</section>
+	
+	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Keep your results</h2>
+	  <div class="grid3">
+	    <div class="card"><h3>Download PDF report</h3><p class="muted">[Generated in browser]</p><button class="btn">Download PDF</button></div>
+	    <div class="card"><h3>Email me the report</h3><label>Email<input type="email"></label><button class="btn">Send report</button><span class="note">/email/send-report</span></div>
+	    <div class="card"><h3>Remind me in 12 months</h3><label>Email<input type="email"></label><button class="btn">Set reminder</button><span class="note">/reminder/subscribe</span></div>
+	  </div>
+	  <div class="ph" style="height:90px;border-style:dashed">[Paid detailed report upsell: build ONLY if Andy confirms paid reports are live. Backend has no /payment route today.]</div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Check other parts of your vision</h2>
+	  <div class="grid3">
+	    <a href={routes.astigmatism} class="card" style="text-decoration:none"><h3>Astigmatism test</h3><span class="note">→ /astigmatism-test</span></a>
+	    <a href={routes.colorBlind} class="card" style="text-decoration:none"><h3>Color blind test</h3><span class="note">→ /color-blind-test</span></a>
+	    <a href={routes.readingGlasses} class="card" style="text-decoration:none"><h3>Reading glasses test</h3><span class="note">→ /reading-glasses-test</span></a>
+	  </div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center">
+	  <p class="muted">Found this useful? <a href={routes.testimonial}>Share your experience</a> (→ /testimonial)</p>
+	  <button class="btn">Delete my data</button>
+	</div></section>
+	</div>
+</Layout>

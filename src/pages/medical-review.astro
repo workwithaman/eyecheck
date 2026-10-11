@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { routes } from '../data/site';
+---
+
+<Layout title={"Medical Review: [NAME], OD | EyeCheck.app"} active="about">
+	<div class="inner">
+	<div class="wrap crumb">Home › About › Medical review</div>
+	<section class="wrap narrow" style="padding-top:24px;padding-bottom:36px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+	  <div class="ph" style="width:200px;height:200px;border-radius:100px;flex:0 0 auto">[Reviewer photo]</div>
+	  <div style="flex:1 1 360px;display:flex;flex-direction:column;gap:12px">
+	    <span class="eyebrow">Medical reviewer</span>
+	    <h1>[NAME], OD</h1>
+	    <p class="muted">[Role, practice, years in practice]</p>
+	    <div style="display:flex;flex-wrap:wrap;gap:8px 20px" class="note"><span>Licence: [NUMBER, STATE]</span><span>[Verify licence ↗]</span><span>[LinkedIn ↗]</span></div>
+	  </div>
+	</section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:20px">
+	  <div style="display:flex;flex-direction:column;gap:10px"><h2>About [FIRST NAME]</h2><p class="muted">[Short bio: education, clinical focus, pediatric experience]</p></div>
+	  <div class="grid3">
+	    <div class="card"><span class="eyebrow">Education</span><p class="muted">[Degree, school, year]</p></div>
+	    <div class="card"><span class="eyebrow">Specialties</span><p class="muted">[Pediatric optometry, binocular vision…]</p></div>
+	    <div class="card"><span class="eyebrow">Memberships</span><p class="muted">[AOA, state association…]</p></div>
+	  </div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:14px">
+	  <h2>What [FIRST NAME] reviews</h2>
+	  <p class="muted">[Scope: test logic, result wording, every health article before publishing and on a [12]-month cycle]</p>
+	  <div class="grid3">
+	    <a href={routes.astigmatism} class="card" style="text-decoration:none"><h3>Astigmatism test</h3><span class="note">Reviewed [DATE]</span></a>
+	    <a href={routes.colorBlind} class="card" style="text-decoration:none"><h3>Color blind test</h3><span class="note">Reviewed [DATE]</span></a>
+	    <a href="#" class="card" style="text-decoration:none"><h3>[Auto-listed: every page with this reviewer]</h3><span class="note">Generated at build time</span></a>
+	  </div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:12px">
+	  <h2>Editorial policy</h2>
+	  <p class="muted">[How content is written, reviewed, cited and updated. Conflicts of interest statement.]</p>
+	  <p class="muted">Spotted an error? <a href="#">Tell us</a> (→ contact form on /about-us)</p>
+	</div></section>
+	</div>
+</Layout>

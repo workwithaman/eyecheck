@@ -1,0 +1,92 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { routes } from '../data/site';
+
+interface Props {
+	crumb: string;
+	h1: string;
+	intro: string;
+	photo: string;
+	whyTitle: string;
+	howTitle: string;
+	steps: string[];
+	resourcesTitle: string;
+	story: string;
+	faqTitle: string;
+	faqs: string[];
+	orgLabel: string;
+	sizeLabel: string;
+}
+
+const p = Astro.props;
+---
+
+<Layout title={`${p.h1} | EyeCheck.app`} active="orgs">
+	<div class="inner">
+	<div class="wrap crumb">Home › For organisations › {p.crumb}</div>
+	<section class="wrap" style="padding-top:20px;padding-bottom:44px;display:flex;flex-wrap:wrap;gap:36px;align-items:center">
+	  <div style="flex:1 1 460px;display:flex;flex-direction:column;gap:16px">
+	    <h1>{p.h1}</h1>
+	    <p class="muted">{p.intro}</p>
+	    <div style="display:flex;flex-wrap:wrap;gap:12px"><a href="#contact" class="btn solid">Get started</a><a href={routes.start} class="btn">Try the test yourself</a></div>
+	  </div>
+	  <div class="ph" style="flex:1 1 380px;height:300px">{p.photo}</div>
+	</section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>{p.whyTitle}</h2>
+	  <div class="grid3">
+	    <div class="card"><h3>[Benefit 1]</h3><p class="muted">[Evidence-backed line + citation]</p></div>
+	    <div class="card"><h3>[Benefit 2]</h3><p class="muted">[ ]</p></div>
+	    <div class="card"><h3>[Benefit 3]</h3><p class="muted">[ ]</p></div>
+	  </div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>{p.howTitle}</h2>
+	  <div class="grid3">
+	    <div class="card"><span class="eyebrow">1</span><h3>{p.steps[0]}</h3></div>
+	    <div class="card"><span class="eyebrow">2</span><h3>{p.steps[1]}</h3></div>
+	    <div class="card"><span class="eyebrow">3</span><h3>{p.steps[2]}</h3></div>
+	  </div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>Plans</h2>
+	  <div class="ph" style="height:180px;border-style:dashed">[Port existing PricingSection only if Andy confirms current pricing. Otherwise a single “Free for schools” card.]</div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>{p.resourcesTitle}</h2>
+	  <div class="grid3">
+	    <a href={routes.chartPediatric} class="card" style="text-decoration:none"><h3>Pediatric eye chart</h3><span class="note">→ /eye-charts/pediatric</span></a>
+	    <a href={routes.colorBlindKids} class="card" style="text-decoration:none"><h3>Color blind test for kids</h3><span class="note">→ /color-blind-test/kids</span></a>
+	    <a href={routes.lazyEye} class="card" style="text-decoration:none"><h3>Lazy eye checklist</h3><span class="note">→ /lazy-eye-test</span></a>
+	  </div>
+	</div></section>
+	
+	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:20px">
+	  <h2>[Success story]</h2>
+	  <div class="card"><p class="muted">{p.story}</p></div>
+	</div></section>
+	
+	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:8px">
+	  <h2 style="margin-bottom:12px">{p.faqTitle}</h2>
+	  <div class="faq"><span>{p.faqs[0]}</span><span>+</span></div>
+	  <div class="faq"><span>{p.faqs[1]}</span><span>+</span></div>
+	  <div class="faq"><span>{p.faqs[2]}</span><span>+</span></div>
+	</div></section>
+	
+	<section id="contact" class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:16px">
+	  <h2>Talk to us</h2>
+	  <div style="display:flex;flex-wrap:wrap;gap:16px">
+	    <label style="flex:1 1 240px">Your name<input type="text"></label>
+	    <label style="flex:1 1 240px">{p.orgLabel}<input type="text"></label>
+	    <label style="flex:1 1 240px">Email<input type="email"></label>
+	    <label style="flex:1 1 240px">{p.sizeLabel}<input type="number"></label>
+	  </div>
+	  <label>Message<textarea></textarea></label>
+	  <button class="btn solid" style="align-self:flex-start">Send</button>
+	</div></section>
+	</div>
+</Layout>
