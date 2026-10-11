@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 130" width="380" height="260">
+  <title>EyeCheck – Shape match</title>
+  <circle cx="45" cy="65" r="20" fill="#2463EB"></circle>
+  <rect x="80" y="45" width="40" height="40" rx="6" fill="#FFC53D"></rect>
+  <path d="M145 45 L167 85 L123 85 Z" fill="#16A34A" stroke="#16A34A" stroke-width="4" stroke-linejoin="round"></path>
+</svg>

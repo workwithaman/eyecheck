@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 130" width="380" height="260">
+  <title>EyeCheck – Arm divider</title>
+  <circle cx="32" cy="65" r="16" fill="none" stroke="#2463EB" stroke-width="6"></circle>
+  <circle cx="68" cy="65" r="16" fill="none" stroke="#2463EB" stroke-width="6"></circle>
+  <path d="M84 65 L140 65 Q156 65 156 81 L156 95" fill="none" stroke="#2463EB" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

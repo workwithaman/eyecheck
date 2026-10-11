@@ -1,0 +1,549 @@
+---
+import { site, routes, tests, charts, orgs } from '../data/site';
+
+interface Props {
+	active?: 'tests' | 'charts' | 'orgs' | 'blog' | 'about' | '';
+}
+
+const { active = '' } = Astro.props;
+---
+
+<div class="trust">
+	<div class="wrap trust-in">
+		<div class="trust-items">
+			<span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Free, no app to download</span>
+			<span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Medically reviewed by {site.reviewer}</span>
+			<span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>{site.peopleScreened} people screened</span>
+		</div>
+		<div class="trust-links"><a href={routes.schools}>For schools</a><a href={routes.help}>Help</a></div>
+	</div>
+</div>
+
+<header class="site-header" data-header>
+	<div class="wrap bar">
+		<a href={routes.home} class="logo" aria-label="EyeCheck home">
+			<img src="/images/logo.svg" alt="EyeCheck" width="607" height="232" />
+		</a>
+
+		<nav aria-label="Main" class="nav" id="main-nav">
+			<div class="item wide" data-menu>
+				<button type="button" class:list={['link', { current: active === 'tests' }]} aria-expanded="false" aria-controls="menu-tests">
+					Eye tests<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+				</button>
+				<div class="panel" id="menu-tests">
+					<div class="tests">
+						{
+							tests.map((t) => (
+								<a href={t.href} class="test">
+									<span class:list={['thumb', { kids: t.kids }]}>
+										<img src={t.img} alt="" width="50" height="34" loading="lazy" />
+									</span>
+									<span class="text">
+										<b>{t.title}</b>
+										<span class="desc">{t.menu}</span>
+									</span>
+								</a>
+							))
+						}
+					</div>
+					<div class="promo">
+						<span class="eyebrow">Most popular</span>
+						<b>Full online eye test</b>
+						<span class="desc">Both eyes, about 5 minutes, results you can download.</span>
+						<a href={routes.start} class="btn solid">Start free eye test</a>
+						<a href={routes.howWeTest} class="promo-link">How we test →</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="item" data-menu>
+				<button type="button" class:list={['link', { current: active === 'charts' }]} aria-expanded="false" aria-controls="menu-charts">
+					Eye charts<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+				</button>
+				<div class="panel list" id="menu-charts">
+					{
+						charts.map((c) => (
+							<a href={c.href} class="row">
+								<b>{c.title}</b>
+								<span class="pdf">PDF</span>
+							</a>
+						))
+					}
+					<a href={routes.eyeCharts} class="all">All printable charts →</a>
+				</div>
+			</div>
+
+			<div class="item" data-menu>
+				<button type="button" class:list={['link', { current: active === 'orgs' }]} aria-expanded="false" aria-controls="menu-orgs">
+					For organisations<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+				</button>
+				<div class="panel list" id="menu-orgs">
+					{
+						orgs.map((o) => (
+							<a href={o.href} class="row stack">
+								<b>{o.menuTitle}</b>
+								<span class="desc">{o.menu}</span>
+							</a>
+						))
+					}
+					<a href={routes.donation} class="all">Support our work: Donate →</a>
+				</div>
+			</div>
+
+			<a href={routes.blog} class:list={['link', { current: active === 'blog' }]}>Blog</a>
+			<a href={routes.about} class:list={['link', { current: active === 'about' }]}>About</a>
+
+			<div class="nav-cta"><a href={routes.start} class="btn solid">Start free eye test</a></div>
+		</nav>
+
+		<a href={routes.start} class="btn solid cta">
+			<span class="long">Start free eye test</span><span class="short">Start test</span>
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+		</a>
+
+		<button type="button" class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav" data-burger>
+			<svg class="i-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+			<svg class="i-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+		</button>
+	</div>
+</header>
+
+<script>
+	const header = document.querySelector<HTMLElement>('[data-header]');
+	if (header) {
+		const items = [...header.querySelectorAll<HTMLElement>('[data-menu]')];
+		const burger = header.querySelector<HTMLButtonElement>('[data-burger]');
+
+		const setOpen = (item: HTMLElement, open: boolean) => {
+			item.classList.toggle('open', open);
+			item.querySelector('button')?.setAttribute('aria-expanded', String(open));
+		};
+		const closeAll = (except?: HTMLElement) => items.forEach((i) => i !== except && setOpen(i, false));
+		const setMobile = (open: boolean) => {
+			header.classList.toggle('menu-open', open);
+			burger?.setAttribute('aria-expanded', String(open));
+			burger?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+		};
+
+		items.forEach((item) => {
+			item.querySelector('button')?.addEventListener('click', () => {
+				const open = !item.classList.contains('open');
+				closeAll(item);
+				setOpen(item, open);
+			});
+			item.addEventListener('mouseenter', () => closeAll(item));
+		});
+
+		burger?.addEventListener('click', () => setMobile(!header.classList.contains('menu-open')));
+
+		document.addEventListener('keydown', (e) => {
+			if (e.key !== 'Escape') return;
+			const open = items.find((i) => i.classList.contains('open'));
+			if (open) {
+				setOpen(open, false);
+				open.querySelector('button')?.focus();
+			} else if (header.classList.contains('menu-open')) {
+				setMobile(false);
+				burger?.focus();
+			}
+		});
+
+		document.addEventListener('click', (e) => {
+			if (!header.contains(e.target as Node)) closeAll();
+		});
+	}
+</script>
+
+<style>
+	.trust {
+		background: var(--lens);
+		font-size: 13px;
+		line-height: 20px;
+		font-weight: 500;
+	}
+	.trust-in {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		gap: 6px 24px;
+		padding-top: 8px;
+		padding-bottom: 8px;
+	}
+	.trust-items {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px 20px;
+	}
+	.trust-items span {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+	.trust-items svg {
+		color: var(--green);
+	}
+	.trust-links {
+		display: flex;
+		gap: 18px;
+	}
+
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: var(--surface);
+		border-bottom: 1px solid var(--line);
+	}
+	.bar {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 40px;
+		height: 72px;
+	}
+	.logo {
+		display: flex;
+		flex: 0 0 auto;
+	}
+	.logo img {
+		display: block;
+		height: 46px;
+		width: auto;
+	}
+
+	.nav {
+		display: flex;
+		flex: 1;
+		gap: 28px;
+		height: 100%;
+		font-size: 15px;
+	}
+	.item {
+		position: relative;
+		display: flex;
+	}
+	.item.wide {
+		position: static;
+	}
+	.link {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		padding: 0;
+		border: 0;
+		border-top: 3px solid transparent;
+		border-bottom: 3px solid transparent;
+		background: none;
+		color: var(--ink);
+		font: inherit;
+		font-weight: 500;
+		text-decoration: none;
+		white-space: nowrap;
+		cursor: pointer;
+	}
+	.link:hover,
+	.item.open > .link {
+		color: var(--blue);
+	}
+	.link.current {
+		border-bottom-color: var(--blue);
+		color: var(--blue);
+		font-weight: 600;
+	}
+	.link svg {
+		transition: transform 0.15s;
+	}
+	.item.open > .link svg {
+		transform: rotate(180deg);
+	}
+
+	.panel {
+		display: none;
+		position: absolute;
+		top: 100%;
+		left: -20px;
+		z-index: 60;
+		width: 340px;
+		padding: 20px;
+		border: 1px solid var(--line);
+		border-radius: 16px;
+		background: var(--surface);
+		box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+	}
+	.item.wide .panel {
+		left: 40px;
+		right: 40px;
+		width: auto;
+		padding: 24px;
+		gap: 24px;
+	}
+	.item.open .panel.list {
+		display: block;
+	}
+	.item.open.wide .panel {
+		display: flex;
+	}
+	.panel a {
+		color: var(--ink);
+		text-decoration: none;
+	}
+	.panel b {
+		font-weight: 600;
+	}
+	.desc {
+		font-size: 13px;
+		line-height: 20px;
+		color: var(--slate);
+	}
+
+	.tests {
+		flex: 2 1 520px;
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 4px 20px;
+	}
+	.test {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		padding: 10px;
+		border-radius: 12px;
+	}
+	.test:hover,
+	.row:hover {
+		background: var(--surface-2);
+	}
+	.thumb {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		width: 56px;
+		height: 56px;
+		border-radius: 14px;
+		background: var(--lens);
+	}
+	.thumb.kids {
+		background: var(--sun-soft);
+	}
+	.thumb img {
+		width: 50px;
+		height: auto;
+	}
+	.text {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.promo {
+		flex: 1 1 260px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 22px;
+		border-radius: 14px;
+		background: var(--lens);
+	}
+	.promo > b {
+		font-size: 20px;
+		line-height: 28px;
+	}
+	.promo .desc {
+		font-size: 14px;
+	}
+	.promo .btn {
+		min-height: 46px;
+		margin-top: 4px;
+		color: var(--on-blue);
+	}
+	.panel .promo-link,
+	.panel .all {
+		color: var(--blue);
+		font-size: 14px;
+		font-weight: 500;
+	}
+
+	.row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 10px;
+		border-radius: 10px;
+	}
+	.row.stack {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.pdf {
+		padding: 3px 10px;
+		border-radius: 999px;
+		background: var(--lens);
+		color: var(--blue);
+		font-size: 12px;
+		line-height: 16px;
+		font-weight: 600;
+	}
+	.all {
+		display: block;
+		margin-top: 6px;
+		padding: 12px 10px 4px;
+		border-top: 1px solid var(--line);
+	}
+
+	.cta {
+		flex: 0 0 auto;
+		min-height: 46px;
+		padding: 0 22px;
+	}
+	.short,
+	.nav-cta,
+	.burger {
+		display: none;
+	}
+
+	@media (hover: hover) and (min-width: 960px) {
+		.item:hover .panel.list {
+			display: block;
+		}
+		.item.wide:hover .panel {
+			display: flex;
+		}
+	}
+
+	@media (max-width: 1100px) {
+		.bar,
+		.nav {
+			gap: 20px;
+		}
+	}
+
+	@media (max-width: 959px) {
+		.trust-items span:nth-child(n + 2),
+		.trust-links {
+			display: none;
+		}
+		.bar {
+			justify-content: space-between;
+			gap: 2px;
+			height: 60px;
+			padding-right: 10px;
+		}
+		.logo {
+			margin-right: auto;
+		}
+		.logo img {
+			height: 36px;
+		}
+		.cta {
+			min-height: 44px;
+			padding: 0 16px;
+			font-size: 14px;
+		}
+		.cta svg,
+		.long {
+			display: none;
+		}
+		.short {
+			display: inline;
+		}
+		.burger {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 44px;
+			height: 44px;
+			padding: 0;
+			border: 0;
+			background: none;
+			color: var(--ink);
+			cursor: pointer;
+		}
+		.i-close,
+		.menu-open .i-open {
+			display: none;
+		}
+		.menu-open .i-close {
+			display: block;
+		}
+
+		.nav {
+			display: none;
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			flex-direction: column;
+			gap: 0;
+			height: auto;
+			max-height: calc(100dvh - 60px);
+			overflow-y: auto;
+			border-bottom: 1px solid var(--line);
+			background: var(--surface);
+			font-size: 16px;
+			box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+		}
+		.menu-open .nav {
+			display: flex;
+		}
+		.item {
+			flex-direction: column;
+		}
+		.link {
+			justify-content: space-between;
+			width: 100%;
+			padding: 14px 18px;
+			border: 0;
+			border-bottom: 1px solid var(--line);
+			font-weight: 600;
+		}
+		.link.current {
+			border-bottom-color: var(--line);
+		}
+		.panel,
+		.item.wide .panel {
+			position: static;
+			width: auto;
+			padding: 4px 18px 10px;
+			border: 0;
+			border-bottom: 1px solid var(--line);
+			border-radius: 0;
+			background: var(--surface-2);
+			box-shadow: none;
+			font-size: 15px;
+		}
+		.item.open.wide .panel {
+			display: block;
+		}
+		.tests {
+			display: block;
+		}
+		.test,
+		.row {
+			display: block;
+			padding: 8px 0;
+		}
+		.panel b {
+			font-weight: 400;
+		}
+		.thumb,
+		.promo,
+		.pdf,
+		.panel .desc {
+			display: none;
+		}
+		.all {
+			margin-top: 4px;
+			padding: 10px 0 4px;
+		}
+		.nav-cta {
+			display: block;
+			padding: 14px 18px;
+		}
+		.nav-cta .btn {
+			width: 100%;
+			min-height: 50px;
+		}
+	}
+</style>

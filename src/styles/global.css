@@ -1,0 +1,228 @@
+/* Tokens from the EyeCheck design system (light theme) */
+:root {
+	--blue: #2463eb;
+	--blue-strong: #1d4fcb;
+	--on-blue: #ffffff;
+	--link: #2463eb;
+	--lens: #ebf5ff;
+	--lens-line: #d6e6fd;
+	--night: #0b1530;
+	--green: #16a34a;
+	--green-text: #15803d;
+	--sun: #ffc53d;
+	--sun-soft: #fff6db;
+	--surface: #ffffff;
+	--surface-2: #f5f8fd;
+	--ink: #101828;
+	--slate: #4a5565;
+	--muted: #6a7282;
+	--line: #e5e7eb;
+
+	--font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+	--radius-lg: 16px;
+	--radius-pill: 999px;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+	scroll-padding-top: 88px;
+}
+
+body {
+	margin: 0;
+	background: var(--surface);
+	color: var(--ink);
+	font-family: var(--font-sans);
+	font-size: 16px;
+	line-height: 26px;
+	-webkit-font-smoothing: antialiased;
+}
+
+img {
+	max-width: 100%;
+}
+
+a {
+	color: var(--link);
+}
+a:hover {
+	color: var(--blue-strong);
+}
+
+:focus-visible {
+	outline: 3px solid var(--blue);
+	outline-offset: 2px;
+}
+
+h1,
+h2,
+h3 {
+	margin: 0;
+	font-weight: 600;
+	color: var(--ink);
+}
+h1 {
+	font-size: 56px;
+	line-height: 60px;
+	letter-spacing: -0.02em;
+}
+h2 {
+	font-size: 30px;
+	line-height: 36px;
+	letter-spacing: -0.01em;
+}
+h3 {
+	font-size: 20px;
+	line-height: 28px;
+}
+p {
+	margin: 0;
+	color: var(--slate);
+}
+
+.wrap {
+	max-width: 1160px;
+	margin: 0 auto;
+	padding: 0 40px;
+}
+
+.sec {
+	padding: 88px 0;
+}
+.band {
+	background: var(--surface-2);
+}
+
+.eyebrow {
+	font-family: var(--font-mono);
+	font-size: 12px;
+	line-height: 16px;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--blue);
+	font-weight: 500;
+}
+
+.meta {
+	font-family: var(--font-mono);
+	font-size: 12px;
+	line-height: 16px;
+	color: var(--muted);
+}
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-height: 48px;
+	padding: 0 24px;
+	border: 1px solid var(--line);
+	border-radius: var(--radius-pill);
+	background: var(--surface);
+	color: var(--blue);
+	font: inherit;
+	font-weight: 600;
+	font-size: 15px;
+	text-decoration: none;
+	cursor: pointer;
+}
+.btn:hover {
+	border-color: var(--blue);
+	color: var(--blue-strong);
+}
+.btn.solid {
+	background: var(--blue);
+	border-color: var(--blue);
+	color: var(--on-blue);
+}
+.btn.solid:hover {
+	background: var(--blue-strong);
+	border-color: var(--blue-strong);
+	color: var(--on-blue);
+}
+
+.card {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 24px;
+	border: 1px solid var(--line);
+	border-radius: var(--radius-lg);
+	background: var(--surface);
+	color: var(--ink);
+	text-decoration: none;
+}
+a.card:hover {
+	border-color: var(--blue);
+	color: var(--ink);
+}
+
+.more {
+	font-weight: 600;
+	font-size: 15px;
+	text-decoration: none;
+	color: var(--blue);
+}
+
+.grid3 {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+	gap: 24px;
+}
+
+.ic {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: 56px;
+	height: 56px;
+	border-radius: 28px;
+	background: var(--lens);
+	color: var(--blue);
+}
+
+/* Stand-in for imagery that has not been supplied yet */
+.ph {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px;
+	background: var(--lens);
+	color: var(--slate);
+	font-family: var(--font-mono);
+	font-size: 13px;
+	text-align: center;
+}
+
+@media (max-width: 720px) {
+	h1 {
+		font-size: 38px;
+		line-height: 44px;
+	}
+	h2 {
+		font-size: 26px;
+		line-height: 32px;
+	}
+	.wrap {
+		padding: 0 18px;
+	}
+	.sec {
+		padding: 56px 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+}

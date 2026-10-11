@@ -1,11 +1,922 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import { site, routes, tests, orgs } from '../data/site';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const title = 'Free Online Eye Test & Eye Test App | EyeCheck.app';
+const description =
+	'Check your eyes online in about 5 minutes. A free eye test for adults and children that runs in your browser on any phone, tablet or computer, with no app to install.';
+
+const steps = [
+	{ title: 'Set up your screen', text: 'We check your screen size and tell you how far away to sit.' },
+	{ title: 'Cover one eye and answer', text: 'Children aged 3 to 7 match shapes. From age 8 you answer with Landolt C rings.' },
+	{ title: 'Get your results', text: 'A score for each eye, what it means, and a PDF report to keep.' },
+];
+
+// Placeholders until approved testimonials are supplied.
+const testimonials = [
+	{ quote: '[Approved testimonial]', by: '[Name, role]' },
+	{ quote: '[Approved testimonial]', by: '[Name, role]' },
+	{ quote: '[Approved testimonial]', by: '[Name, role]' },
+];
+
+const posts = [
+	{ topic: 'Screen time', title: 'The 20-20-20 rule for eye strain', href: routes.blog },
+	{ topic: 'Children’s vision', title: 'Pediatric vision screening: what parents should know', href: routes.blog },
+	{ topic: 'Adult vision', title: 'How often should you get an eye exam?', href: routes.blog },
+];
+
+const faqs = [
+	{
+		q: 'Can I check my eyes online for free?',
+		a: 'Yes. Every EyeCheck test is free and runs in your browser on a phone, tablet or computer.',
+	},
+	{
+		q: 'Is there a free eye test app I can use on my phone?',
+		a: 'EyeCheck works like an eye test app, but it runs in your phone’s browser, so there is nothing to download. Open the site and start the test.',
+	},
+	{
+		q: 'How accurate is an online eye test?',
+		a: 'An online eye test is a screening tool. It can show signs that your vision may need attention, but the result depends on your screen, lighting and distance, and it cannot examine the health of your eyes. It does not replace a full eye exam.',
+	},
+	{
+		q: 'Can I do an eye checkup online for my child?',
+		a: 'Yes. Children from age 3 can take the test using shapes instead of letters, with an adult helping. If the result is outside the normal range, or you have any concerns, see an eye care professional.',
+	},
+	{
+		q: 'How often should I get a full eye exam?',
+		a: 'It depends on your age, health and risk factors, so follow your eye care professional’s advice. Many adults are advised to have an exam every one to two years. Book sooner if you notice a change in your vision.',
+	},
+];
+
+const origin = Astro.site?.href ?? '/';
+const schema = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Organization',
+		name: site.name,
+		url: origin,
+		logo: new URL('/images/logo.svg', origin).href,
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: site.name,
+		url: origin,
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'WebApplication',
+		name: 'EyeCheck online eye test',
+		url: origin,
+		applicationCategory: 'HealthApplication',
+		operatingSystem: 'Any',
+		browserRequirements: 'Requires JavaScript',
+		offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: faqs.map((f) => ({
+			'@type': 'Question',
+			name: f.q,
+			acceptedAnswer: { '@type': 'Answer', text: f.a },
+		})),
+	},
+];
 ---
 
-<Layout>
-	<Welcome />
+<Layout title={title} description={description}>
+	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+
+	<section class="hero">
+		<div class="wrap hero-in">
+			<div class="hero-copy">
+				<span class="pill">Free · No app · About 5 minutes</span>
+				<h1>Free online eye test: check your eyes in 5 minutes</h1>
+				<p class="lead">
+					A quick vision screening for adults and children on any phone, tablet or computer. It’s the eye test app that runs in
+					your browser, so there’s nothing to install.
+				</p>
+				<div class="actions">
+					<a href={routes.start} class="btn solid">
+						Start free eye test
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+					</a>
+					<a href="#how" class="btn">How it works</a>
+				</div>
+				<div class="proof">
+					<span class="reviewer">
+						<span class="avatar"></span>
+						<span><b>Reviewed by {site.reviewer}</b><br />{site.reviewerRole}</span>
+					</span>
+					<span class="screened">
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
+						<span><b>{site.peopleScreened}</b> people screened</span>
+					</span>
+				</div>
+			</div>
+			<div class="hero-art">
+				<div class="ph shot">[Product shot: the test running on a laptop and a phone]</div>
+				<img class="rings" src="/images/test-astigmatism.svg" alt="" width="150" height="103" />
+				<div class="result">
+					<img src="/images/result-check.svg" alt="" width="64" height="44" />
+					<span><b>Right eye 6/6</b><br /><span class="ok">Within normal range</span></span>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="sec tests-sec">
+		<div class="wrap stack">
+			<div class="head narrow">
+				<span class="eyebrow">Eye tests</span>
+				<h2>Choose an eye test</h2>
+				<p>Each test checks a different part of your vision. All of them are free.</p>
+			</div>
+			<div class="grid3">
+				{
+					tests.map((t) => (
+						<a href={t.href} class="card test">
+							{t.badge && <span class="badge corner">{t.badge}</span>}
+							<div class:list={['art', { kids: t.kids }]}>
+								<img src={t.img} alt="" width="161" height="110" loading="lazy" />
+							</div>
+							<h3>{t.title}</h3>
+							<p>{t.desc}</p>
+							<span class="more">Start test →</span>
+						</a>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	<section id="how" class="sec band">
+		<div class="wrap stack">
+			<div class="head">
+				<span class="eyebrow">How it works</span>
+				<h2>How the online eye check works</h2>
+			</div>
+			<ol class="grid3 steps">
+				{
+					steps.map((s, i) => (
+						<li class="card">
+							<span class="ic num" aria-hidden="true">{i + 1}</span>
+							<h3>{s.title}</h3>
+							<p>{s.text}</p>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</section>
+
+	<section class="sec">
+		<div class="wrap video-sec">
+			<span class="eyebrow">Video overview</span>
+			<h2>Watch: how EyeCheck works in 90 seconds</h2>
+			<p>See how to set up your screen, take the test with a child and read the result.</p>
+			<div class="video" data-video={site.videoId}>
+				<img class="video-logo" src="/images/logo-white.svg" alt="" width="105" height="40" loading="lazy" />
+				{
+					site.videoId ? (
+						<button type="button" class="play" aria-label="Play video: how EyeCheck works">
+							<svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+						</button>
+					) : (
+						<span class="play" aria-hidden="true">
+							<svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+						</span>
+					)
+				}
+				<span class="video-title">How EyeCheck works · 1:30</span>
+			</div>
+		</div>
+	</section>
+
+	<section class="sec audiences">
+		<div class="wrap pair">
+			<div class="card audience adults">
+				<span class="eyebrow">For adults</span>
+				<h3>Blurry text, headaches or screen strain?</h3>
+				<p>If reading has become harder or your eyes feel tired after screen time, start with one of these tests.</p>
+				<div class="actions small">
+					<a href={routes.readingGlasses} class="btn">Reading glasses test</a>
+					<a href={routes.astigmatism} class="btn">Astigmatism test</a>
+				</div>
+			</div>
+			<div class="card audience parents">
+				<span class="badge">For parents</span>
+				<h3>Checking a child from age 3</h3>
+				<p>Child-friendly shapes let children take part before they can read, so problems can be picked up early.</p>
+				<div class="actions small">
+					<a href={routes.colorBlindKids} class="btn">Kids color test</a>
+					<a href={routes.lazyEye} class="btn">Lazy eye test</a>
+				</div>
+				<img src="/images/test-color-blind.svg" alt="" width="110" height="75" loading="lazy" />
+			</div>
+		</div>
+	</section>
+
+	<section class="sec band">
+		<div class="wrap stats">
+			<div class="card stat">
+				<span class="figure">{site.peopleScreened}</span>
+				<p>People screened</p>
+			</div>
+			<div class="card stat">
+				<span class="figure">{site.peopleReferred}</span>
+				<p>Referred for a full eye exam</p>
+			</div>
+			<div class="card stat impact">
+				<img src="/images/test-visual-acuity.svg" alt="" width="130" height="89" loading="lazy" />
+				<p>Free for every school and charity.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="sec">
+		<div class="wrap review">
+			<div class="portrait">
+				<div class="ph photo">[Photo]</div>
+				<img src="/images/result-check.svg" alt="" width="96" height="66" loading="lazy" />
+			</div>
+			<div class="review-copy">
+				<span class="eyebrow">Medically reviewed</span>
+				<h2>Screening, not a diagnosis</h2>
+				<p>
+					EyeCheck is reviewed by {site.reviewer}. It can flag signs that your vision needs attention, but it cannot diagnose eye
+					conditions or replace a full eye exam. If a result is outside the normal range, or anything about your vision worries
+					you, book an exam.
+				</p>
+				<div class="actions">
+					<a href={routes.howWeTest} class="btn">How we test</a>
+					<a href={routes.medicalReview} class="btn">Our medical reviewer</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="sec band">
+		<div class="wrap stack">
+			<h2>What people say</h2>
+			<div class="grid3">
+				{
+					testimonials.map((t) => (
+						<figure class="card quote">
+							<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 7h4v4c0 3-1.5 5-4 6l-.8-1.3C7.6 14.8 8.3 13.6 8.3 12H7zM14 7h4v4c0 3-1.5 5-4 6l-.8-1.3c1.4-.9 2.1-2.1 2.1-3.7H14z"></path></svg>
+							<blockquote>{t.quote}</blockquote>
+							<figcaption class="meta">{t.by}</figcaption>
+						</figure>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	<section class="sec">
+		<div class="wrap">
+			<div class="charts">
+				<div class="charts-copy">
+					<span class="eyebrow">Free printables</span>
+					<h2>Free printable eye charts</h2>
+					<p>Snellen, 10-foot, pediatric and tumbling E charts as PDFs for home and school.</p>
+					<a href={routes.eyeCharts} class="btn solid">Browse eye charts</a>
+				</div>
+				<div class="charts-art">
+					<img src="/images/eye-charts.svg" alt="" width="380" height="260" loading="lazy" />
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="sec band">
+		<div class="wrap stack">
+			<div class="head">
+				<span class="eyebrow">Organisations</span>
+				<h2>For schools, clinics and charities</h2>
+			</div>
+			<div class="orgs">
+				<a href={orgs[0].href} class="card">
+					<span class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"></path><path d="M6 11v5c3 2 9 2 12 0v-5"></path></svg></span>
+					<h3>{orgs[0].title}</h3>
+					<span class="more">{orgs[0].more} →</span>
+				</a>
+				<a href={orgs[1].href} class="card">
+					<span class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v6a4 4 0 0 0 8 0V3"></path><path d="M10 13v3a4 4 0 0 0 8 0v-2"></path><circle cx="18" cy="12" r="2"></circle></svg></span>
+					<h3>{orgs[1].title}</h3>
+					<span class="more">{orgs[1].more} →</span>
+				</a>
+				<a href={orgs[2].href} class="card">
+					<span class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg></span>
+					<h3>{orgs[2].title}</h3>
+					<span class="more">{orgs[2].more} →</span>
+				</a>
+				<a href={orgs[3].href} class="card">
+					<span class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"></path></svg></span>
+					<h3>{orgs[3].title}</h3>
+					<span class="more">{orgs[3].more} →</span>
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="sec">
+		<div class="wrap stack">
+			<div class="head split">
+				<div class="head">
+					<span class="eyebrow">Blog</span>
+					<h2>From the blog</h2>
+				</div>
+				<a href={routes.blog} class="more">All articles →</a>
+			</div>
+			<div class="grid3">
+				{
+					posts.map((p) => (
+						<a href={p.href} class="card post">
+							<div class="ph">[Image]</div>
+							<div class="post-body">
+								<span class="meta">{p.topic}</span>
+								<h3>{p.title}</h3>
+								<span class="meta">Reviewed by {site.reviewer}</span>
+							</div>
+						</a>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	<section class="sec band">
+		<div class="wrap faq">
+			<span class="eyebrow">FAQ</span>
+			<h2>Online eye test FAQ</h2>
+			{
+				faqs.map((f) => (
+					<details>
+						<summary>
+							<span>{f.q}</span>
+							<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+						</summary>
+						<p>{f.a}</p>
+					</details>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="closing">
+		<div class="wrap closing-in">
+			<img src="/images/logo-white.svg" alt="" width="147" height="56" loading="lazy" />
+			<h2>Check your eyes now</h2>
+			<p>Free, about 5 minutes, results for each eye.</p>
+			<a href={routes.start} class="btn">
+				Start free eye test
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+			</a>
+		</div>
+	</section>
 </Layout>
+
+<script>
+	// Click-to-load: no YouTube script is requested until the visitor presses play.
+	const video = document.querySelector<HTMLElement>('[data-video]');
+	video?.querySelector('button')?.addEventListener('click', () => {
+		const frame = document.createElement('iframe');
+		frame.src = `https://www.youtube-nocookie.com/embed/${video.dataset.video}?autoplay=1&cc_load_policy=1`;
+		frame.title = 'How EyeCheck works';
+		frame.allow = 'autoplay; encrypted-media; picture-in-picture';
+		frame.allowFullscreen = true;
+		video.replaceChildren(frame);
+	});
+</script>
+
+<style>
+	.stack {
+		display: flex;
+		flex-direction: column;
+		gap: 32px;
+	}
+	.head {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.head.narrow {
+		max-width: 640px;
+	}
+	.head.split {
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: 12px;
+	}
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+	}
+	.actions.small {
+		gap: 10px;
+	}
+	.badge {
+		align-self: flex-start;
+		padding: 4px 10px;
+		border-radius: 999px;
+		background: var(--sun);
+		color: var(--ink);
+		font-size: 12px;
+		line-height: 16px;
+		font-weight: 600;
+	}
+
+	/* Hero */
+	.hero {
+		overflow: hidden;
+		background: linear-gradient(180deg, var(--lens) 0%, var(--surface) 100%);
+	}
+	.hero-in {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 48px;
+		padding-top: 72px;
+		padding-bottom: 88px;
+	}
+	.hero-copy {
+		flex: 1 1 460px;
+		display: flex;
+		flex-direction: column;
+		gap: 22px;
+	}
+	.pill {
+		align-self: flex-start;
+		padding: 6px 14px;
+		border: 1px solid var(--lens-line);
+		border-radius: 999px;
+		background: var(--surface);
+		color: var(--blue);
+		font-size: 14px;
+		line-height: 20px;
+		font-weight: 500;
+	}
+	.lead {
+		font-size: 18px;
+		line-height: 28px;
+	}
+	.proof {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 12px 24px;
+		color: var(--slate);
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.proof b {
+		color: var(--ink);
+		font-weight: 600;
+	}
+	.reviewer {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	.avatar {
+		flex: 0 0 auto;
+		width: 36px;
+		height: 36px;
+		border: 2px solid var(--surface);
+		border-radius: 18px;
+		background: var(--lens-line);
+	}
+	.screened {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+	.screened svg {
+		color: var(--green);
+	}
+	.hero-art {
+		position: relative;
+		flex: 1 1 440px;
+		min-height: 420px;
+	}
+	.shot {
+		position: absolute;
+		inset: 20px 0 0 30px;
+		border: 1px solid var(--line);
+		border-radius: 16px;
+		background: var(--surface);
+		box-shadow: 0 24px 60px rgba(36, 99, 235, 0.14);
+	}
+	.rings {
+		position: absolute;
+		left: -10px;
+		top: -10px;
+		width: 150px;
+		height: auto;
+	}
+	.result {
+		position: absolute;
+		right: -10px;
+		bottom: -18px;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 12px 16px;
+		border: 1px solid var(--line);
+		border-radius: 16px;
+		background: var(--surface);
+		box-shadow: 0 12px 30px rgba(16, 24, 40, 0.1);
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.result img {
+		width: 64px;
+		height: auto;
+	}
+	.result b {
+		font-weight: 600;
+	}
+	.ok {
+		color: var(--green-text);
+		font-weight: 500;
+	}
+
+	/* Eye tests */
+	.tests-sec {
+		padding-top: 64px;
+	}
+	.test {
+		position: relative;
+	}
+	.art {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 150px;
+		border-radius: 12px;
+		background: var(--lens);
+	}
+	.art.kids {
+		background: var(--sun-soft);
+	}
+	.art img {
+		width: auto;
+		height: 110px;
+	}
+	.corner {
+		position: absolute;
+		top: 16px;
+		right: 16px;
+		z-index: 1;
+	}
+
+	/* How it works */
+	.steps {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.num {
+		font-size: 20px;
+		font-weight: 600;
+	}
+
+	/* Video */
+	.video-sec {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		max-width: 960px;
+	}
+	.video {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		border-radius: 20px;
+		background: var(--night);
+	}
+	.video :global(iframe) {
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+	.video-logo {
+		position: absolute;
+		left: 28px;
+		top: 24px;
+		width: auto;
+		height: 40px;
+		opacity: 0.9;
+	}
+	.play {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 88px;
+		height: 88px;
+		padding: 0;
+		border: 0;
+		border-radius: 44px;
+		background: var(--blue);
+		color: var(--on-blue);
+		box-shadow: 0 0 0 12px rgba(36, 99, 235, 0.25);
+	}
+	button.play {
+		cursor: pointer;
+	}
+	button.play:hover {
+		background: var(--blue-strong);
+	}
+	button.play:focus-visible {
+		outline-color: var(--on-blue);
+	}
+	.video-title {
+		position: absolute;
+		left: 28px;
+		bottom: 24px;
+		color: #f3f6fc;
+		font-size: 15px;
+		font-weight: 500;
+	}
+
+	/* Adults and parents */
+	.audiences {
+		padding-top: 0;
+	}
+	.pair {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 24px;
+	}
+	.audience {
+		position: relative;
+		flex: 1 1 420px;
+		padding: 32px;
+	}
+	.audience h3 {
+		font-size: 24px;
+		line-height: 30px;
+	}
+	.adults {
+		border-color: var(--surface-2);
+		background: var(--surface-2);
+	}
+	.parents {
+		border-color: var(--sun-soft);
+		background: var(--sun-soft);
+	}
+	.parents img {
+		position: absolute;
+		right: 20px;
+		top: 18px;
+		width: 110px;
+		height: auto;
+	}
+	.parents h3 {
+		padding-right: 110px;
+	}
+
+	/* Stats */
+	.stats {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: stretch;
+		gap: 24px;
+	}
+	.stat {
+		flex: 1 1 240px;
+		border: 0;
+	}
+	.figure {
+		color: var(--blue);
+		font-size: 52px;
+		line-height: 56px;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+	.impact {
+		flex: 2 1 420px;
+		flex-direction: row;
+		align-items: center;
+		gap: 20px;
+	}
+	.impact img {
+		width: 130px;
+		height: auto;
+	}
+
+	/* Medical review */
+	.review {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 40px;
+	}
+	.portrait {
+		position: relative;
+		flex: 0 0 auto;
+		margin-right: 30px;
+	}
+	.photo {
+		width: 180px;
+		height: 180px;
+		border-radius: 90px;
+	}
+	.portrait img {
+		position: absolute;
+		right: -30px;
+		bottom: 6px;
+		width: 96px;
+		height: auto;
+	}
+	.review-copy {
+		flex: 1 1 420px;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+	.review-copy .actions {
+		margin-top: 4px;
+	}
+
+	/* Testimonials */
+	.quote {
+		margin: 0;
+	}
+	.quote svg {
+		color: var(--blue);
+	}
+	.quote blockquote {
+		margin: 0;
+		color: var(--ink);
+	}
+
+	/* Printable charts */
+	.charts {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 32px;
+		padding: 48px;
+		border-radius: 24px;
+		background: var(--lens);
+	}
+	.charts-copy {
+		flex: 1 1 400px;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+	.charts-copy .btn {
+		align-self: flex-start;
+		margin-top: 6px;
+	}
+	.charts-art {
+		flex: 1 1 320px;
+		display: flex;
+		justify-content: center;
+	}
+	.charts-art img {
+		width: 100%;
+		max-width: 380px;
+		height: auto;
+	}
+
+	/* Organisations */
+	.orgs {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 20px;
+	}
+
+	/* Blog */
+	.post {
+		overflow: hidden;
+		padding: 0;
+	}
+	.post .ph {
+		height: 180px;
+	}
+	.post-body {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 0 24px 24px;
+	}
+
+	/* FAQ */
+	.faq {
+		display: flex;
+		flex-direction: column;
+		max-width: 860px;
+	}
+	.faq h2 {
+		margin: 10px 0 16px;
+	}
+	details {
+		border-bottom: 1px solid var(--line);
+	}
+	summary {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 16px;
+		padding: 20px 0;
+		font-size: 17px;
+		font-weight: 600;
+		list-style: none;
+		cursor: pointer;
+	}
+	summary::-webkit-details-marker {
+		display: none;
+	}
+	summary svg {
+		flex: 0 0 auto;
+		color: var(--blue);
+		transition: transform 0.15s;
+	}
+	details[open] summary svg {
+		transform: rotate(45deg);
+	}
+	details p {
+		max-width: 720px;
+		padding-bottom: 20px;
+	}
+
+	/* Closing call to action */
+	.closing {
+		background: var(--blue);
+	}
+	.closing-in {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 18px;
+		padding-top: 80px;
+		padding-bottom: 80px;
+		text-align: center;
+	}
+	.closing img {
+		width: auto;
+		height: 56px;
+	}
+	.closing h2 {
+		color: var(--on-blue);
+		font-size: 40px;
+		line-height: 46px;
+	}
+	.closing p {
+		color: var(--on-blue);
+		font-size: 18px;
+	}
+	.closing .btn {
+		margin-top: 6px;
+		border-color: var(--on-blue);
+	}
+
+	@media (max-width: 720px) {
+		.hero-in {
+			padding-top: 48px;
+			padding-bottom: 64px;
+		}
+		.hero-art {
+			flex-basis: 100%;
+			min-height: 300px;
+		}
+		.shot {
+			inset: 20px 0 0 0;
+		}
+		.rings {
+			left: 0;
+			width: 110px;
+		}
+		.result {
+			right: 0;
+		}
+		.tests-sec {
+			padding-top: 40px;
+		}
+		.audiences {
+			padding-top: 0;
+		}
+		.audience {
+			padding: 24px;
+		}
+		.charts {
+			padding: 28px 22px;
+		}
+		.closing h2 {
+			font-size: 32px;
+			line-height: 38px;
+		}
+	}
+</style>

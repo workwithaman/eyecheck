@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 130" width="380" height="260">
+  <title>EyeCheck – Half blink</title>
+  <circle cx="72" cy="65" r="20" fill="#FFFFFF"></circle><circle cx="118" cy="65" r="20" fill="#FFFFFF"></circle>
+  <circle cx="72" cy="74" r="6" fill="#101828"></circle><circle cx="118" cy="74" r="6" fill="#101828"></circle>
+  <path d="M52 65 A20 20 0 0 1 92 65 Z" fill="#1D4FCB"></path><path d="M98 65 A20 20 0 0 1 138 65 Z" fill="#1D4FCB"></path>
+</svg>
