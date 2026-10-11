@@ -97,17 +97,46 @@ export const tests = [
 ];
 
 export const charts = [
-	{ title: 'Snellen chart', href: routes.chartSnellen },
-	{ title: '10-foot chart', href: routes.chart10Feet },
-	{ title: 'Pediatric chart', href: routes.chartPediatric },
-	{ title: 'Tumbling E chart', href: routes.chartTumblingE },
+	{ title: 'Snellen chart', href: routes.chartSnellen, img: '/images/test-visual-acuity.svg', menu: 'Letters, for 20 ft' },
+	{ title: '10-foot chart', href: routes.chart10Feet, img: '/images/eye-charts.svg', menu: 'For smaller rooms' },
+	{ title: 'Pediatric chart', href: routes.chartPediatric, img: '/images/test-color-blind.svg', menu: 'Picture shapes, ages 3–6', kids: true },
+	{ title: 'Tumbling E chart', href: routes.chartTumblingE, img: '/images/eye-charts.svg', menu: 'No reading needed' },
 ];
 
+// `icon` is the inner markup of a 24×24 stroke icon.
 export const orgs = [
-	{ title: 'Schools', menuTitle: 'Schools', href: routes.schools, menu: 'Free classroom screening', more: 'Free classroom screening' },
-	{ title: 'Clinics', menuTitle: 'Clinics & healthcare', href: routes.clinics, menu: 'Pre-screening and telehealth', more: 'Pre-screening tools' },
-	{ title: 'Charities', menuTitle: 'Charities', href: routes.charities, menu: 'Community programmes', more: 'Community programmes' },
-	{ title: 'Research', menuTitle: 'Research', href: routes.research, menu: 'Academic collaboration', more: 'Collaborate with us' },
+	{
+		title: 'Schools',
+		menuTitle: 'Schools',
+		href: routes.schools,
+		menu: 'Free classroom vision screening',
+		more: 'Free classroom screening',
+		icon: '<path d="M2 9l10-5 10 5-10 5z"></path><path d="M6 11v5c3 2 9 2 12 0v-5"></path>',
+	},
+	{
+		title: 'Clinics',
+		menuTitle: 'Clinics & healthcare',
+		href: routes.clinics,
+		menu: 'Pre-screening and telehealth',
+		more: 'Pre-screening tools',
+		icon: '<path d="M6 3v6a4 4 0 0 0 8 0V3"></path><path d="M10 13v3a4 4 0 0 0 8 0v-2"></path><circle cx="18" cy="12" r="2"></circle>',
+	},
+	{
+		title: 'Charities',
+		menuTitle: 'Charities',
+		href: routes.charities,
+		menu: 'Screening for community programmes',
+		more: 'Community programmes',
+		icon: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path>',
+	},
+	{
+		title: 'Research',
+		menuTitle: 'Research',
+		href: routes.research,
+		menu: 'Academic collaboration and data',
+		more: 'Collaborate with us',
+		icon: '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"></path>',
+	},
 ];
 
 export const footerColumns = [

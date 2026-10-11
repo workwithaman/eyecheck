@@ -30,63 +30,99 @@ const { active = '' } = Astro.props;
 				<button type="button" class:list={['link', { current: active === 'tests' }]} aria-expanded="false" aria-controls="menu-tests">
 					Eye tests<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
 				</button>
-				<div class="panel" id="menu-tests">
-					<div class="tests">
-						{
-							tests.map((t) => (
-								<a href={t.href} class="test">
-									<span class:list={['thumb', { kids: t.kids }]}>
-										<img src={t.img} alt="" width="50" height="34" loading="lazy" />
-									</span>
-									<span class="text">
-										<b>{t.title}</b>
-										<span class="desc">{t.menu}</span>
-									</span>
+				<div class="drop" id="menu-tests">
+					<div class="sheet">
+						<span class="caret"></span>
+						<div class="body split">
+							<div class="grid">
+								{
+									tests.map((t) => (
+										<a href={t.href} class="entry">
+											<span class:list={['tile', { kids: t.kids }]}>
+												<img src={t.img} alt="" width="42" height="29" loading="lazy" />
+											</span>
+											<span class="text">
+												<b>{t.title}</b>
+												<span>{t.menu}</span>
+											</span>
+										</a>
+									))
+								}
+							</div>
+							<div class="promo">
+								<span class="eyebrow">Most popular</span>
+								<b>Full online eye test</b>
+								<span>Both eyes, about 5 minutes, results you can download.</span>
+								<a href={routes.start} class="promo-btn">
+									Start free eye test<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
 								</a>
-							))
-						}
-					</div>
-					<div class="promo">
-						<span class="eyebrow">Most popular</span>
-						<b>Full online eye test</b>
-						<span class="desc">Both eyes, about 5 minutes, results you can download.</span>
-						<a href={routes.start} class="btn solid">Start free eye test</a>
-						<a href={routes.howWeTest} class="promo-link">How we test →</a>
+							</div>
+						</div>
+						<div class="foot">
+							<a href={`${routes.home}#tests`}>All eye tests →</a>
+							<a href={routes.howWeTest} class="quiet">How we test</a>
+						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="item" data-menu>
+			<div class="item charts" data-menu>
 				<button type="button" class:list={['link', { current: active === 'charts' }]} aria-expanded="false" aria-controls="menu-charts">
 					Eye charts<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
 				</button>
-				<div class="panel list" id="menu-charts">
-					{
-						charts.map((c) => (
-							<a href={c.href} class="row">
-								<b>{c.title}</b>
-								<span class="pdf">PDF</span>
-							</a>
-						))
-					}
-					<a href={routes.eyeCharts} class="all">All printable charts →</a>
+				<div class="drop" id="menu-charts">
+					<div class="sheet">
+						<span class="caret"></span>
+						<div class="body">
+							{
+								charts.map((c) => (
+									<a href={c.href} class="entry">
+										<span class:list={['tile', { kids: c.kids }]}>
+											<img src={c.img} alt="" width="42" height="29" loading="lazy" />
+										</span>
+										<span class="text">
+											<b>{c.title}</b>
+											<span>{c.menu}</span>
+										</span>
+										<span class="pdf">PDF</span>
+									</a>
+								))
+							}
+						</div>
+						<div class="foot">
+							<a href={routes.eyeCharts}>All printable charts →</a>
+							<span class="aside">Letter + A4</span>
+						</div>
+					</div>
 				</div>
 			</div>
 
-			<div class="item" data-menu>
+			<div class="item orgs" data-menu>
 				<button type="button" class:list={['link', { current: active === 'orgs' }]} aria-expanded="false" aria-controls="menu-orgs">
 					For organisations<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
 				</button>
-				<div class="panel list" id="menu-orgs">
-					{
-						orgs.map((o) => (
-							<a href={o.href} class="row stack">
-								<b>{o.menuTitle}</b>
-								<span class="desc">{o.menu}</span>
-							</a>
-						))
-					}
-					<a href={routes.donation} class="all">Support our work: Donate →</a>
+				<div class="drop" id="menu-orgs">
+					<div class="sheet">
+						<span class="caret"></span>
+						<div class="body">
+							{
+								orgs.map((o) => (
+									<a href={o.href} class="entry">
+										<span class="icon">
+											<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={o.icon} />
+										</span>
+										<span class="text">
+											<b>{o.menuTitle}</b>
+											<span>{o.menu}</span>
+										</span>
+									</a>
+								))
+							}
+						</div>
+						<div class="foot">
+							<a href={routes.donation}>Support our work: Donate →</a>
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -113,6 +149,9 @@ const { active = '' } = Astro.props;
 	if (header) {
 		const items = [...header.querySelectorAll<HTMLElement>('[data-menu]')];
 		const burger = header.querySelector<HTMLButtonElement>('[data-burger]');
+		// Hover only drives the menus on the desktop bar with a real pointer.
+		const hoverable = window.matchMedia('(hover: hover) and (min-width: 960px)');
+		let timer: number | undefined;
 
 		const setOpen = (item: HTMLElement, open: boolean) => {
 			item.classList.toggle('open', open);
@@ -127,17 +166,35 @@ const { active = '' } = Astro.props;
 
 		items.forEach((item) => {
 			item.querySelector('button')?.addEventListener('click', () => {
+				window.clearTimeout(timer);
 				const open = !item.classList.contains('open');
 				closeAll(item);
 				setOpen(item, open);
 			});
-			item.addEventListener('mouseenter', () => closeAll(item));
+			item.addEventListener('mouseenter', () => {
+				if (!hoverable.matches) return;
+				window.clearTimeout(timer);
+				timer = window.setTimeout(() => {
+					closeAll(item);
+					setOpen(item, true);
+				}, 120);
+			});
+			item.addEventListener('mouseleave', () => {
+				if (!hoverable.matches) return;
+				window.clearTimeout(timer);
+				timer = window.setTimeout(() => setOpen(item, false), 200);
+			});
+			// Tabbing out of the panel closes it; the mobile accordion stays as the visitor left it.
+			item.addEventListener('focusout', (e) => {
+				if (hoverable.matches && !item.contains(e.relatedTarget as Node | null)) setOpen(item, false);
+			});
 		});
 
 		burger?.addEventListener('click', () => setMobile(!header.classList.contains('menu-open')));
 
 		document.addEventListener('keydown', (e) => {
 			if (e.key !== 'Escape') return;
+			window.clearTimeout(timer);
 			const open = items.find((i) => i.classList.contains('open'));
 			if (open) {
 				setOpen(open, false);
@@ -223,6 +280,7 @@ const { active = '' } = Astro.props;
 		position: relative;
 		display: flex;
 	}
+	/* The wide panel is placed against the bar, so it can be clamped inside the page. */
 	.item.wide {
 		position: static;
 	}
@@ -258,138 +316,215 @@ const { active = '' } = Astro.props;
 		transform: rotate(180deg);
 	}
 
-	.panel {
-		display: none;
+	/* Dropdown: sits 14px below the bar; the padding keeps the pointer inside on the way down. */
+	.drop {
 		position: absolute;
 		top: 100%;
-		left: -20px;
+		left: -14px;
 		z-index: 60;
-		width: 340px;
-		padding: 20px;
+		padding-top: 14px;
+		visibility: hidden;
+		opacity: 0;
+		transform: translateY(-4px);
+		transition:
+			opacity 0.15s,
+			transform 0.15s,
+			visibility 0s 0.15s;
+	}
+	.item.open > .drop {
+		visibility: visible;
+		opacity: 1;
+		transform: none;
+		transition-delay: 0s;
+	}
+	.item.wide > .drop {
+		left: max(20px, min(190px, calc(100% - 800px)));
+	}
+	.sheet {
+		position: relative;
+		width: 380px;
 		border: 1px solid var(--line);
-		border-radius: 16px;
+		border-radius: 20px;
 		background: var(--surface);
-		box-shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+		box-shadow:
+			0 24px 56px rgba(16, 24, 40, 0.14),
+			0 2px 6px rgba(16, 24, 40, 0.05);
 	}
-	.item.wide .panel {
-		left: 40px;
-		right: 40px;
-		width: auto;
-		padding: 24px;
-		gap: 24px;
+	.wide .sheet {
+		width: 780px;
 	}
-	.item.open .panel.list {
-		display: block;
+	.orgs .sheet {
+		width: 420px;
 	}
-	.item.open.wide .panel {
-		display: flex;
+	.caret {
+		position: absolute;
+		top: -7px;
+		left: 44px;
+		width: 14px;
+		height: 14px;
+		border-top: 1px solid var(--line);
+		border-left: 1px solid var(--line);
+		background: var(--surface);
+		transform: rotate(45deg);
 	}
-	.panel a {
-		color: var(--ink);
-		text-decoration: none;
-	}
-	.panel b {
-		font-weight: 600;
-	}
-	.desc {
-		font-size: 13px;
-		line-height: 20px;
-		color: var(--slate);
+	.orgs .caret {
+		left: 74px;
 	}
 
-	.tests {
-		flex: 2 1 520px;
+	.body {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 12px;
+	}
+	.body.split {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 236px;
+		gap: 8px;
+	}
+	.grid {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 4px 20px;
+		gap: 2px 4px;
+		align-content: start;
 	}
-	.test {
+	.entry {
 		display: flex;
 		align-items: center;
 		gap: 14px;
-		padding: 10px;
-		border-radius: 12px;
+		padding: 12px;
+		border-radius: 14px;
+		color: var(--ink);
+		text-decoration: none;
 	}
-	.test:hover,
-	.row:hover {
+	.entry:hover {
 		background: var(--surface-2);
 	}
-	.thumb {
+	.entry:hover b {
+		color: var(--blue);
+	}
+	.entry:focus-visible {
+		outline: 2px solid var(--blue);
+		outline-offset: 2px;
+	}
+	.tile,
+	.icon {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		flex: 0 0 auto;
-		width: 56px;
-		height: 56px;
-		border-radius: 14px;
+		flex: 0 0 48px;
+		overflow: hidden;
+		width: 48px;
+		height: 48px;
+		border-radius: 12px;
 		background: var(--lens);
 	}
-	.thumb.kids {
+	.tile.kids {
 		background: var(--sun-soft);
 	}
-	.thumb img {
-		width: 50px;
+	.tile img {
+		display: block;
+		width: 42px;
 		height: auto;
+	}
+	.icon {
+		flex-basis: 44px;
+		width: 44px;
+		height: 44px;
+		border-radius: 22px;
+		color: var(--blue);
 	}
 	.text {
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
+		min-width: 0;
 	}
-
-	.promo {
-		flex: 1 1 260px;
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-		padding: 22px;
-		border-radius: 14px;
-		background: var(--lens);
+	.text b {
+		font-size: 15px;
+		line-height: 20px;
+		font-weight: 600;
 	}
-	.promo > b {
-		font-size: 20px;
-		line-height: 28px;
-	}
-	.promo .desc {
-		font-size: 14px;
-	}
-	.promo .btn {
-		min-height: 46px;
-		margin-top: 4px;
-		color: var(--on-blue);
-	}
-	.panel .promo-link,
-	.panel .all {
-		color: var(--blue);
-		font-size: 14px;
-		font-weight: 500;
-	}
-
-	.row {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 10px;
-		border-radius: 10px;
-	}
-	.row.stack {
-		flex-direction: column;
-		align-items: flex-start;
+	.text span {
+		color: var(--slate);
+		font-size: 13px;
+		line-height: 18px;
 	}
 	.pdf {
-		padding: 3px 10px;
+		flex: 0 0 auto;
+		margin-left: auto;
+		padding: 3px 9px;
 		border-radius: 999px;
 		background: var(--lens);
 		color: var(--blue);
-		font-size: 12px;
+		font-size: 11px;
 		line-height: 16px;
 		font-weight: 600;
 	}
-	.all {
-		display: block;
+
+	.promo {
+		align-self: start;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 20px;
+		border-radius: 14px;
+		background: var(--lens);
+	}
+	.promo .eyebrow {
+		font-size: 11px;
+	}
+	.promo > b {
+		font-size: 18px;
+		line-height: 24px;
+		font-weight: 600;
+	}
+	.promo > span:not(.eyebrow) {
+		color: var(--slate);
+		font-size: 13px;
+		line-height: 19px;
+	}
+	.promo-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		min-height: 44px;
 		margin-top: 6px;
-		padding: 12px 10px 4px;
+		border-radius: 999px;
+		background: var(--blue);
+		color: var(--on-blue);
+		font-size: 14px;
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.promo-btn:hover {
+		background: var(--blue-strong);
+		color: var(--on-blue);
+	}
+
+	.foot {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 12px;
+		padding: 12px 20px;
 		border-top: 1px solid var(--line);
+		border-radius: 0 0 19px 19px;
+		background: var(--surface-2);
+		font-size: 14px;
+		line-height: 20px;
+		font-weight: 500;
+	}
+	.foot a {
+		text-decoration: none;
+	}
+	.foot .quiet {
+		color: var(--slate);
+	}
+	.foot .aside {
+		color: var(--muted);
+		font-size: 13px;
 	}
 
 	.cta {
@@ -403,22 +538,18 @@ const { active = '' } = Astro.props;
 		display: none;
 	}
 
-	@media (hover: hover) and (min-width: 960px) {
-		.item:hover .panel.list {
-			display: block;
-		}
-		.item.wide:hover .panel {
-			display: flex;
-		}
-	}
-
-	@media (max-width: 1100px) {
+	@media (max-width: 1159px) {
 		.bar,
 		.nav {
 			gap: 20px;
 		}
+		/* The wide panel is clamped to the page here, so it no longer lines up with its trigger. */
+		.wide .caret {
+			display: none;
+		}
 	}
 
+	/* Below 960px the nav becomes an accordion; panels turn into plain link lists. */
 	@media (max-width: 959px) {
 		.trust-items span:nth-child(n + 2),
 		.trust-links {
@@ -501,41 +632,63 @@ const { active = '' } = Astro.props;
 		.link.current {
 			border-bottom-color: var(--line);
 		}
-		.panel,
-		.item.wide .panel {
+
+		.drop,
+		.item.wide > .drop {
+			display: none;
 			position: static;
+			padding: 0;
+			visibility: visible;
+			opacity: 1;
+			transform: none;
+			transition: none;
+		}
+		.item.open > .drop {
+			display: block;
+		}
+		.sheet,
+		.wide .sheet,
+		.orgs .sheet {
 			width: auto;
-			padding: 4px 18px 10px;
 			border: 0;
 			border-bottom: 1px solid var(--line);
 			border-radius: 0;
 			background: var(--surface-2);
 			box-shadow: none;
-			font-size: 15px;
 		}
-		.item.open.wide .panel {
+		.body,
+		.body.split,
+		.grid {
 			display: block;
+			padding: 0;
 		}
-		.tests {
-			display: block;
+		.body {
+			padding: 4px 18px 0;
 		}
-		.test,
-		.row {
+		.entry {
 			display: block;
 			padding: 8px 0;
+			border-radius: 0;
 		}
-		.panel b {
+		.text b {
 			font-weight: 400;
 		}
-		.thumb,
-		.promo,
+		.caret,
+		.tile,
+		.icon,
 		.pdf,
-		.panel .desc {
+		.promo,
+		.text span,
+		.foot .quiet,
+		.foot .aside {
 			display: none;
 		}
-		.all {
-			margin-top: 4px;
-			padding: 10px 0 4px;
+		.foot {
+			padding: 8px 18px 12px;
+			border: 0;
+			border-radius: 0;
+			background: none;
+			font-size: 15px;
 		}
 		.nav-cta {
 			display: block;
@@ -544,6 +697,13 @@ const { active = '' } = Astro.props;
 		.nav-cta .btn {
 			width: 100%;
 			min-height: 50px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.drop,
+		.link svg {
+			transition: none;
 		}
 	}
 </style>
