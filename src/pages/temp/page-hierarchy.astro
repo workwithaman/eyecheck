@@ -1,0 +1,158 @@
+---
+// Temporary review page from the wireframes. Not linked from the menu; remove before launch.
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Page hierarchy (temporary) | EyeCheck.app" noindex>
+	<div class="temp">
+		<div style="width:2400px;margin:0 auto;box-sizing:border-box;padding:48px 56px;display:flex;flex-direction:column;gap:30px">
+		  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px">
+		    <div style="display:flex;flex-direction:column;gap:8px"><span class="ey">Temporary page · planning</span><h1 style="margin:0;font-size:40px;line-height:46px;font-weight:600;letter-spacing:-0.02em">Page hierarchy</h1><p style="margin:0;color:#4A5565;font-size:16px">Every URL on the new eyecheck.app, grouped the way the navigation and breadcrumbs work. Volumes are US monthly searches for each page’s main keyword.</p></div>
+		    <span class="mono" style="font-size:12px;color:#6A7282;border:1px dashed #9AA4B2;border-radius:999px;padding:6px 14px">Not a live page · remove before launch</span>
+		  </div>
+		
+		  <div style="display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;background:#F5F8FD;border-radius:14px;padding:14px 18px">
+		    <span class="leg"><i style="background:#F5F8FD;border:1.5px solid #2463EB"></i>New page (15)</span>
+		    <span class="leg"><i style="background:#FFFFFF;border:1.5px solid #D0D5DD"></i>Existing page, rebuilt</span>
+		    <span class="leg"><i style="background:#F9FAFB;border:1.5px dashed #D0D5DD"></i>noindex, not in sitemap</span>
+		    <span class="leg"><i style="background:#FFFFFF;border:1.5px dashed #2463EB"></i>Phase 2</span>
+		    <span class="leg"><i style="background:#2463EB"></i>Section page with its own URL</span>
+		    <span class="leg"><i style="background:#101828"></i>Menu group only, no URL</span>
+		    <span class="leg mono" style="font-size:12px">↪ 301 = redirect from an old URL</span>
+		  </div>
+		
+		  <div style="display:flex;flex-direction:column;align-items:center">
+		    <div class="node page" style="width:340px;align-items:center;text-align:center;padding:18px"><b style="font-size:20px">Home</b><span>/  ·  online eye test 8,100  ·  eye test app</span></div>
+		    <div class="stub"></div>
+		  </div>
+		  <div style="height:2px;background:#B8C4D6;margin:-30px 153px 0"></div>
+		
+		  <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:24px;margin-top:-30px">
+		
+		    <div class="col"><div class="stub"></div>
+		      <div class="node"><b>Eye test flow</b><span>the app itself</span></div>
+		      <div class="kids">
+		        <div class="row"><div class="bx"><b>Start test</b><span class="u">/screening</span><span class="k">take an eye test online · 140</span></div></div>
+		        <div class="row"><div class="bx no"><b>Result <span class="tag t-no">noindex</span></b><span class="u">/result</span><span class="k">score per eye, PDF, reminder</span></div></div>
+		        <div class="row"><div class="bx no"><b>Thank you <span class="tag t-no">noindex</span></b><span class="u">/thank-you</span></div></div>
+		      </div>
+		    </div>
+		
+		    <div class="col"><div class="stub"></div>
+		      <div class="node"><b>Eye tests</b><span>menu group</span></div>
+		      <div class="kids">
+		        <div class="row"><div class="bx new"><b>Visual acuity test <span class="tag t-new">NEW</span></b><span class="u">/visual-acuity-test</span><span class="k">visual acuity test · 5,400</span></div></div>
+		        <div class="row"><div class="bx new"><b>Astigmatism test <span class="tag t-new">NEW</span></b><span class="u">/astigmatism-test</span><span class="k">eye astigmatism test · 33,100</span></div></div>
+		        <div class="row"><div style="flex:1;min-width:0;display:flex;flex-direction:column">
+		          <div class="bx new"><b>Color blind test <span class="tag t-new">NEW</span></b><span class="u">/color-blind-test</span><span class="k">color blind test · 201,000</span></div>
+		          <div class="kids" style="margin-left:18px">
+		            <div class="row"><div class="bx new"><b>For kids <span class="tag t-new">NEW</span><span class="tag t-kid">3+</span></b><span class="u">/color-blind-test/kids</span><span class="k">…for preschoolers · 4,400</span></div></div>
+		          </div>
+		        </div></div>
+		        <div class="row"><div class="bx new"><b>Reading glasses test <span class="tag t-new">NEW</span></b><span class="u">/reading-glasses-test</span><span class="k">reading glasses vision test · 5,400</span></div></div>
+		        <div class="row"><div class="bx new"><b>Lazy eye test <span class="tag t-new">NEW</span></b><span class="u">/lazy-eye-test</span><span class="k">lazy eye test · 880</span></div></div>
+		        <div class="row"><div class="bx ph2"><b>Amsler grid test <span class="tag t-ph">PHASE 2</span></b><span class="u">/amsler-grid-test</span><span class="k">check volume first</span></div></div>
+		      </div>
+		    </div>
+		
+		    <div class="col"><div class="stub"></div>
+		      <div class="node page"><b>Eye charts hub <span class="tag" style="background:#FFFFFF;color:#2463EB">NEW</span></b><span>/eye-charts · eye chart printable 3,600</span></div>
+		      <div class="kids">
+		        <div class="row"><div class="bx" style="border:0;padding:0 0 0 2px;background:transparent"><span class="r">↪ 301 from /resources</span></div></div>
+		        <div class="row"><div class="bx new"><b>Snellen chart <span class="tag t-new">NEW</span></b><span class="u">/eye-charts/snellen</span><span class="k">printable snellen chart · 2,400</span></div></div>
+		        <div class="row"><div class="bx new"><b>10-foot chart <span class="tag t-new">NEW</span></b><span class="u">/eye-charts/10-feet</span><span class="k">…10 feet pdf · 590</span></div></div>
+		        <div class="row"><div class="bx new"><b>Pediatric chart <span class="tag t-new">NEW</span></b><span class="u">/eye-charts/pediatric</span><span class="k">eye chart for preschoolers · 480</span></div></div>
+		        <div class="row"><div class="bx new"><b>Tumbling E chart <span class="tag t-new">NEW</span></b><span class="u">/eye-charts/tumbling-e</span><span class="k">tumbling e eye chart · 110</span></div></div>
+		        <div class="row"><div class="bx ph2"><b>DMV eye chart <span class="tag t-ph">PHASE 2</span></b><span class="u">/eye-charts/dmv</span><span class="k">dmv eye chart test · 2,900</span></div></div>
+		      </div>
+		    </div>
+		
+		    <div class="col"><div class="stub"></div>
+		      <div class="node"><b>For organisations</b><span>menu group</span></div>
+		      <div class="kids">
+		        <div class="row"><div class="bx"><b>Schools</b><span class="u">/schools</span><span class="k">vision screening for schools · 210</span></div></div>
+		        <div class="row"><div class="bx"><b>Clinics</b><span class="u">/clinics</span><span class="k">conversion page</span></div></div>
+		        <div class="row"><div class="bx"><b>Charities</b><span class="u">/charity-support</span><span class="k">conversion page</span></div></div>
+		        <div class="row"><div class="bx"><b>Research</b><span class="u">/academic-collaboration</span><span class="k">conversion page</span></div></div>
+		        <div class="row"><div class="bx"><b>Donate</b><span class="u">/donation</span><span class="k">add to sitemap</span></div></div>
+		      </div>
+		    </div>
+		
+		    <div class="col"><div class="stub"></div>
+		      <div class="node"><b>About &amp; trust</b><span>menu: About</span></div>
+		      <div class="kids">
+		        <div class="row"><div class="bx"><b>About us</b><span class="u">/about-us</span><span class="k">brand, mission, contact</span></div></div>
+		        <div class="row"><div class="bx new"><b>How we test <span class="tag t-new">NEW</span></b><span class="u">/how-we-test</span><span class="k">methodology (E-E-A-T)</span><span class="r">↪ 301 from /blog/tech-revolution, /blog/tech-access-eye-care</span></div></div>
+		        <div class="row"><div class="bx new"><b>Medical review <span class="tag t-new">NEW</span></b><span class="u">/medical-review</span><span class="k">reviewer profile</span></div></div>
+		        <div class="row"><div class="bx"><b>Help &amp; FAQ</b><span class="u">/help</span><span class="k">FAQPage schema</span></div></div>
+		      </div>
+		    </div>
+		
+		    <div class="col"><div class="stub"></div>
+		      <div class="node page"><b>Blog</b><span>/blog · built from Sanity</span></div>
+		      <div class="kids">
+		        <div class="row"><div class="bx"><b>20-20-20 rule</b><span class="u">/blog/20-20-20-rule</span><span class="k">20 20 20 rule · 5,400</span><span class="r">↪ 301 from /blog/screen-time-and-eye-health</span></div></div>
+		        <div class="row"><div class="bx"><b>Pediatric vision screening</b><span class="u">/blog/pediatric-vision-screening</span><span class="k">pediatric vision screening · 390</span><span class="r">↪ 301 from /blog/eye-screening</span></div></div>
+		        <div class="row"><div class="bx"><b>How often to get an eye exam</b><span class="u">/blog/how-often-eye-exam</span><span class="k">how often should you… · 1,600</span><span class="r">↪ 301 from /blog/vision-care-adults</span></div></div>
+		        <div class="row"><div class="bx new"><b>Presbyopia symptoms <span class="tag t-new">NEW</span></b><span class="u">/blog/presbyopia-symptoms</span><span class="k">symptoms of presbyopia · 590</span></div></div>
+		      </div>
+		    </div>
+		
+		    <div class="col"><div class="stub"></div>
+		      <div class="node"><b>Legal &amp; utility</b><span>footer links</span></div>
+		      <div class="kids">
+		        <div class="row"><div class="bx"><b>Privacy policy</b><span class="u">/privacy-policy</span></div></div>
+		        <div class="row"><div class="bx"><b>Terms of service</b><span class="u">/tos</span><span class="r">↪ 301 from /terms-of-service</span></div></div>
+		        <div class="row"><div class="bx no"><b>Unsubscribe <span class="tag t-no">noindex</span></b><span class="u">/unsubscribe</span></div></div>
+		        <div class="row"><div class="bx no"><b>Testimonial <span class="tag t-no">noindex</span></b><span class="u">/testimonial</span></div></div>
+		        <div class="row"><div class="bx no"><b>Approve testimonial <span class="tag t-no">noindex</span></b><span class="u">/testimonial-approve</span></div></div>
+		        <div class="row"><div class="bx new"><b>404 page <span class="tag t-new">NEW</span></b><span class="u">404.html</span><span class="k">real 404 status</span></div></div>
+		      </div>
+		    </div>
+		  </div>
+		
+		  <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:14px;color:#4A5565;border-top:1px solid #E5E7EB;padding-top:20px">
+		    <span><b style="color:#101828">About 32</b> indexable URLs at launch</span><span>·</span>
+		    <span><b style="color:#101828">15</b> new pages</span><span>·</span>
+		    <span><b style="color:#101828">7</b> redirects</span><span>·</span>
+		    <span><b style="color:#101828">5</b> noindex pages</span><span>·</span>
+		    <span>Breadcrumbs follow this tree, e.g. Home › Eye tests › Color blind test › For kids</span>
+		  </div>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	/* The artboard is a fixed-width sheet, so it scrolls sideways on small screens. */
+	.temp {
+		overflow-x: auto;
+		line-height: normal;
+	}
+	.mono{font-family:'Geist Mono',monospace}
+	.ey{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#2463EB;font-weight:500}
+	.col{display:flex;flex-direction:column;align-items:stretch}
+	.stub{width:2px;height:28px;background:#B8C4D6;align-self:center}
+	.node{border-radius:14px;padding:14px 16px;background:#101828;color:#FFFFFF;display:flex;flex-direction:column;gap:3px}
+	.node b{font-size:16px;font-weight:600}
+	.node span{font-family:'Geist Mono',monospace;font-size:11px;color:#B7C0D1}
+	.node.page{background:#2463EB}
+	.node.page span{color:#EBF5FF}
+	.kids{margin-left:22px;border-left:2px solid #B8C4D6;padding:10px 0 0 0;display:flex;flex-direction:column;gap:10px}
+	.row{display:flex;align-items:flex-start}
+	.row::before{content:"";width:16px;height:2px;background:#B8C4D6;margin-top:24px;flex:0 0 16px}
+	.bx{flex:1;min-width:0;border-radius:12px;border:1.5px solid #D0D5DD;background:#FFFFFF;padding:10px 12px;display:flex;flex-direction:column;gap:3px}
+	.bx b{font-size:14px;font-weight:600;line-height:19px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+	.bx .u{font-family:'Geist Mono',monospace;font-size:11px;color:#2463EB}
+	.bx .k{font-size:12px;color:#4A5565}
+	.bx .r{font-family:'Geist Mono',monospace;font-size:10.5px;color:#6A7282}
+	.new{border-color:#2463EB;background:#F5F8FD}
+	.no{border-style:dashed;background:#F9FAFB}
+	.ph2{border-style:dashed;border-color:#2463EB;background:#FFFFFF;opacity:.75}
+	.tag{font-size:10px;font-weight:700;letter-spacing:.04em;border-radius:999px;padding:2px 7px}
+	.t-new{background:#2463EB;color:#FFFFFF}
+	.t-no{background:#E5E7EB;color:#4A5565}
+	.t-ph{background:#FFFFFF;color:#2463EB;border:1px dashed #2463EB}
+	.t-kid{background:#FFC53D;color:#101828}
+	.leg{display:flex;align-items:center;gap:8px;font-size:13px;color:#4A5565}
+	.leg i{width:26px;height:16px;border-radius:5px;display:inline-block}
+</style>

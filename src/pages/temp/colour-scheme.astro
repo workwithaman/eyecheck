@@ -1,0 +1,101 @@
+---
+// Temporary review page from the wireframes. Not linked from the menu; remove before launch.
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Colour scheme (temporary) | EyeCheck.app" noindex>
+	<div class="temp">
+		<div style="width:1280px;margin:0 auto;box-sizing:border-box;padding:48px 56px;display:flex;flex-direction:column;gap:34px">
+		  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px">
+		    <div style="display:flex;flex-direction:column;gap:8px"><span class="ey">Temporary page · brand review</span><h1 style="margin:0;font-size:40px;line-height:46px;font-weight:600;letter-spacing:-0.02em">Colour scheme</h1><p style="margin:0;color:#4A5565;font-size:16px">One confident blue, lots of white, a green tick for good news and a little sunshine for kids.</p></div>
+		    <span class="mono" style="font-size:12px;color:#6A7282;border:1px dashed #9AA4B2;border-radius:999px;padding:6px 14px">Not a live page · remove before launch</span>
+		  </div>
+		
+		  <div style="display:flex;flex-direction:column;gap:14px">
+		    <h2>Core colours</h2>
+		    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px">
+		      <div class="sw"><div class="swatch" style="background:#2463EB;color:#FFFFFF">#2463EB</div><div class="inf"><b>EyeCheck Blue</b><span class="mono">blue · RGB 36 99 235</span><span>Logo, primary buttons, CTA band, key icons</span></div></div>
+		      <div class="sw"><div class="swatch" style="background:#101828;color:#FFFFFF">#101828</div><div class="inf"><b>Ink</b><span class="mono">ink · RGB 16 24 40</span><span>Headings, body, “check” in the logo</span></div></div>
+		      <div class="sw"><div class="swatch" style="background:#EBF5FF;color:#101828">#EBF5FF</div><div class="inf"><b>Lens</b><span class="mono">lens · RGB 235 245 255</span><span>Hero, icon tiles, light cards</span></div></div>
+		      <div class="sw"><div class="swatch" style="background:#0B1530;color:#FFFFFF">#0B1530</div><div class="inf"><b>Night</b><span class="mono">night · RGB 11 21 48</span><span>Footer, clinic media, dark mode</span></div></div>
+		    </div>
+		  </div>
+		
+		  <div style="display:flex;flex-direction:column;gap:14px">
+		    <h2>Signal colours</h2>
+		    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px">
+		      <div class="sw"><div class="swatch" style="background:#16A34A;color:#FFFFFF">#16A34A</div><div class="inf"><b>Check Green</b><span class="mono">green · text uses #15803D</span><span>Ticks and pass results; icons only on white</span></div></div>
+		      <div class="sw"><div class="swatch" style="background:#FFC53D;color:#101828">#FFC53D</div><div class="inf"><b>Sunshine</b><span class="mono">sun · soft #FFF6DB</span><span>Kids and parent content only; dark text</span></div></div>
+		      <div class="sw"><div class="swatch" style="background:#DC3B41;color:#FFFFFF">#DC3B41</div><div class="inf"><b>Refer Red</b><span class="mono">refer · text uses #B42318</span><span>“See an eye doctor” and errors only</span></div></div>
+		      <div class="sw"><div class="swatch" style="background:#1D4FCB;color:#FFFFFF">#1D4FCB</div><div class="inf"><b>Blue strong</b><span class="mono">blue-strong</span><span>Hover and pressed state of blue</span></div></div>
+		    </div>
+		  </div>
+		
+		  <div style="display:flex;flex-direction:column;gap:14px">
+		    <h2>Neutrals</h2>
+		    <div class="n" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px">
+		      <div class="sw"><div class="swatch" style="background:#4A5565;color:#FFFFFF">#4A5565</div><div class="inf"><b>Slate</b><span>Body text</span></div></div>
+		      <div class="sw"><div class="swatch" style="background:#6A7282;color:#FFFFFF">#6A7282</div><div class="inf"><b>Muted</b><span>Captions, meta</span></div></div>
+		      <div class="sw"><div class="swatch" style="background:#E5E7EB;color:#101828">#E5E7EB</div><div class="inf"><b>Line</b><span>Borders, dividers</span></div></div>
+		      <div class="sw"><div class="swatch" style="background:#F5F8FD;color:#101828">#F5F8FD</div><div class="inf"><b>Mist</b><span>Section bands</span></div></div>
+		      <div class="sw"><div class="swatch" style="background:#FFFFFF;color:#101828">#FFFFFF</div><div class="inf"><b>White</b><span>Page, cards</span></div></div>
+		    </div>
+		  </div>
+		
+		  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px">
+		    <div style="display:flex;flex-direction:column;gap:14px">
+		      <h2>Proportions per screen</h2>
+		      <div style="display:flex;height:56px;border-radius:12px;overflow:hidden;border:1px solid #E5E7EB">
+		        <div style="flex:60;background:#F5F8FD;display:flex;align-items:center;padding-left:12px;font-size:13px;font-weight:500">60% White / Mist</div>
+		        <div style="flex:25;background:#101828;color:#FFFFFF;display:flex;align-items:center;padding-left:10px;font-size:13px;font-weight:500">25% Ink</div>
+		        <div style="flex:10;background:#2463EB;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">10%</div>
+		        <div style="flex:5;display:flex;flex-direction:column"><div style="flex:1;background:#16A34A"></div><div style="flex:1;background:#FFC53D"></div><div style="flex:1;background:#DC3B41"></div></div>
+		      </div>
+		      <p style="margin:0;font-size:13px;color:#4A5565">Blue does the brand work. Green, sunshine and red together stay around 5%, once or twice per screen.</p>
+		      <h2 style="margin-top:8px">In use</h2>
+		      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+		        <span style="display:inline-flex;align-items:center;min-height:46px;padding:0 22px;border-radius:999px;background:#2463EB;color:#FFFFFF;font-weight:600;font-size:15px">Primary button</span>
+		        <span style="display:inline-flex;align-items:center;min-height:46px;padding:0 22px;border-radius:999px;background:#FFFFFF;border:1px solid #E5E7EB;color:#2463EB;font-weight:600;font-size:15px">Secondary</span>
+		        <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:#E8F7EE;color:#15803D;font-weight:600;font-size:14px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.8" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Within normal range</span>
+		        <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:#FDECEC;color:#B42318;font-weight:600;font-size:14px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC3B41" stroke-width="2.4" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16v.01"></path></svg>See an eye doctor</span>
+		        <span style="display:inline-flex;align-items:center;padding:6px 12px;border-radius:999px;background:#FFC53D;color:#101828;font-weight:600;font-size:13px">Ages 3+</span>
+		      </div>
+		    </div>
+		    <div style="display:flex;flex-direction:column;gap:14px">
+		      <h2>Readability</h2>
+		      <table>
+		        <tr><th>Text</th><th>On</th><th>Contrast</th><th>Result</th></tr>
+		        <tr><td>Ink</td><td>White</td><td class="mono">17.8 : 1</td><td style="color:#15803D;font-weight:600">Pass</td></tr>
+		        <tr><td>Slate</td><td>White</td><td class="mono">7.6 : 1</td><td style="color:#15803D;font-weight:600">Pass</td></tr>
+		        <tr><td>Muted</td><td>White</td><td class="mono">4.8 : 1</td><td style="color:#15803D;font-weight:600">Pass</td></tr>
+		        <tr><td>White</td><td>Blue</td><td class="mono">5.2 : 1</td><td style="color:#15803D;font-weight:600">Pass</td></tr>
+		        <tr><td>Blue</td><td>Lens</td><td class="mono">4.7 : 1</td><td style="color:#15803D;font-weight:600">Pass</td></tr>
+		        <tr><td>Green #16A34A</td><td>White</td><td class="mono">3.3 : 1</td><td style="color:#B42318;font-weight:600">Icons only</td></tr>
+		        <tr><td>White</td><td>Refer Red</td><td class="mono">4.4 : 1</td><td style="color:#B42318;font-weight:600">18px+ bold only</td></tr>
+		      </table>
+		      <p style="margin:0;font-size:13px;color:#4A5565">Type: Geist. Headings 600 with −0.01em tracking; body 400. Sentence case everywhere.</p>
+		    </div>
+		  </div>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	/* The artboard is a fixed-width sheet, so it scrolls sideways on small screens. */
+	.temp {
+		overflow-x: auto;
+		line-height: normal;
+	}
+	.mono{font-family:'Geist Mono',monospace}
+	.ey{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#2463EB;font-weight:500}
+	h2{margin:0;font-size:22px;line-height:28px;font-weight:600;letter-spacing:-0.01em}
+	.sw{border-radius:16px;overflow:hidden;border:1px solid #E5E7EB;display:flex;flex-direction:column}
+	.swatch{height:130px;display:flex;align-items:flex-end;padding:14px;box-sizing:border-box;font-family:'Geist Mono',monospace;font-size:13px;font-weight:500}
+	.inf{padding:14px;display:flex;flex-direction:column;gap:3px;font-size:13px;color:#4A5565}
+	.inf b{color:#101828;font-size:15px;font-weight:600}
+	.inf .mono{font-size:11px;color:#6A7282}
+	.n .swatch{height:90px}
+	table{border-collapse:collapse;width:100%;font-size:14px}
+	td,th{padding:10px 12px;border-bottom:1px solid #E5E7EB;text-align:left}
+	th{font-weight:600;color:#4A5565;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+</style>

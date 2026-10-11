@@ -1,0 +1,101 @@
+---
+// Temporary review page from the wireframes. Not linked from the menu; remove before launch.
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Logo options (temporary) | EyeCheck.app" noindex>
+	<div class="temp">
+		<div style="width:1280px;margin:0 auto;box-sizing:border-box;padding:48px 56px;display:flex;flex-direction:column;gap:36px">
+		  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px">
+		    <div style="display:flex;flex-direction:column;gap:8px"><span class="ey">Temporary page · brand review</span><h1 style="margin:0;font-size:40px;line-height:46px;font-weight:600;letter-spacing:-0.02em">Logo options</h1><p style="margin:0;color:#4A5565;font-size:16px">Every logo, icon and favicon option from the brand pack, on the backgrounds each one is meant for.</p></div>
+		    <span class="mono" style="font-size:12px;color:#6A7282;border:1px dashed #9AA4B2;border-radius:999px;padding:6px 14px">Not a live page · remove before launch</span>
+		  </div>
+		
+		  <div style="position:relative;border:2px solid #2463EB;border-radius:24px;padding:40px;display:flex;align-items:center;gap:48px;background:linear-gradient(180deg,#EBF5FF,#FFFFFF)">
+		    <span style="position:absolute;top:16px;left:16px;background:#2463EB;color:#FFFFFF;font-size:12px;font-weight:600;border-radius:999px;padding:5px 12px">Selected · primary logo</span>
+		    <img src="/images/logo.svg" alt="EyeCheck logo, full colour" style="height:150px;width:auto;margin-top:16px">
+		    <div class="cap" style="gap:6px;font-size:14px"><b style="font-size:18px">Full-colour wordmark</b><span class="mono">logo/eyecheck-logo.svg</span><span>“eye” in EyeCheck Blue, “check” in Ink. Used in the site header. Use on White, Lens and Mist only.</span></div>
+		  </div>
+		
+		  <div style="display:flex;flex-direction:column;gap:16px">
+		    <h2>Wordmark variants</h2>
+		    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px">
+		      <div class="tile"><div class="sw" style="background:#0B1530"><img src="/images/logo-white.svg" alt="" style="height:70px"></div><div class="cap"><b>White</b><span class="mono">eyecheck-logo-white.svg</span><span>Footer, Night and photos</span></div></div>
+		      <div class="tile"><div class="sw" style="background:#2463EB"><img src="/images/logo-white.svg" alt="" style="height:70px"></div><div class="cap"><b>White on Blue</b><span class="mono">eyecheck-logo-white.svg</span><span>Final CTA band</span></div></div>
+		      <div class="tile"><div class="sw" style="background:#FFFFFF;border:1px solid #E5E7EB"><img src="/images/brand/logo-ink.svg" alt="" style="height:70px"></div><div class="cap"><b>Ink, one colour</b><span class="mono">eyecheck-logo-ink.svg</span><span>Single-colour print, stamps</span></div></div>
+		      <div class="tile"><div class="sw" style="background:#EBF5FF"><img src="/images/brand/logo-blue.svg" alt="" style="height:70px"></div><div class="cap"><b>Blue, one colour</b><span class="mono">eyecheck-logo-blue.svg</span><span>Single colour on White or Lens</span></div></div>
+		    </div>
+		  </div>
+		
+		  <div style="display:flex;flex-direction:column;gap:16px">
+		    <h2>Icons</h2>
+		    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px">
+		      <div class="tile"><div class="sw" style="background:#FFFFFF;border:1px solid #E5E7EB"><img src="/images/brand/icon.svg" alt="" style="height:100px"></div><div class="cap"><b>Icon, blue</b><span class="mono">eyecheck-icon.svg</span><span>Small spaces on white</span></div></div>
+		      <div class="tile"><div class="sw" style="background:#2463EB"><img src="/images/brand/icon-white.svg" alt="" style="height:100px"></div><div class="cap"><b>Icon, white</b><span class="mono">eyecheck-icon-white.svg</span><span>On Blue or Night</span></div></div>
+		      <div class="tile"><div class="sw" style="background:#F5F8FD"><img src="/images/brand/app-icon.svg" alt="" style="height:110px"></div><div class="cap"><b>App icon, blue</b><span class="mono">eyecheck-app-icon.svg</span><span>Social avatars, app stores</span></div></div>
+		      <div class="tile"><div class="sw" style="background:#F5F8FD"><img src="/images/brand/app-icon-lens.svg" alt="" style="height:110px"></div><div class="cap"><b>App icon, Lens</b><span class="mono">eyecheck-app-icon-lens.svg</span><span>Light avatar alternative</span></div></div>
+		    </div>
+		  </div>
+		
+		  <div style="display:flex;flex-direction:column;gap:16px">
+		    <h2>Favicon options</h2>
+		    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
+		      <div class="fav" style="border:2px solid #2463EB;background:#FAFCFF">
+		        <div style="display:flex;align-items:center;gap:8px"><b style="font-size:15px">D · Bold glasses</b><span style="background:#2463EB;color:#FFFFFF;font-size:11px;font-weight:600;border-radius:999px;padding:3px 9px">Recommended</span></div>
+		        <div class="sizes"><div><img src="/images/brand/favicon-d-bold-glasses.svg" alt="" style="width:64px;height:64px"><span>64</span></div><div><img src="/images/brand/favicon-d-bold-glasses.svg" alt="" style="width:32px;height:32px"><span>32</span></div><div><img src="/images/brand/favicon-d-bold-glasses.svg" alt="" style="width:16px;height:16px"><span>16</span></div></div>
+		        <span style="font-size:13px;color:#4A5565">App icon redrawn with thicker rings. Clear at 16px on light and dark tabs.</span>
+		      </div>
+		      <div class="fav">
+		        <b style="font-size:15px">B · App icon as-is</b>
+		        <div class="sizes"><div><img src="/images/brand/app-icon.svg" alt="" style="width:64px;height:64px"><span>64</span></div><div><img src="/images/brand/app-icon.svg" alt="" style="width:32px;height:32px"><span>32</span></div><div><img src="/images/brand/app-icon.svg" alt="" style="width:16px;height:16px"><span>16</span></div></div>
+		        <span style="font-size:13px;color:#4A5565">Works well; pupils soften at 16px.</span>
+		      </div>
+		      <div class="fav">
+		        <b style="font-size:15px">E · Peeking eyes</b>
+		        <div class="sizes"><div><img src="/images/brand/favicon-e-peeking-eyes.svg" alt="" style="width:64px;height:64px"><span>64</span></div><div><img src="/images/brand/favicon-e-peeking-eyes.svg" alt="" style="width:32px;height:32px"><span>32</span></div><div><img src="/images/brand/favicon-e-peeking-eyes.svg" alt="" style="width:16px;height:16px"><span>16</span></div></div>
+		        <span style="font-size:13px;color:#4A5565">Playful and readable; loses the glasses.</span>
+		      </div>
+		      <div class="fav">
+		        <b style="font-size:15px">F · Single lens</b>
+		        <div class="sizes"><div><img src="/images/brand/favicon-f-single-lens.svg" alt="" style="width:64px;height:64px"><span>64</span></div><div><img src="/images/brand/favicon-f-single-lens.svg" alt="" style="width:32px;height:32px"><span>32</span></div><div><img src="/images/brand/favicon-f-single-lens.svg" alt="" style="width:16px;height:16px"><span>16</span></div></div>
+		        <span style="font-size:13px;color:#4A5565">Boldest at 16px; reads less as EyeCheck.</span>
+		      </div>
+		      <div class="fav">
+		        <b style="font-size:15px">A · Glasses only</b>
+		        <div class="sizes"><div><img src="/images/brand/icon.svg" alt="" style="width:64px;height:64px"><span>64</span></div><div><img src="/images/brand/icon.svg" alt="" style="width:32px;height:32px"><span>32</span></div><div><img src="/images/brand/icon.svg" alt="" style="width:16px;height:16px"><span>16</span></div></div>
+		        <span style="font-size:13px;color:#4A5565">Too thin at 16px, weak on dark tabs.</span>
+		      </div>
+		      <div class="fav">
+		        <b style="font-size:15px">C · App icon, Lens</b>
+		        <div class="sizes"><div><img src="/images/brand/app-icon-lens.svg" alt="" style="width:64px;height:64px"><span>64</span></div><div><img src="/images/brand/app-icon-lens.svg" alt="" style="width:32px;height:32px"><span>32</span></div><div><img src="/images/brand/app-icon-lens.svg" alt="" style="width:16px;height:16px"><span>16</span></div></div>
+		        <span style="font-size:13px;color:#4A5565">Pale square fades into light tabs.</span>
+		      </div>
+		    </div>
+		  </div>
+		
+		  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;font-size:14px;color:#4A5565">
+		    <div style="background:#E8F7EE;border-radius:14px;padding:16px 18px"><b style="color:#15803D">Do</b> use the colour logo on White, Lens or Mist, and the white logo on Blue or Night.</div>
+		    <div style="background:#FDECEC;border-radius:14px;padding:16px 18px"><b style="color:#B42318">Don’t</b> recolour the logo green, yellow or red, or put the colour logo on Blue.</div>
+		  </div>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	/* The artboard is a fixed-width sheet, so it scrolls sideways on small screens. */
+	.temp {
+		overflow-x: auto;
+		line-height: normal;
+	}
+	.mono{font-family:'Geist Mono',monospace}
+	.ey{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#2463EB;font-weight:500}
+	h2{margin:0;font-size:22px;line-height:28px;font-weight:600;letter-spacing:-0.01em}
+	.tile{display:flex;flex-direction:column;gap:10px}
+	.sw{height:150px;border-radius:16px;display:flex;align-items:center;justify-content:center;box-sizing:border-box}
+	.cap{display:flex;flex-direction:column;gap:2px;font-size:13px;color:#4A5565}
+	.cap b{color:#101828;font-size:14px;font-weight:600}
+	.cap .mono{font-size:11px;color:#6A7282}
+	.fav{display:flex;flex-direction:column;gap:12px;border:1px solid #E5E7EB;border-radius:16px;padding:18px;box-sizing:border-box}
+	.sizes{display:flex;align-items:flex-end;gap:18px;background:#F5F8FD;border-radius:12px;padding:14px 16px}
+	.sizes span{font-family:'Geist Mono',monospace;font-size:10px;color:#6A7282;display:block;text-align:center;margin-top:4px}
+</style>

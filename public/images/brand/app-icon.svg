@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>EyeCheck icon</title>
+  <rect width="512" height="512" rx="112" fill="#2463EB"></rect>
+  <circle cx="160" cy="256" r="72" fill="none" stroke="#FFFFFF" stroke-width="32"></circle>
+  <circle cx="352" cy="256" r="72" fill="none" stroke="#FFFFFF" stroke-width="32"></circle>
+  <path d="M236 248 Q256 220 276 248" fill="none" stroke="#FFFFFF" stroke-width="28" stroke-linecap="round"></path>
+  <circle cx="184" cy="264" r="28" fill="#FFFFFF"></circle>
+  <circle cx="376" cy="264" r="28" fill="#FFFFFF"></circle>
+</svg>
