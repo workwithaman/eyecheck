@@ -5,8 +5,8 @@ import Layout from '../../layouts/Layout.astro';
 
 <Layout title="Page hierarchy (temporary) | EyeCheck.app" noindex>
 	<div class="temp">
-		<div style="width:2400px;margin:0 auto;box-sizing:border-box;padding:48px 56px;display:flex;flex-direction:column;gap:30px">
-		  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px">
+		<div class="sheet">
+		  <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px">
 		    <div style="display:flex;flex-direction:column;gap:8px"><span class="ey">Temporary page · planning</span><h1 style="margin:0;font-size:40px;line-height:46px;font-weight:600;letter-spacing:-0.02em">Page hierarchy</h1><p style="margin:0;color:#4A5565;font-size:16px">Every URL on the new eyecheck.app, grouped the way the navigation and breadcrumbs work. Volumes are US monthly searches for each page’s main keyword.</p></div>
 		    <span class="mono" style="font-size:12px;color:#6A7282;border:1px dashed #9AA4B2;border-radius:999px;padding:6px 14px">Not a live page · remove before launch</span>
 		  </div>
@@ -21,11 +21,14 @@ import Layout from '../../layouts/Layout.astro';
 		    <span class="leg mono" style="font-size:12px">↪ 301 = redirect from an old URL</span>
 		  </div>
 		
+		  <p class="hint">The diagram is wider than this window. Scroll it sideways to see all seven columns.</p>
+		  <div class="scroller" role="region" aria-label="Page hierarchy diagram" tabindex="0">
+		  <div class="tree">
 		  <div style="display:flex;flex-direction:column;align-items:center">
 		    <div class="node page" style="width:340px;align-items:center;text-align:center;padding:18px"><b style="font-size:20px">Home</b><span>/  ·  online eye test 8,100  ·  eye test app</span></div>
 		    <div class="stub"></div>
 		  </div>
-		  <div style="height:2px;background:#B8C4D6;margin:-30px 153px 0"></div>
+		  <div class="rail"></div>
 		
 		  <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:24px;margin-top:-30px">
 		
@@ -111,6 +114,9 @@ import Layout from '../../layouts/Layout.astro';
 		    </div>
 		  </div>
 		
+		  </div>
+		  </div>
+
 		  <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:14px;color:#4A5565;border-top:1px solid #E5E7EB;padding-top:20px">
 		    <span><b style="color:#101828">About 32</b> indexable URLs at launch</span><span>·</span>
 		    <span><b style="color:#101828">15</b> new pages</span><span>·</span>
@@ -123,10 +129,58 @@ import Layout from '../../layouts/Layout.astro';
 </Layout>
 
 <style>
-	/* The artboard is a fixed-width sheet, so it scrolls sideways on small screens. */
 	.temp {
-		overflow-x: auto;
 		line-height: normal;
+	}
+	/* The title, legend and totals follow the page width; only the diagram scrolls sideways. */
+	.sheet {
+		display: flex;
+		flex-direction: column;
+		gap: 30px;
+		max-width: 2400px;
+		margin: 0 auto;
+		padding: 48px 32px;
+	}
+	.sheet > * {
+		min-width: 0;
+	}
+	.scroller {
+		overflow-x: auto;
+		padding-bottom: 12px;
+		scrollbar-width: thin;
+	}
+	.scroller:focus-visible {
+		outline: 2px solid #2463EB;
+		outline-offset: 4px;
+	}
+	/* Seven columns need about 1800px to stay readable; wider windows let them grow. */
+	.tree {
+		display: flex;
+		flex-direction: column;
+		gap: 30px;
+		min-width: 1800px;
+	}
+	/* Horizontal connector: runs from the centre of the first column to the centre of the last. */
+	.rail {
+		height: 2px;
+		margin: -30px calc((100% - 144px) / 14) 0;
+		background: #B8C4D6;
+	}
+	.hint {
+		display: none;
+		margin: 0;
+		color: #4A5565;
+		font-size: 13px;
+	}
+	@media (max-width: 1879px) {
+		.hint {
+			display: block;
+		}
+	}
+	@media (max-width: 720px) {
+		.sheet {
+			padding: 32px 18px;
+		}
 	}
 	.mono{font-family:'Geist Mono',monospace}
 	.ey{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#2463EB;font-weight:500}
@@ -142,7 +196,7 @@ import Layout from '../../layouts/Layout.astro';
 	.row::before{content:"";width:16px;height:2px;background:#B8C4D6;margin-top:24px;flex:0 0 16px}
 	.bx{flex:1;min-width:0;border-radius:12px;border:1.5px solid #D0D5DD;background:#FFFFFF;padding:10px 12px;display:flex;flex-direction:column;gap:3px}
 	.bx b{font-size:14px;font-weight:600;line-height:19px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-	.bx .u{font-family:'Geist Mono',monospace;font-size:11px;color:#2463EB}
+	.bx .u{font-family:'Geist Mono',monospace;font-size:11px;color:#2463EB;overflow-wrap:anywhere}
 	.bx .k{font-size:12px;color:#4A5565}
 	.bx .r{font-family:'Geist Mono',monospace;font-size:10.5px;color:#6A7282}
 	.new{border-color:#2463EB;background:#F5F8FD}
