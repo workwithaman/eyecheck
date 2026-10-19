@@ -56,7 +56,7 @@ const schema = [
 		'@type': 'Organization',
 		name: site.name,
 		url: origin,
-		logo: new URL('/images/logo.svg', origin).href,
+		logo: new URL('/icon-512.png', origin).href,
 	},
 	{
 		'@context': 'https://schema.org',
@@ -178,7 +178,7 @@ const schema = [
 			<h2>Watch: how EyeCheck works in 90 seconds</h2>
 			<p>See how to set up your screen, take the test with a child and read the result.</p>
 			<div class="video" data-video={site.videoId}>
-				<img class="video-logo" src="/images/logo-white.svg" alt="" width="105" height="40" loading="lazy" />
+				<img class="video-logo" src="/images/logo-white.svg" alt="" width="221" height="32" loading="lazy" />
 				{
 					site.videoId ? (
 						<button type="button" class="play" aria-label="Play video: how EyeCheck works">
@@ -368,7 +368,7 @@ const schema = [
 
 	<section class="closing">
 		<div class="wrap closing-in">
-			<img src="/images/logo-white.svg" alt="" width="147" height="56" loading="lazy" />
+			<img src="/images/logo-on-blue.svg" alt="" width="331" height="48" loading="lazy" />
 			<h2>Check your eyes now</h2>
 			<p>Free, about 5 minutes, results for each eye.</p>
 			<a href={routes.start} class="btn">
@@ -615,7 +615,7 @@ const schema = [
 		left: 28px;
 		top: 24px;
 		width: auto;
-		height: 40px;
+		height: 32px;
 		opacity: 0.9;
 	}
 	.play {
@@ -868,7 +868,7 @@ const schema = [
 	}
 	.closing img {
 		width: auto;
-		height: 56px;
+		height: 48px;
 	}
 	.closing h2 {
 		color: var(--on-blue);

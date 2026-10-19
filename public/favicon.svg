@@ -1,9 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <title>EyeCheck favicon, bold</title>
-  <rect width="512" height="512" rx="112" fill="#2463EB"/>
-  <circle cx="148" cy="262" r="92" fill="none" stroke="#FFFFFF" stroke-width="48"/>
-  <circle cx="364" cy="262" r="92" fill="none" stroke="#FFFFFF" stroke-width="48"/>
-  <path d="M236 246 Q256 222 276 246" fill="none" stroke="#FFFFFF" stroke-width="40" stroke-linecap="round"/>
-  <circle cx="176" cy="274" r="40" fill="#FFFFFF"/>
-  <circle cx="392" cy="274" r="40" fill="#FFFFFF"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><title>EyeCheck favicon</title><rect width="512" height="512" rx="112" fill="#2463EB"></rect><g fill="#FFFFFF" transform="translate(256 256) scale(1.000) translate(-256 -256)"><path transform="translate(256.00 256.00) rotate(0)" d="M-140.00 -140.00 L140.00 -140.00 L140.00 -84.00 L-84.00 -84.00 L-84.00 -28.00 L140.00 -28.00 L140.00 28.00 L-84.00 28.00 L-84.00 84.00 L140.00 84.00 L140.00 140.00 L-140.00 140.00 Z"></path></g></svg>
