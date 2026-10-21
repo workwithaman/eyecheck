@@ -8,10 +8,10 @@ export const site = {
 	legalEntity: '[Legal entity, country]',
 	// YouTube ID of the "How EyeCheck works" video. The player only loads once this is set.
 	videoId: '',
+	// Profile URLs for the footer and home page social links. Until one is set, its icon links nowhere.
 	social: {
-		youtube: '',
+		facebook: '',
 		instagram: '',
-		linkedin: '',
 	},
 };
 

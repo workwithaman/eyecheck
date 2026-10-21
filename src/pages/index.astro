@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { site, routes, tests, orgs } from '../data/site';
 import { posts as blogPosts } from '../data/blog';
+import { socialLinks, socialProfiles } from '../data/social';
 
 const title = 'Free Online Eye Test & Eye Test App | EyeCheck.app';
 const description =
@@ -57,6 +58,7 @@ const schema = [
 		name: site.name,
 		url: origin,
 		logo: new URL('/icon-512.png', origin).href,
+		...(socialProfiles.length > 0 && { sameAs: socialProfiles }),
 	},
 	{
 		'@context': 'https://schema.org',
@@ -344,6 +346,30 @@ const schema = [
 						</a>
 					))
 				}
+			</div>
+		</div>
+	</section>
+
+	<section class="sec follow-sec">
+		<div class="wrap">
+			<div class="follow">
+				<div class="follow-copy">
+					<span class="eyebrow">Follow us</span>
+					<h2>Eye health tips, every week</h2>
+					<p>Short videos and tips on screen time, children’s vision and when to see an eye doctor.</p>
+				</div>
+				<div class="actions">
+					{
+						socialLinks.map((s) => (
+							<a href={s.href || '#'} target="_blank" rel="noopener" class="btn" aria-label={`Follow EyeCheck on ${s.name}`}>
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+									<path d={s.icon} />
+								</svg>
+								{s.name}
+							</a>
+						))
+					}
+				</div>
 			</div>
 		</div>
 	</section>
@@ -812,6 +838,31 @@ const schema = [
 		flex-direction: column;
 		gap: 8px;
 		padding: 0 24px 24px;
+	}
+
+	/* Follow us */
+	.follow-sec {
+		padding-top: 0;
+	}
+	.follow {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 20px;
+		padding: 28px 32px;
+		border-radius: 20px;
+		background: var(--lens);
+	}
+	.follow-copy {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		max-width: 560px;
+	}
+	.follow h2 {
+		font-size: 26px;
+		line-height: 32px;
 	}
 
 	/* FAQ */
