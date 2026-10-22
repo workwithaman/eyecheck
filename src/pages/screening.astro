@@ -1,72 +1,203 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { routes } from '../data/site';
+
+const origin = Astro.site?.href ?? '/';
+const schema = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', origin).href },
+			{ '@type': 'ListItem', position: 2, name: 'Start eye test', item: new URL('/screening/', origin).href },
+		],
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'WebApplication',
+		name: 'EyeCheck online eye test',
+		url: new URL('/screening/', origin).href,
+		applicationCategory: 'HealthApplication',
+		operatingSystem: 'Any',
+		browserRequirements: 'Requires JavaScript',
+		offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+	},
+];
+
+const tick = (size: number) =>
+	`<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>`;
+
+const setup = [
+	{
+		title: 'A bright screen, 33 cm (13″) or larger',
+		text: 'A laptop or desktop. Phones are too small for accurate results.',
+		icon: '<rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path>',
+	},
+	{ title: 'Sit 3 m (10 ft) away', text: 'About 4 big steps for an adult.', icon: '<path d="M3 12h18M6 9l-3 3 3 3M18 9l3 3-3 3"></path>' },
+	{
+		title: 'Wireless mouse on a flat surface',
+		text: 'So you can answer from 3 m away.',
+		icon: '<rect x="7" y="3" width="10" height="18" rx="5"></rect><path d="M12 7v3"></path>',
+	},
+];
+
+const fields = [
+	{ id: 'full-name', name: 'fullName', label: 'Full name', type: 'text', autocomplete: 'name', wide: true },
+	{ id: 'email', name: 'email', label: 'Email address', type: 'email', autocomplete: 'email' },
+	{ id: 'birth-date', name: 'birthDate', label: 'Birth date', type: 'date', autocomplete: 'bday' },
+	{ id: 'country', name: 'country', label: 'Country', type: 'text', autocomplete: 'country-name' },
+	{ id: 'city', name: 'city', label: 'City', type: 'text', autocomplete: 'address-level2' },
+];
 ---
 
-<Layout title={"Start Your Free Eye Test | EyeCheck.app"}>
-	<div class="inner">
-	<div class="wrap crumb">Home › Start eye test</div>
-	<section class="wrap" style="padding-top:20px;padding-bottom:32px;display:flex;flex-direction:column;gap:12px;max-width:860px;margin-left:auto;margin-right:auto">
-	  <h1>Start Your Free Eye Test</h1>
-	  <p class="muted">Three quick steps, then the test runs full screen. About 1–2 minutes per eye.</p>
+<Layout title="Start Your Free Eye Test | EyeCheck.app">
+	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+
+	<section class="hero">
+		<div class="wrap hero-in">
+			<nav aria-label="Breadcrumb" class="crumbs"><a href={routes.home}>Home</a> › <span aria-current="page">Start eye test</span></nav>
+			<h1>Start your free eye test</h1>
+			<p class="lead">Three quick steps, then the test runs full screen. About 1–2 minutes per eye.</p>
+			<ul class="perks">
+				<li><Fragment set:html={tick(16)} />Free</li>
+				<li><Fragment set:html={tick(16)} />No download</li>
+				<li><Fragment set:html={tick(16)} />For ages 3 and up</li>
+			</ul>
+		</div>
 	</section>
 
-	<section class="wrap" style="max-width:860px;display:flex;flex-direction:column;gap:20px;padding-bottom:48px">
-	  <div class="card">
-	    <span class="eyebrow">Step 1 of 3</span>
-	    <h2 id="age-heading">Who is taking the test?</h2>
-	    <div class="ages" role="group" aria-labelledby="age-heading" data-ages>
-	      <button type="button" class="card age" data-optotype="shapes" aria-pressed="false"><span class="age-art"><img src="/images/test-color-blind.svg" alt="" width="132" height="90" /></span><h3>Child, ages 3–7</h3><span class="muted">Picture shapes</span></button>
-	      <button type="button" class="card age selected" data-optotype="landolt" aria-pressed="true"><span class="age-art"><img src="/images/test-visual-acuity.svg" alt="" width="132" height="90" /></span><h3>Ages 8 and up</h3><span class="muted">Landolt C rings</span></button>
-	    </div>
-	  </div>
+	<div class="wrap body">
+		<form class="steps" aria-label="Eye test setup" novalidate data-screening>
+			<fieldset class="step">
+				<legend>
+					<span class="step-head">
+						<span class="num" aria-hidden="true">1</span>
+						<span class="step-title"><span class="eyebrow">Step 1 of 3</span><span class="h2">Who is taking the test?</span></span>
+					</span>
+				</legend>
+				<div class="ages">
+					<label class="age">
+						<input type="radio" name="ageGroup" value="shapes" required />
+						<span class="age-art"><img src="/images/test-color-blind.svg" alt="" width="111" height="76" /></span>
+						<span class="age-row">
+							<span class="age-text"><b>Child, ages 3–7</b><span>Picture shapes</span></span>
+							<span class="radio" aria-hidden="true"></span>
+						</span>
+					</label>
+					<label class="age">
+						<input type="radio" name="ageGroup" value="landolt" required />
+						<span class="age-art"><img src="/images/test-visual-acuity.svg" alt="" width="117" height="80" /></span>
+						<span class="age-row">
+							<span class="age-text"><b>Ages 8 and up</b><span>Landolt C rings</span></span>
+							<span class="radio" aria-hidden="true"></span>
+						</span>
+					</label>
+				</div>
+				<p class="error" id="ageGroup-error" data-error="ageGroup" hidden>Choose who is taking the test.</p>
+			</fieldset>
 
-	  <div class="card">
-	    <span class="eyebrow">Step 2 of 3</span>
-	    <h2>Check your setup</h2>
-	    <div class="grid3">
-	      <div style="display:flex;flex-direction:column;gap:8px"><span class="setup-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg></span><h3>A bright screen, 33 cm (13″) or larger</h3><p class="muted">A laptop or desktop. Phones are too small for accurate results.</p></div>
-	      <div style="display:flex;flex-direction:column;gap:8px"><span class="setup-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18M6 9l-3 3 3 3M18 9l3 3-3 3" /></svg></span><h3>Sit 3 m (10 ft) away</h3><p class="muted">About 4 big steps for an adult.</p></div>
-	      <div style="display:flex;flex-direction:column;gap:8px"><span class="setup-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="5" /><path d="M12 7v3" /></svg></span><h3>Wireless mouse on a flat surface</h3><p class="muted">So you can answer from 3 m away.</p></div>
-	    </div>
-	  </div>
+			<section class="step" aria-labelledby="step-2">
+				<div class="step-head">
+					<span class="num" aria-hidden="true">2</span>
+					<span class="step-title"><span class="eyebrow">Step 2 of 3</span><h2 id="step-2">Check your setup</h2></span>
+				</div>
+				<div class="setup">
+					{
+						setup.map((s) => (
+							<div class="setup-item">
+								<span class="tile">
+									<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={s.icon} />
+								</span>
+								<h3>{s.title}</h3>
+								<p>{s.text}</p>
+							</div>
+						))
+					}
+				</div>
+				<p class="aside-note">No screen big enough? <a href={`${routes.eyeCharts}/`}>Print an eye chart instead</a>.</p>
+			</section>
 
-	  <form id="screening-form" class="details" data-screening>
-	    <div class="card">
-	      <span class="eyebrow">Step 3 of 3</span>
-	      <h2>Your details</h2>
-	      <div class="fields">
-	        <label for="full-name">Full name<input type="text" id="full-name" name="fullName" autocomplete="name" required /></label>
-	        <label for="email">Email address<input type="email" id="email" name="email" autocomplete="email" required /></label>
-	        <label for="birth-date" class="short">Birth date<input type="date" id="birth-date" name="birthDate" autocomplete="bday" required /></label>
-	        <label for="country" class="short">Country<input type="text" id="country" name="country" autocomplete="country-name" required /></label>
-	        <label for="city" class="short">City<input type="text" id="city" name="city" autocomplete="address-level2" required /></label>
-	      </div>
-	      <label for="screening-consent" class="check">
-	        <input type="checkbox" id="screening-consent" name="consent" required />
-	        <span>I understand that EyeCheck.app is a digital screening tool and not a substitute for a professional eye exam.</span>
-	      </label>
-	      <p class="muted terms">
-	        By proceeding, you agree to the <a href={`${routes.privacy}/`}>Privacy Policy</a> and <a href={`${routes.terms}/`}>Terms of Service</a>.
-	      </p>
-	    </div>
+			<section class="step" aria-labelledby="step-3">
+				<div class="step-head">
+					<span class="num" aria-hidden="true">3</span>
+					<span class="step-title"><span class="eyebrow">Step 3 of 3</span><h2 id="step-3">Your details</h2></span>
+				</div>
+				<div class="fields">
+					{
+						fields.map((f) => (
+							<div class:list={['field', { wide: f.wide }]}>
+								<label for={f.id}>{f.label}</label>
+								<input
+									type={f.type}
+									id={f.id}
+									name={f.name}
+									autocomplete={f.autocomplete}
+									required
+									aria-describedby={`${f.id}-error`}
+								/>
+								<p class="error" id={`${f.id}-error`} data-error={f.name} hidden />
+							</div>
+						))
+					}
+				</div>
+				<div class="consent">
+					<label for="screening-consent" class="check">
+						<input type="checkbox" id="screening-consent" name="consent" required aria-describedby="screening-consent-error" />
+						<span>I understand that EyeCheck.app is a digital screening tool and not a substitute for a professional eye exam.</span>
+					</label>
+					<p class="error" id="screening-consent-error" data-error="consent" hidden>Tick the box to continue.</p>
+				</div>
+				<p class="terms">
+					By proceeding, you agree to the <a href={`${routes.privacy}/`}>Privacy Policy</a> and <a href={`${routes.terms}/`}>Terms of Service</a>.
+				</p>
+			</section>
 
-	    <div class="start">
-	      <button type="submit" class="btn solid">Start screening</button>
-	      <span class="muted" style="font-size:14px">Opens full screen. Press Esc to exit.</span>
-	    </div>
-	    <p class="status" role="status" aria-live="polite" data-status></p>
-	  </form>
-	  <!-- After Start: the Unity WebGL test opens in a full-screen overlay (shape or landolt build). Results are posted to /user/update-results, then the visitor is redirected to /result. -->
-	</section>
+			<div class="start">
+				<button type="submit" class="btn solid start-btn" disabled>
+					Start screening
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+				</button>
+				<span class="start-note">Opens full screen. Press Esc to exit.</span>
+			</div>
+			<p class="status" role="status" aria-live="polite" data-status></p>
+			<!-- After Start: the Unity WebGL test opens in a full-screen overlay (shape or landolt build). Results are posted to /user/update-results, then the visitor is redirected to /result. -->
+		</form>
 
-	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="max-width:860px;display:flex;flex-direction:column;gap:14px">
-	  <h2>Before you start</h2>
-	  <p class="muted">Wear your usual glasses or contact lenses, use good lighting, and test one eye at a time.</p>
-	  <p class="muted">Testing a young child? Show them the <a href={routes.chartPediatric}>Shapes Chart</a> first so they know the shapes (optional).</p>
-	  <p class="muted">No screen big enough? <a href={routes.eyeCharts}>Print an eye chart instead</a>.</p>
-	  <p class="muted">EyeCheck.app is a screening tool, not a diagnosis. If you notice sudden changes in your vision, see an eye doctor straight away. Read <a href={`${routes.howWeTest}/`}>how we test</a> or <a href={`${routes.help}/`}>get help</a>.</p>
-	</div></section>
+		<aside class="side">
+			<div class="panel expect">
+				<h2>What to expect</h2>
+				<ol>
+					<li><span class="dot" aria-hidden="true">1</span><p><b>Cover one eye</b> and answer from 3 m away using the mouse.</p></li>
+					<li><span class="dot" aria-hidden="true">2</span><p><b>Swap eyes.</b> About 1–2 minutes each.</p></li>
+					<li><span class="dot" aria-hidden="true">3</span><p><b>Get a Pass or Refer</b> result for each eye, plus an optional detailed PDF report.</p></li>
+				</ol>
+			</div>
+
+			<div class="panel tips">
+				<h2>Before you start</h2>
+				<ul>
+					<li><Fragment set:html={tick(18)} />Wear your usual glasses or contact lenses</li>
+					<li><Fragment set:html={tick(18)} />Use good, even lighting</li>
+					<li><Fragment set:html={tick(18)} />Test one eye at a time</li>
+				</ul>
+			</div>
+
+			<div class="panel kids">
+				<img src="/images/shapes-chart.jpg" alt="" width="76" height="76" loading="lazy" />
+				<span>
+					<b>Testing a young child?</b>
+					<span>Show them the <a href={`${routes.chartPediatric}/`}>Shapes Chart</a> first so they know the shapes (optional).</span>
+				</span>
+			</div>
+
+			<div class="panel disclaimer">
+				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16v.01"></path></svg>
+				<p>
+					EyeCheck.app is a screening tool, not a diagnosis. If you notice sudden changes in your vision, see an eye doctor straight
+					away. Read <a href={`${routes.howWeTest}/`}>how we test</a> or <a href={`${routes.help}/`}>get help</a>.
+				</p>
+			</div>
+		</aside>
 	</div>
 </Layout>
 
@@ -74,86 +205,305 @@ import { routes } from '../data/site';
 	// Nothing is sent on page load. The session is created and the details saved only after "Start screening".
 	const API = 'https://monkfish-app-lnjjx.ondigitalocean.app';
 
-	const ages = document.querySelector<HTMLElement>('[data-ages]');
 	const form = document.querySelector<HTMLFormElement>('[data-screening]');
 	const status = document.querySelector<HTMLElement>('[data-status]');
-	let optotype = 'landolt';
 
-	ages?.querySelectorAll<HTMLButtonElement>('button').forEach((btn) => {
-		btn.addEventListener('click', () => {
-			optotype = btn.dataset.optotype ?? 'landolt';
-			ages.querySelectorAll('button').forEach((b) => {
-				b.classList.toggle('selected', b === btn);
-				b.setAttribute('aria-pressed', String(b === btn));
+	if (form) {
+		const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+		const touched = new Set<string>();
+
+		const messageFor = (el: HTMLInputElement) => {
+			if (el.validity.valueMissing) {
+				if (el.type === 'radio') return 'Choose who is taking the test.';
+				if (el.type === 'checkbox') return 'Tick the box to continue.';
+				return `Enter your ${el.labels?.[0]?.textContent?.trim().toLowerCase() ?? 'details'}.`;
+			}
+			if (el.validity.typeMismatch && el.type === 'email') return 'Enter a valid email address, like name@example.com.';
+			return el.validationMessage;
+		};
+
+		// Errors show under a field once it has been used, so a fresh form isn't covered in messages.
+		const showErrors = () => {
+			form.querySelectorAll<HTMLInputElement>('input[required]').forEach((el) => {
+				const box = form.querySelector<HTMLElement>(`[data-error="${el.name}"]`);
+				if (!box) return;
+				const show = touched.has(el.name) && !el.checkValidity();
+				box.hidden = !show;
+				if (show) box.textContent = messageFor(el);
+				el.setAttribute('aria-invalid', String(show));
 			});
-		});
-	});
+		};
 
-	const post = async (path: string, body?: unknown) => {
-		const res = await fetch(API + path, {
-			method: 'POST',
-			headers: body ? { 'Content-Type': 'application/json' } : undefined,
-			body: body ? JSON.stringify(body) : undefined,
-			credentials: 'include',
-		});
-		if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
-	};
+		const update = () => {
+			button.disabled = !form.checkValidity();
+			showErrors();
+		};
 
-	form?.addEventListener('submit', async (e) => {
-		e.preventDefault();
-		const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
-		const data = new FormData(form);
-		if (button) button.disabled = true;
-		if (status) status.textContent = 'Saving your details…';
-		try {
-			await post('/user/create-user');
-			await post('/user/save-info', {
-				name: data.get('fullName'),
-				emailAddress: data.get('email'),
-				birthDate: data.get('birthDate'),
-				country: data.get('country'),
-				city: data.get('city'),
+		form.addEventListener('input', update);
+		form.addEventListener('change', (e) => {
+			touched.add((e.target as HTMLInputElement).name);
+			update();
+		});
+		form.addEventListener('focusout', (e) => {
+			const el = e.target as HTMLInputElement;
+			if (el.name) touched.add(el.name);
+			showErrors();
+		});
+
+		const post = async (path: string, body?: unknown) => {
+			const res = await fetch(API + path, {
+				method: 'POST',
+				headers: body ? { 'Content-Type': 'application/json' } : undefined,
+				body: body ? JSON.stringify(body) : undefined,
+				credentials: 'include',
 			});
-			// "shapes" for ages 3–7, "landolt" for 8 and up: picks the Unity build the test opens with.
-			await post('/user/update-optotype', { optotype });
-			if (status) status.textContent = 'Your details are saved.';
-			// TODO: open the Unity test (/builds/shape or /builds/landolt) full screen here.
-		} catch (err) {
-			console.error('Could not start the screening:', err);
-			if (status) status.textContent = 'We couldn’t save your details. Please check your connection and try again.';
-		} finally {
-			if (button) button.disabled = false;
-		}
-	});
+			if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
+		};
+
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			if (!form.checkValidity()) {
+				form.querySelectorAll<HTMLInputElement>('input[required]').forEach((el) => touched.add(el.name));
+				update();
+				return;
+			}
+			const data = new FormData(form);
+			button.disabled = true;
+			if (status) status.textContent = 'Saving your details…';
+			try {
+				await post('/user/create-user');
+				await post('/user/save-info', {
+					name: data.get('fullName'),
+					emailAddress: data.get('email'),
+					birthDate: data.get('birthDate'),
+					country: data.get('country'),
+					city: data.get('city'),
+				});
+				// "shapes" for ages 3–7, "landolt" for 8 and up: picks the Unity build the test opens with.
+				await post('/user/update-optotype', { optotype: data.get('ageGroup') });
+				if (status) status.textContent = 'Your details are saved.';
+				// TODO: open the Unity test (/builds/shape or /builds/landolt) full screen here.
+			} catch (err) {
+				console.error('Could not start the screening:', err);
+				if (status) status.textContent = 'We couldn’t save your details. Please check your connection and try again.';
+			} finally {
+				button.disabled = !form.checkValidity();
+			}
+		});
+	}
 </script>
 
 <style>
-	.ages {
+	.hero {
+		background: linear-gradient(180deg, var(--lens) 0%, var(--surface) 100%);
+	}
+	.hero-in {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		padding-top: 28px;
+		padding-bottom: 36px;
+	}
+	.crumbs {
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.crumbs a {
+		color: var(--muted);
+		text-decoration: none;
+	}
+	.crumbs a:hover {
+		color: var(--blue);
+	}
+	.crumbs span {
+		color: var(--ink);
+	}
+	h1 {
+		font-size: 48px;
+		line-height: 54px;
+		letter-spacing: -0.02em;
+	}
+	.lead {
+		max-width: 640px;
+		font-size: 18px;
+		line-height: 28px;
+	}
+	.perks {
 		display: flex;
 		flex-wrap: wrap;
+		gap: 8px 20px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		color: var(--ink);
+		font-size: 14px;
+		line-height: 20px;
+		font-weight: 500;
+	}
+	.perks li,
+	.tips li {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.body {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-start;
+		gap: 32px;
+		padding-bottom: 88px;
+	}
+	.steps {
+		flex: 999 1 620px;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+	.step {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		min-width: 0;
+		margin: 0;
+		padding: 28px;
+		border: 1px solid var(--line);
+		border-radius: 20px;
+		background: var(--surface);
+		box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+	}
+	legend {
+		float: left;
+		width: 100%;
+		padding: 0;
+	}
+	legend + * {
+		clear: both;
+	}
+	.step-head {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+	}
+	.num {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		width: 36px;
+		height: 36px;
+		border-radius: 18px;
+		background: var(--blue);
+		color: var(--on-blue);
+		font-size: 16px;
+		font-weight: 600;
+	}
+	.step-title {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+	.step h2,
+	.step .h2 {
+		color: var(--ink);
+		font-size: 24px;
+		line-height: 30px;
+		font-weight: 600;
+		letter-spacing: -0.01em;
+	}
+
+	.ages {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 		gap: 16px;
 	}
 	.age {
-		flex: 1 1 240px;
-		align-items: center;
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		padding: 14px;
+		border: 2px solid var(--line);
+		border-radius: 16px;
 		background: var(--surface);
-		font: inherit;
 		cursor: pointer;
+	}
+	.age input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+	.age:hover {
+		border-color: var(--blue);
+	}
+	.age:has(input:checked) {
+		border-color: var(--blue);
+		box-shadow: 0 0 0 4px rgba(36, 99, 235, 0.12);
+	}
+	.age:has(input:focus-visible) {
+		outline: 3px solid var(--blue);
+		outline-offset: 2px;
 	}
 	.age-art {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 100%;
-		height: 110px;
-		border-radius: 14px;
+		height: 120px;
+		border-radius: 12px;
 		background: var(--lens);
 	}
 	.age-art img {
 		width: auto;
-		height: 90px;
+		height: 76px;
 	}
-	.setup-icon {
+	.age:last-child .age-art img {
+		height: 80px;
+	}
+	.age-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 8px;
+	}
+	.age-text {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		color: var(--slate);
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.age-text b {
+		color: var(--ink);
+		font-size: 18px;
+		line-height: 24px;
+		font-weight: 600;
+	}
+	.radio {
+		flex: 0 0 auto;
+		width: 22px;
+		height: 22px;
+		border: 2px solid #98a2b3;
+		border-radius: 11px;
+		background: var(--surface);
+	}
+	.age:has(input:checked) .radio {
+		border: 7px solid var(--blue);
+	}
+
+	.setup {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 20px;
+	}
+	.setup-item {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.tile {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -163,49 +513,257 @@ import { routes } from '../data/site';
 		background: var(--lens);
 		color: var(--blue);
 	}
-	.age.selected {
-		border: 2px solid var(--blue);
+	.setup h3 {
+		font-size: 17px;
+		line-height: 24px;
 	}
-	.details {
+	.setup p,
+	.terms,
+	.aside-note {
+		font-size: 15px;
+		line-height: 24px;
+	}
+	.aside-note {
+		padding: 12px 14px;
+		border-radius: 12px;
+		background: var(--surface-2);
+		font-size: 14px;
+	}
+
+	.fields {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 16px 18px;
+	}
+	.field {
 		display: flex;
 		flex-direction: column;
-		gap: 20px;
+		gap: 6px;
+		min-width: 0;
 	}
-	.fields {
+	.field.wide {
+		grid-column: 1 / -1;
+	}
+	.field label {
+		color: var(--ink);
+		font-size: 14px;
+		line-height: 20px;
+		font-weight: 600;
+	}
+	.field input {
+		box-sizing: border-box;
+		width: 100%;
+		min-height: 48px;
+		padding: 0 14px;
+		border: 1px solid #d0d5dd;
+		border-radius: 12px;
+		background: var(--surface);
+		color: var(--ink);
+		font: inherit;
+		font-size: 15px;
+	}
+	.field input:focus-visible {
+		outline: 3px solid rgba(36, 99, 235, 0.35);
+		outline-offset: 0;
+		border-color: var(--blue);
+	}
+	.field input[aria-invalid='true'] {
+		border-color: var(--ink);
+	}
+	.error {
+		margin: 0;
+		color: var(--ink);
+		font-size: 13px;
+		line-height: 18px;
+		font-weight: 500;
+	}
+	.error::before {
+		content: '! ';
+		color: var(--blue);
+		font-weight: 700;
+	}
+	.consent {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 16px;
+		flex-direction: column;
+		gap: 6px;
 	}
-	.fields label {
-		flex: 1 1 240px;
-	}
-	.fields label.short {
-		flex-basis: 160px;
-	}
-	.inner .check {
-		flex-direction: row;
+	.check {
+		display: flex;
 		align-items: flex-start;
-		gap: 10px;
-		font-weight: 400;
+		gap: 12px;
+		color: var(--ink);
+		font-size: 15px;
+		line-height: 22px;
+		cursor: pointer;
 	}
-	.inner .check input {
+	.check input {
 		flex: 0 0 auto;
-		width: 18px;
-		height: 18px;
-		min-height: 0;
-		margin: 2px 0 0;
-		padding: 0;
+		width: 20px;
+		height: 20px;
+		margin: 1px 0 0;
+		accent-color: var(--blue);
 	}
 	.terms {
 		font-size: 14px;
 	}
+
 	.start {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 12px;
+		gap: 14px 20px;
+	}
+	.start-btn {
+		min-height: 52px;
+		padding: 0 28px;
+		font-size: 16px;
+	}
+	.start-btn:disabled {
+		border-color: #b8c4d6;
+		background: #b8c4d6;
+		color: var(--surface);
+		cursor: not-allowed;
+	}
+	.start-note {
+		color: var(--slate);
+		font-size: 14px;
+	}
+	.status {
+		margin: 0;
+		color: var(--ink);
+		font-size: 14px;
 	}
 	.status:empty {
 		display: none;
+	}
+
+	.side {
+		flex: 1 1 300px;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+	.panel {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		padding: 24px;
+		border-radius: 20px;
+	}
+	.panel h2 {
+		font-size: 20px;
+		line-height: 26px;
+		letter-spacing: -0.01em;
+	}
+	.panel p {
+		font-size: 15px;
+		line-height: 24px;
+	}
+	.panel b {
+		color: var(--ink);
+		font-weight: 600;
+	}
+	.expect {
+		background: var(--surface-2);
+	}
+	.expect ol,
+	.tips ul {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.expect li {
+		display: flex;
+		align-items: flex-start;
+		gap: 12px;
+	}
+	.dot {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		width: 26px;
+		height: 26px;
+		border: 1.5px solid var(--blue);
+		border-radius: 13px;
+		background: var(--surface);
+		color: var(--blue);
+		font-size: 13px;
+		font-weight: 600;
+	}
+	.tips {
+		border: 1px solid var(--line);
+	}
+	.tips ul {
+		gap: 10px;
+	}
+	.tips li {
+		align-items: flex-start;
+		gap: 10px;
+		color: var(--slate);
+		font-size: 15px;
+		line-height: 22px;
+	}
+	.tips li :global(svg) {
+		flex: 0 0 auto;
+		margin-top: 2px;
+	}
+	.kids {
+		flex-direction: row;
+		align-items: center;
+		gap: 16px;
+		background: var(--sun-soft);
+	}
+	.kids img {
+		flex: 0 0 auto;
+		width: 76px;
+		height: 76px;
+		border-radius: 10px;
+		background: var(--surface);
+		object-fit: contain;
+	}
+	.kids > span {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		color: var(--slate);
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.kids > span b {
+		font-size: 16px;
+	}
+	.disclaimer {
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 12px;
+		background: var(--lens);
+	}
+	.disclaimer svg {
+		flex: 0 0 auto;
+		margin-top: 1px;
+		color: var(--blue);
+	}
+	.disclaimer p {
+		font-size: 14px;
+		line-height: 21px;
+	}
+
+	@media (max-width: 900px) {
+		h1 {
+			font-size: 36px;
+			line-height: 42px;
+		}
+		.setup,
+		.fields {
+			grid-template-columns: 1fr;
+		}
+		.step {
+			padding: 22px;
+		}
 	}
 </style>
