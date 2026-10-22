@@ -16,6 +16,8 @@ export interface Field {
 	accept?: string;
 	required?: boolean;
 	minLength?: number;
+	min?: number;
+	inputmode?: string;
 	autocomplete?: string;
 	options?: string[];
 }
@@ -34,8 +36,9 @@ interface Props {
 	description?: string;
 	// A string is served as-is from /public; an imported image is optimised to WebP by Astro.
 	image?: { src: string | ImageMetadata; alt: string; width: number; height: number };
-	why?: { title: string; benefits?: { title: string; text: string }[]; lists?: { title?: string; items: string[] }[]; closing?: string };
-	how?: { title: string; steps: { title: string; text?: string }[] };
+	why?: { title: string; intro?: string; benefits?: { title: string; text: string }[]; lists?: { title?: string; items: string[] }[]; closing?: string };
+	// wide: full-width container so three steps fit on one row. callout: highlighted line (and link) after the steps.
+	how?: { title: string; wide?: boolean; steps: { title: string; text?: string }[]; callout?: string; link?: { text: string; href: string } };
 	plan?: { label: string; price: string; unit: string; items: string[] };
 	resources?: { title: string; items: { title: string; href: string; note: string }[] };
 	stories?: { title: string; text: string }[];
@@ -44,7 +47,10 @@ interface Props {
 	service?: { name: string; serviceType?: string; audience?: string; areaServed?: string; price?: string; currency?: string; offer?: string };
 	form: {
 		fields: Field[];
-		consents?: string[];
+		// Checkboxes are checked in the browser only and never sent to the backend. A label may contain links (HTML).
+		consents?: (string | { name: string; label: string })[];
+		note?: string;
+		title?: string;
 		button: string;
 		// Backend path (e.g. /email/school-form). Without one the form is not sent anywhere yet.
 		endpoint?: string;
@@ -126,6 +132,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 				<section class="sec band-2">
 					<div class="wrap stack">
 						<h2>{p.why.title}</h2>
+						{p.why.intro && <p class="section-intro">{p.why.intro}</p>}
 						{p.why.benefits && (
 							<div class="grid3">
 								{p.why.benefits.map((b) => (
@@ -159,7 +166,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 		{
 			p.how && (
 				<section class="sec">
-					<div class="wrap narrow stack">
+					<div class:list={['wrap stack', { narrow: !p.how.wide }]}>
 						<h2>{p.how.title}</h2>
 						<div class="grid3">
 							{p.how.steps.map((step, i) => (
@@ -170,6 +177,12 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 								</div>
 							))}
 						</div>
+						{p.how.callout && <blockquote class="callout">{p.how.callout}</blockquote>}
+						{p.how.link && (
+							<a href={p.how.link.href} class="more-link">
+								{p.how.link.text} →
+							</a>
+						)}
 					</div>
 				</section>
 			)
@@ -259,7 +272,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 		<section id="contact" class="sec band-2">
 			<div class="wrap narrow" data-form-wrap>
 				<form class="form" novalidate={!!p.form.endpoint} data-endpoint={p.form.endpoint} data-success={p.form.success}>
-					<h2>Talk to us</h2>
+					<h2>{p.form.title ?? 'Talk to us'}</h2>
 					<p class="required-note muted">Fields marked * are required.</p>
 					<div class="fields">
 						{
@@ -301,6 +314,8 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 											{...common}
 											placeholder={f.placeholder}
 											minlength={f.minLength}
+											min={f.min}
+											inputmode={f.inputmode}
 											autocomplete={f.autocomplete}
 										/>
 									);
@@ -317,13 +332,21 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 						}
 					</div>
 					{
-						p.form.consents?.map((c) => (
-							<label class="check">
-								<input type="checkbox" name={slugify(c)} required />
-								<span>{c}</span>
-							</label>
-						))
+						p.form.consents?.map((c) => {
+							const consent = typeof c === 'string' ? { name: slugify(c), label: c } : c;
+							const id = `f-${consent.name}`;
+							return (
+								<div class="consent">
+									<label class="check" for={id}>
+										<input type="checkbox" id={id} name={consent.name} required aria-required="true" aria-describedby={`${id}-error`} data-local />
+										<span set:html={consent.label} />
+									</label>
+									<p class="error" id={`${id}-error`} hidden />
+								</div>
+							);
+						})
 					}
+					{p.form.note && <p class="form-note">{p.form.note}</p>}
 					<button type="submit" class="btn solid">{p.form.button}</button>
 					<p class="form-error" role="alert" data-form-error hidden></p>
 				</form>
@@ -345,13 +368,19 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 
 		const messageFor = (el: Control) => {
 			const name = (el.labels?.[0]?.textContent ?? 'this field').replace('*', '').replace(/\(.*?\)/, '').trim().toLowerCase();
+			if (el instanceof HTMLInputElement && el.type === 'checkbox') return 'Tick the box to continue.';
 			if (el.validity.valueMissing) return el instanceof HTMLSelectElement ? `Choose a ${name}.` : `Enter the ${name}.`;
-			if (el.validity.typeMismatch) return 'Enter a valid email address, like name@school.edu.';
-			if (el.validity.tooShort) return `Enter at least ${(el as HTMLInputElement).minLength} characters.`;
+			if (el.validity.typeMismatch)
+				return el.type === 'url' ? 'Enter a full web address, like https://example.org.' : 'Enter a valid email address, like name@example.org.';
+			if (el.validity.rangeUnderflow) return `Enter a number of at least ${(el as HTMLInputElement).min}.`;
+			if (el.validity.badInput) return 'Enter a number.';
 			return el.validationMessage;
 		};
 		const check = (el: Control) => {
 			const box = form.querySelector<HTMLElement>(`#${el.id}-error`);
+			// The browser only applies minlength to typed input, so check it for every value.
+			const min = 'minLength' in el ? el.minLength : -1;
+			el.setCustomValidity(min > 0 && el.value && el.value.length < min ? `Enter at least ${min} characters.` : '');
 			const ok = el.checkValidity();
 			el.setAttribute('aria-invalid', String(!ok));
 			if (box) {
@@ -364,6 +393,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 		controls.forEach((el) => {
 			el.addEventListener('blur', () => el.value && check(el));
 			el.addEventListener('input', () => el.getAttribute('aria-invalid') === 'true' && check(el));
+			el.addEventListener('change', () => el.getAttribute('aria-invalid') === 'true' && check(el));
 		});
 
 		form.addEventListener('submit', async (e) => {
@@ -380,7 +410,12 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 				const res = await fetch(BACKEND_URL + form.dataset.endpoint, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(Object.fromEntries(new FormData(form))),
+					// Checkboxes (data-local) are only checked here; the backend gets the other fields, all as strings.
+					body: JSON.stringify(
+						Object.fromEntries(
+							[...new FormData(form)].filter(([key]) => !form.querySelector(`[name="${key}"][data-local]`)),
+						),
+					),
 				});
 				// Any non-2xx, including 429 from the rate limiter, shows the same message.
 				if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -452,6 +487,38 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 	.closing {
 		color: var(--ink);
 		font-weight: 500;
+	}
+	.section-intro {
+		max-width: 720px;
+		color: var(--slate);
+		font-size: 17px;
+		line-height: 27px;
+	}
+	.callout {
+		margin: 8px 0 0;
+		padding: 20px 24px;
+		border-left: 0;
+		border-radius: 16px;
+		background: var(--lens);
+		color: var(--ink);
+		font-size: 19px;
+		line-height: 28px;
+		font-weight: 500;
+	}
+	.more-link {
+		align-self: flex-start;
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.consent {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+	.form-note {
+		color: var(--slate);
+		font-size: 14px;
+		line-height: 21px;
 	}
 	.step-text {
 		color: var(--slate);

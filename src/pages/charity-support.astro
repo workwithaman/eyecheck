@@ -1,5 +1,32 @@
 ---
 import AudiencePage from '../components/AudiencePage.astro';
+import { routes } from '../data/site';
+import charityImage from '../assets/charity-image.jpg';
+
+// TODO CONFIRM WITH ANDY: real organisation names, locations and dates. Remove before launch if not confirmed.
+const stories = [
+	{
+		title: 'School Vision Project',
+		text: 'Screened over 5,000 children in rural communities, identifying over 800 cases requiring further care.',
+	},
+	{
+		title: 'Urban Health Initiative',
+		text: 'Screenings at community centres in underserved neighbourhoods, reaching 1,200 children in one month.',
+	},
+];
+
+const faqs = [
+	{
+		q: 'Who can apply?',
+		a: 'Charities and non-profit organisations that provide vision screening to underprivileged children, anywhere in the world.',
+	},
+	{
+		q: 'What does the programme include?',
+		// TODO CONFIRM: number of screenings, PDF reports, training.
+		a: 'Free access to EyeCheck.app screening tools for your project, with Pass or Refer results for each child.',
+	},
+	{ q: 'Is there any cost?', a: 'No. Approved charity projects use EyeCheck.app for free.' },
+];
 ---
 
 <AudiencePage
@@ -7,32 +34,74 @@ import AudiencePage from '../components/AudiencePage.astro';
 	crumb="Charities"
 	h1="Free Vision Screening Support for Charities"
 	intro="Free screening tools for organisations that provide vision screening to underprivileged children around the world."
+	description="Free vision screening tools for charities and non-profits screening underprivileged children. Apply to EyeCheck.app's charity support programme."
+	image={{ src: charityImage, alt: 'Children taking part in a charity vision screening programme', width: 776, height: 593 }}
 	why={{
 		title: 'Charity support programme',
-		closing: 'Together, we can ensure that every child, regardless of their circumstances, has access to quality vision screening.',
+		intro: 'EyeCheck.app is committed to supporting organisations that provide vision screening to underprivileged children around the world.',
 	}}
-	stories={[
-		{
-			title: 'School Vision Project',
-			text: 'Screened over 5,000 children in rural communities, identifying over 800 cases requiring further care.',
-		},
-		{
-			title: 'Urban Health Initiative',
-			text: 'Screenings at community centres in underserved neighbourhoods, reaching 1,200 children in one month.',
-		},
-	]}
-	faq={{ title: '[FAQ heading]', items: [{ q: '[Question 1]' }, { q: '[Question 2]' }, { q: '[Question 3]' }] }}
-	form={{
-		fields: [
-			{ label: 'Organisation name', required: true },
-			{ label: 'Website', type: 'url' },
-			{ label: 'Contact person', required: true },
-			{ label: 'Email', type: 'email', required: true },
-			{ label: 'Phone', type: 'tel' },
-			{ label: 'Expected number of screenings', type: 'number' },
-			{ label: 'Project description', type: 'textarea', hint: 'Location, target population, and goals', required: true },
+	how={{
+		title: 'How charity support works',
+		wide: true,
+		steps: [
+			{ title: 'Apply', text: 'Tell us about your project, where it runs and how many children you plan to screen.' },
+			{ title: 'We review your project', text: 'Our team checks the application and contacts you to plan the rollout.' },
+			{ title: 'Start screening', text: 'Get free access to EyeCheck.app screening tools for your programme.' },
 		],
-		consents: ['I agree to the terms and conditions', 'I consent to media usage'],
+		callout: 'Together, we can ensure that every child, regardless of their circumstances, has access to quality vision screening.',
+		link: { text: 'Learn more about our impact', href: `${routes.about}/` },
+	}}
+	stories={stories}
+	service={{
+		name: 'Charity vision screening support',
+		serviceType: 'Vision screening',
+		audience: 'Charities and non-profit organisations',
+		areaServed: 'Worldwide',
+		price: '0',
+		currency: 'SGD',
+	}}
+	faq={{ title: 'Charity support FAQ', items: faqs }}
+	form={{
+		title: 'Apply for charity support',
+		endpoint: '/email/charity-form',
+		success: 'Thanks! We’ve received your application and will be in touch soon.',
+		fields: [
+			{ label: 'Organisation name', name: 'organizationName', required: true, minLength: 3, autocomplete: 'organization' },
+			{ label: 'Website', name: 'website', type: 'url', required: true, hint: 'e.g. https://example.org', autocomplete: 'url' },
+			{ label: 'Contact person', name: 'contactName', required: true, minLength: 2, autocomplete: 'name' },
+			{ label: 'Email', name: 'contactEmail', type: 'email', required: true, autocomplete: 'email' },
+			{
+				label: 'Phone',
+				name: 'phone',
+				type: 'tel',
+				required: true,
+				minLength: 10,
+				autocomplete: 'tel',
+				hint: 'Include country code, e.g. +65 9123 4567',
+			},
+			{ label: 'Expected number of screenings', name: 'expectedScreenings', type: 'number', required: true, min: 1, inputmode: 'numeric' },
+			{
+				label: 'Project description',
+				name: 'projectDescription',
+				type: 'textarea',
+				required: true,
+				minLength: 30,
+				hint: 'Describe the vision screening project you’re planning, including location, target population, and goals.',
+			},
+		],
+		consents: [
+			{
+				name: 'termsAccepted',
+				// TODO CONFIRM: dedicated charity terms page?
+				label: `I agree to the <a href="${routes.terms}/">terms and conditions</a> for the charity support programme.`,
+			},
+			{
+				name: 'mediaUsageConsent',
+				label:
+					'I grant EyeCheck.app the right to use our organisation’s logo, name, and images for promotional purposes including website content, digital marketing, and social media.',
+			},
+		],
+		note: 'By submitting, you confirm the information is accurate and that you have authority to apply on behalf of your organisation.',
 		button: 'Submit application',
 	}}
 />
