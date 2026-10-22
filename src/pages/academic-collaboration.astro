@@ -1,5 +1,24 @@
 ---
 import AudiencePage from '../components/AudiencePage.astro';
+import { routes } from '../data/site';
+import academicImage from '../assets/academic-image.png';
+
+const faqs = [
+	{
+		q: 'What kind of research can we collaborate on?',
+		// TODO CONFIRM WITH ANDY
+		a: 'Studies on vision screening, myopia, amblyopia and visual acuity in children and adults, using EyeCheck.app’s standardised online tests.',
+	},
+	{
+		q: 'What data can researchers access?',
+		// TODO CONFIRM WITH ANDY
+		a: 'Anonymised screening results only, shared under a data-sharing agreement and your ethics approval.',
+	},
+	{
+		q: 'Do we need ethics approval before applying?',
+		a: 'No. You can apply before approval is granted; tell us the status in the form. Approval is needed before any data collection starts.',
+	},
+];
 ---
 
 <AudiencePage
@@ -7,33 +26,101 @@ import AudiencePage from '../components/AudiencePage.astro';
 	crumb="Research"
 	h1="Vision Research Collaboration"
 	intro="Partner with universities and research institutions to advance vision science."
+	description="Partner with EyeCheck.app on vision research. Standardised online screening, large-scale data collection and anonymised results for universities and research institutions."
+	image={{ src: academicImage, alt: 'A university entrance sign on a campus lawn', width: 1000, height: 664 }}
 	why={{
-		title: 'Research collaboration',
-		lists: [{ items: ['Real-time, large-scale data collection', 'Standardised, consistent testing protocols', 'Big-data analysis across populations'] }],
-	}}
-	faq={{ title: '[FAQ heading]', items: [{ q: '[Question 1]' }, { q: '[Question 2]' }, { q: '[Question 3]' }] }}
-	form={{
-		fields: [
-			{ label: 'Institution', required: true },
-			{ label: 'Department' },
-			{ label: 'Institution website', type: 'url' },
-			{ label: 'Lead researcher', required: true },
-			{ label: 'Email', type: 'email', required: true },
-			{ label: 'Phone', type: 'tel' },
-			{ label: 'Project title', required: true },
-			{ label: 'Estimated timeframe' },
-			{ label: 'Funding source (optional)' },
-			{ label: 'Ethics committee approval status' },
-			{ label: 'Research description', type: 'textarea', required: true },
-			{ label: 'Expected outcomes (optional)', type: 'textarea' },
+		title: 'Why collaborate with EyeCheck.app?',
+		intro: 'Join us in advancing vision science and care.',
+		benefits: [
 			{
-				label: 'Additional documents',
+				title: 'Real-time data collection',
+				text: 'Large-scale, automated data gathering that would be impossible with traditional manual methods.',
+			},
+			{ title: 'Standardised protocols', text: 'Consistent, validated testing methods that make research reproducible.' },
+			{ title: 'Big data capabilities', text: 'Analyse large datasets from diverse populations across demographics and regions.' },
+		],
+	}}
+	how={{
+		title: 'How research collaboration works',
+		wide: true,
+		steps: [
+			{ title: 'Submit a proposal', text: 'Tell us about your research, your institution and your ethics approval status.' },
+			{ title: 'We review and discuss', text: 'We get in touch to discuss your methodology, data needs and data-sharing agreement.' },
+			{ title: 'Set up your study', text: 'We help you integrate EyeCheck.app’s standardised screening into your research.' },
+		],
+	}}
+	service={{
+		name: 'Vision research collaboration',
+		serviceType: 'Research collaboration',
+		audience: 'Universities and research institutions',
+		areaServed: 'Worldwide',
+	}}
+	faq={{ title: 'Research collaboration FAQ', items: faqs }}
+	form={{
+		title: 'Submit a research proposal',
+		endpoint: '/email/research-form',
+		encoding: 'multipart',
+		// The live site sends both checkboxes to this endpoint, so they are kept here.
+		sendConsents: true,
+		success: 'Thanks! We’ve received your research proposal and will be in touch soon.',
+		fields: [
+			{ label: 'Institution', name: 'institutionName', required: true, minLength: 3, autocomplete: 'organization' },
+			{ label: 'Department', name: 'department', required: true, minLength: 2 },
+			{ label: 'Institution website', name: 'website', type: 'url', required: true, hint: 'e.g. https://university.edu', autocomplete: 'url' },
+			{ label: 'Lead researcher', name: 'researcherName', required: true, minLength: 2, autocomplete: 'name' },
+			{ label: 'Email', name: 'researcherEmail', type: 'email', required: true, autocomplete: 'email' },
+			{ label: 'Phone', name: 'phone', type: 'tel', required: true, minLength: 8, autocomplete: 'tel', hint: 'Include country code' },
+			{ label: 'Project title', name: 'researchTitle', required: true, minLength: 5 },
+			{ label: 'Estimated timeframe', name: 'timeframe', required: true, minLength: 3, hint: 'How long do you expect the research to take?' },
+			{ label: 'Funding source (optional)', name: 'fundingSource', placeholder: 'e.g. research grant, university funding' },
+			{
+				label: 'Ethics committee approval',
+				name: 'ethicsApproval',
+				type: 'select',
+				required: true,
+				options: [
+					{ value: 'yes', label: 'Yes, approved' },
+					{ value: 'pending', label: 'Pending approval' },
+					{ value: 'no', label: 'Not yet applied' },
+					{ value: 'notRequired', label: 'Not required for this research' },
+				],
+			},
+			{
+				label: 'Research description',
+				name: 'researchDescription',
+				type: 'textarea',
+				required: true,
+				minLength: 50,
+				hint: 'Describe your research project, methodology, and how EyeCheck.app’s technology could be integrated.',
+			},
+			{
+				label: 'Expected outcomes (optional)',
+				name: 'expectedOutcomes',
+				type: 'textarea',
+				hint: 'What are the expected outcomes or hypotheses of your research?',
+			},
+			{
+				label: 'Additional documents (optional)',
+				name: 'files',
 				type: 'file',
 				accept: '.pdf,.doc,.docx',
-				hint: 'PDF, DOC or DOCX, up to 5 files, max 5 MB each',
+				maxFiles: 5,
+				maxSizeMB: 5,
+				hint: 'Research proposals, ethics approvals or supporting information. PDF, DOC or DOCX, up to 5 files, max 5 MB each.',
 			},
 		],
-		consents: ['I consent to media usage', 'I agree to the terms and conditions'],
+		consents: [
+			{
+				name: 'mediaConsent',
+				label:
+					'I consent to EyeCheck using our institution’s name and logo in research collaboration materials, academic publications, and conference presentations related to this specific research project, with proper academic attribution. This consent is limited to research and educational purposes only.',
+			},
+			{
+				name: 'termsAccepted',
+				label: `I agree to the research collaboration <a href="${routes.terms}/">terms and conditions</a>.`,
+			},
+		],
+		note: 'By submitting, you confirm that all information provided is accurate, that you have authority to propose this collaboration, and that you agree to our data sharing and research collaboration policies.',
 		button: 'Submit research proposal',
 	}}
 />

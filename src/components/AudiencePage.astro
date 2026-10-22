@@ -19,7 +19,10 @@ export interface Field {
 	min?: number;
 	inputmode?: string;
 	autocomplete?: string;
-	options?: string[];
+	options?: (string | { value: string; label: string })[];
+	// File inputs only: checked in the browser before sending.
+	maxFiles?: number;
+	maxSizeMB?: number;
 }
 
 export interface Faq {
@@ -54,6 +57,10 @@ interface Props {
 		button: string;
 		// Backend path (e.g. /email/school-form). Without one the form is not sent anywhere yet.
 		endpoint?: string;
+		// multipart: sent as FormData (needed for file uploads). Otherwise JSON.
+		encoding?: 'json' | 'multipart';
+		// Send the checkboxes too, as "true". By default they are checked in the browser only.
+		sendConsents?: boolean;
 		success?: string;
 	};
 }
@@ -271,7 +278,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 
 		<section id="contact" class="sec band-2">
 			<div class="wrap narrow" data-form-wrap>
-				<form class="form" novalidate={!!p.form.endpoint} data-endpoint={p.form.endpoint} data-success={p.form.success}>
+				<form class="form" novalidate={!!p.form.endpoint} data-endpoint={p.form.endpoint} data-success={p.form.success} data-encoding={p.form.encoding ?? 'json'}>
 					<h2>{p.form.title ?? 'Talk to us'}</h2>
 					<p class="required-note muted">Fields marked * are required.</p>
 					<div class="fields">
@@ -301,12 +308,13 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 											<option value="" disabled selected>
 												Select…
 											</option>
-											{f.options?.map((o) => (
-												<option value={o}>{o}</option>
-											))}
+											{f.options?.map((o) =>
+												typeof o === 'string' ? <option value={o}>{o}</option> : <option value={o.value}>{o.label}</option>,
+											)}
 										</select>
 									);
-								else if (f.type === 'file') control = <input type="file" {...common} accept={f.accept} multiple />;
+								else if (f.type === 'file')
+									control = <input type="file" {...common} accept={f.accept} multiple data-max-files={f.maxFiles} data-max-mb={f.maxSizeMB} />;
 								else
 									control = (
 										<input
@@ -338,7 +346,16 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 							return (
 								<div class="consent">
 									<label class="check" for={id}>
-										<input type="checkbox" id={id} name={consent.name} required aria-required="true" aria-describedby={`${id}-error`} data-local />
+										<input
+											type="checkbox"
+											id={id}
+											name={consent.name}
+											value="true"
+											required
+											aria-required="true"
+											aria-describedby={`${id}-error`}
+											data-local={p.form.sendConsents ? undefined : true}
+										/>
 										<span set:html={consent.label} />
 									</label>
 									<p class="error" id={`${id}-error`} hidden />
@@ -380,7 +397,18 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 			const box = form.querySelector<HTMLElement>(`#${el.id}-error`);
 			// The browser only applies minlength to typed input, so check it for every value.
 			const min = 'minLength' in el ? el.minLength : -1;
-			el.setCustomValidity(min > 0 && el.value && el.value.length < min ? `Enter at least ${min} characters.` : '');
+			let problem = min > 0 && el.value && el.value.length < min ? `Enter at least ${min} characters.` : '';
+			if (el instanceof HTMLInputElement && el.type === 'file' && el.files) {
+				const maxFiles = Number(el.dataset.maxFiles || Infinity);
+				const maxBytes = Number(el.dataset.maxMb || Infinity) * 1024 * 1024;
+				const allowed = el.accept ? el.accept.split(',').map((s) => s.trim().toLowerCase()) : [];
+				const files = [...el.files];
+				if (files.length > maxFiles) problem = `Choose up to ${maxFiles} files.`;
+				else if (files.some((f) => f.size > maxBytes)) problem = `Each file must be ${el.dataset.maxMb} MB or smaller.`;
+				else if (allowed.length && files.some((f) => !allowed.some((ext) => f.name.toLowerCase().endsWith(ext))))
+					problem = `Use ${allowed.join(', ').replace(/\./g, '').toUpperCase()} files only.`;
+			}
+			el.setCustomValidity(problem);
 			const ok = el.checkValidity();
 			el.setAttribute('aria-invalid', String(!ok));
 			if (box) {
@@ -407,16 +435,24 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 			button.disabled = true;
 			button.textContent = 'Sending…';
 			try {
-				const res = await fetch(BACKEND_URL + form.dataset.endpoint, {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					// Checkboxes (data-local) are only checked here; the backend gets the other fields, all as strings.
-					body: JSON.stringify(
-						Object.fromEntries(
-							[...new FormData(form)].filter(([key]) => !form.querySelector(`[name="${key}"][data-local]`)),
-						),
-					),
-				});
+				// Checkboxes marked data-local are only checked here and never sent.
+				const entries = [...new FormData(form)].filter(
+					([key, value]) => !form.querySelector(`[name="${key}"][data-local]`) && !(value instanceof File && value.size === 0),
+				);
+				let init: RequestInit;
+				if (form.dataset.encoding === 'multipart') {
+					// No Content-Type header: the browser sets it, with the boundary. Each file is sent as "files".
+					const body = new FormData();
+					entries.forEach(([key, value]) => body.append(key, value));
+					init = { method: 'POST', body };
+				} else {
+					init = {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(Object.fromEntries(entries.map(([key, value]) => [key, String(value)]))),
+					};
+				}
+				const res = await fetch(BACKEND_URL + form.dataset.endpoint, init);
 				// Any non-2xx, including 429 from the rate limiter, shows the same message.
 				if (!res.ok) throw new Error(`HTTP ${res.status}`);
 				const done = document.createElement('p');
