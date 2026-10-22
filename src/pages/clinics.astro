@@ -1,5 +1,7 @@
 ---
 import AudiencePage from '../components/AudiencePage.astro';
+import { routes } from '../data/site';
+import clinicsImage from '../assets/clinics-image.jpg';
 ---
 
 <AudiencePage
@@ -7,13 +9,48 @@ import AudiencePage from '../components/AudiencePage.astro';
 	crumb="Clinics"
 	h1="Vision Screening Tools for Clinics"
 	intro="Perform eyesight screening at home, in your clinic or at large events."
+	description="Vision screening tools for clinics and healthcare professionals. Patients screen at home or in clinic, from SGD 1 per screening, with a PDF report for every result."
+	image={{ src: clinicsImage, alt: 'Healthcare professionals using EyeCheck.app for eyesight screening', width: 1000, height: 667 }}
 	why={{
-		title: 'Healthcare professionals',
-		list: [
-			'Patients run guided self-screening at home or in clinic',
-			'Email secure screening links for remote follow-ups',
-			'Run screening days on several laptops at once',
-			'Reduce clinic appointment time; scale from one patient to hundreds',
+		title: 'Why clinics use EyeCheck',
+		benefits: [
+			{ title: 'Empower patients with DIY eye screening', text: 'Patients run a guided vision screening at home or in your clinic.' },
+			{ title: 'Send screening links by email', text: 'Email secure screening links for remote testing, follow-ups and preventive care.' },
+			{
+				title: 'Effortless large-scale screening',
+				text: 'Run screening days on several laptops at once for community events, schools or open days.',
+			},
+		],
+		lists: [
+			{
+				title: 'Perfect for healthcare providers',
+				items: [
+					'Reduce clinic appointment time for routine screenings',
+					'Remote patient monitoring and follow-ups',
+					'Take part in community health initiatives',
+					'Screen large populations efficiently',
+				],
+			},
+			{
+				title: 'Easy implementation',
+				items: [
+					'No software installation; runs in the web browser',
+					'Works on any laptop or computer with an internet connection',
+					'Minimal training for staff or patients',
+					'Scale from one patient to hundreds',
+				],
+			},
+		],
+	}}
+	how={{
+		title: 'How clinic screening works',
+		steps: [
+			{
+				title: 'Send a link or set up a station',
+				text: 'Email the patient a screening link, or set up a screen of 33 cm (13″) or more with a wireless mouse and a 3 m mark.',
+			},
+			{ title: 'The patient screens each eye', text: 'One eye at a time, about 1–2 minutes per eye.' },
+			{ title: 'Review the results', text: 'A Pass or Refer result for each eye, with a PDF report per screening.' },
 		],
 	}}
 	plan={{
@@ -22,14 +59,56 @@ import AudiencePage from '../components/AudiencePage.astro';
 		unit: '100 eyesight screenings (SGD 1 per screening)',
 		items: ['PDF report for each screening', 'Easy setup and deployment', 'No software installation', 'Training provided'],
 	}}
-	faq={{ title: '[FAQ heading]', items: [{ q: '[Question 1]' }, { q: '[Question 2]' }, { q: '[Question 3]' }] }}
+	resources={{
+		title: 'Free resources for clinics',
+		items: [
+			{ title: 'Snellen eye chart', href: `${routes.chartSnellen}/`, note: 'Printable PDF' },
+			{ title: '10-foot eye chart', href: `${routes.chart10Feet}/`, note: 'For smaller rooms' },
+			{ title: 'How we test', href: `${routes.howWeTest}/`, note: 'Methods, scoring and limits' },
+		],
+	}}
+	service={{
+		name: 'Vision screening for clinics',
+		serviceType: 'Vision screening',
+		audience: 'Healthcare professionals',
+		price: '100',
+		currency: 'SGD',
+		offer: '100 eyesight screenings',
+	}}
+	faq={{
+		title: 'Clinic vision screening FAQ',
+		items: [
+			{
+				q: 'How much does it cost?',
+				a: 'The healthcare plan is SGD 100 for 100 eyesight screenings (SGD 1 per screening), including a PDF report for each screening, setup and training.',
+			},
+			{
+				q: 'Can patients screen themselves at home?',
+				a: 'Yes. Email patients a secure screening link. They need a screen of at least 33 cm (13″), a wireless mouse and about 3 m (10 ft) of space.',
+			},
+			{
+				q: 'Does it replace an eye exam?',
+				a: 'No. EyeCheck.app is a screening tool. Each eye gets a Pass or Refer result to help you decide who needs a full eye exam.',
+			},
+		],
+	}}
 	form={{
+		endpoint: '/email/healthcare-form',
+		success: 'Thanks! We’ll be in touch soon to schedule your online session.',
 		fields: [
-			{ label: 'Name', required: true },
-			{ label: 'Profession (e.g. Optometrist, Nurse, Doctor)' },
-			{ label: 'Email', type: 'email', required: true },
-			{ label: 'Contact number', type: 'tel' },
-			{ label: 'Remarks (optional)', type: 'textarea' },
+			{ label: 'Name', name: 'name', required: true, minLength: 2, autocomplete: 'name' },
+			{ label: 'Profession (e.g. Optometrist, Nurse, Doctor)', name: 'profession', required: true, minLength: 2 },
+			{ label: 'Email', name: 'email', type: 'email', required: true, autocomplete: 'email' },
+			{
+				label: 'Contact number',
+				name: 'contactNumber',
+				type: 'tel',
+				required: true,
+				minLength: 10,
+				autocomplete: 'tel',
+				hint: 'Include country code, e.g. +65 9123 4567',
+			},
+			{ label: 'Remarks (optional)', name: 'remarks', type: 'textarea' },
 		],
 		button: 'Schedule an online session',
 	}}

@@ -2,6 +2,8 @@
 // Template for /schools, /clinics, /charity-support and /academic-collaboration (the AudienceTemplate artboard).
 // Each page passes its own copy; sections without data are left out.
 // Forms without an endpoint are not connected to the backend yet.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import Layout from '../layouts/Layout.astro';
 import { routes } from '../data/site';
 
@@ -30,15 +32,16 @@ interface Props {
 	h1: string;
 	intro: string;
 	description?: string;
-	image?: { src: string; alt: string; width: number; height: number };
-	why?: { title: string; benefits?: { title: string; text: string }[]; listTitle?: string; list?: string[]; closing?: string };
+	// A string is served as-is from /public; an imported image is optimised to WebP by Astro.
+	image?: { src: string | ImageMetadata; alt: string; width: number; height: number };
+	why?: { title: string; benefits?: { title: string; text: string }[]; lists?: { title?: string; items: string[] }[]; closing?: string };
 	how?: { title: string; steps: { title: string; text?: string }[] };
 	plan?: { label: string; price: string; unit: string; items: string[] };
-	resources?: { title: string };
+	resources?: { title: string; items: { title: string; href: string; note: string }[] };
 	stories?: { title: string; text: string }[];
 	faq: { title: string; items: Faq[] };
 	// Adds a Service entry to the page's structured data.
-	service?: { name: string; price?: string; currency?: string; offer?: string };
+	service?: { name: string; serviceType?: string; audience?: string; areaServed?: string; price?: string; currency?: string; offer?: string };
 	form: {
 		fields: Field[];
 		consents?: string[];
@@ -66,8 +69,8 @@ const graph: Record<string, unknown>[] = [
 		'@type': 'BreadcrumbList',
 		itemListElement: [
 			{ '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', origin).href },
-			{ '@type': 'ListItem', position: 2, name: 'For organisations' },
-			{ '@type': 'ListItem', position: 3, name: p.crumb, item: pageUrl },
+			// "For organisations" has no page of its own, so it appears in the visible breadcrumb only.
+			{ '@type': 'ListItem', position: 2, name: p.crumb, item: pageUrl },
 		],
 	},
 ];
@@ -75,9 +78,11 @@ if (p.service)
 	graph.push({
 		'@type': 'Service',
 		name: p.service.name,
+		...(p.service.serviceType && { serviceType: p.service.serviceType }),
 		url: pageUrl,
 		provider: { '@type': 'Organization', name: 'EyeCheck.app', url: origin },
-		areaServed: 'Worldwide',
+		...(p.service.audience && { audience: { '@type': 'Audience', audienceType: p.service.audience } }),
+		...(p.service.areaServed && { areaServed: p.service.areaServed }),
 		...(p.service.price && {
 			offers: { '@type': 'Offer', price: p.service.price, priceCurrency: p.service.currency, description: p.service.offer },
 		}),
@@ -105,7 +110,11 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 			</div>
 			{
 				p.image ? (
-					<img class="hero-img" src={p.image.src} alt={p.image.alt} width={p.image.width} height={p.image.height} />
+					typeof p.image.src === 'string' ? (
+						<img class="hero-img" src={p.image.src} alt={p.image.alt} width={p.image.width} height={p.image.height} loading="eager" />
+					) : (
+						<Image class="hero-img" src={p.image.src} alt={p.image.alt} width={p.image.width} height={p.image.height} format="webp" loading="eager" />
+					)
 				) : (
 					<div class="ph hero-img">[Photo]</div>
 				)
@@ -127,14 +136,18 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 								))}
 							</div>
 						)}
-						{p.why.list && (
-							<div class="card list-card">
-								{p.why.listTitle && <h3>{p.why.listTitle}</h3>}
-								<ul class="muted">
-									{p.why.list.map((item) => (
-										<li>{item}</li>
-									))}
-								</ul>
+						{p.why.lists && (
+							<div class="lists">
+								{p.why.lists.map((l) => (
+									<div class="card list-card">
+										{l.title && <h3>{l.title}</h3>}
+										<ul class="muted">
+											{l.items.map((item) => (
+												<li>{item}</li>
+											))}
+										</ul>
+									</div>
+								))}
 							</div>
 						)}
 						{p.why.closing && <p class="closing">{p.why.closing}</p>}
@@ -191,18 +204,12 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 					<div class="wrap stack">
 						<h2>{p.resources.title}</h2>
 						<div class="grid3">
-							<a href={routes.chartPediatric} class="card">
-								<h3>Pediatric eye chart</h3>
-								<span class="note">Printable PDF for preschoolers</span>
-							</a>
-							<a href={routes.colorBlindKids} class="card">
-								<h3>Color blind test for kids</h3>
-								<span class="note">Shapes, from age 3</span>
-							</a>
-							<a href={routes.lazyEye} class="card">
-								<h3>Lazy eye checklist</h3>
-								<span class="note">Signs to look for in children</span>
-							</a>
+							{p.resources.items.map((r) => (
+								<a href={r.href} class="card">
+									<h3>{r.title}</h3>
+									<span class="note">{r.note}</span>
+								</a>
+							))}
 						</div>
 					</div>
 				</section>
@@ -433,6 +440,11 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 		margin: 0;
 		padding-left: 18px;
 		line-height: 1.7;
+	}
+	.lists {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+		gap: 24px;
 	}
 	.list-card {
 		background: var(--surface);
