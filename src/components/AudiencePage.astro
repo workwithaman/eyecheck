@@ -522,7 +522,8 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 		gap: 16px;
 	}
 	.field {
-		flex: 1 1 240px;
+		/* Two per row on desktop, so a long label never pushes its input below its neighbours. */
+		flex: 1 1 280px;
 		display: flex;
 		flex-direction: column;
 		gap: 6px;
