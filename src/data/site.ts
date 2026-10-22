@@ -1,10 +1,13 @@
 // Values in [brackets] are placeholders carried over from the wireframes: replace them with real data.
+import { liveStats } from './live';
+
 export const site = {
 	name: 'EyeCheck',
 	reviewer: '[NAME], OD',
 	reviewerRole: 'Optometrist',
-	peopleScreened: '8,417',
-	peopleReferred: '348',
+	// Read from the backend at build time (see live.ts).
+	peopleScreened: liveStats.peopleScreened,
+	peopleReferred: liveStats.peopleReferred,
 	statsNote: 'Data updated October 2025. Based on anonymised screening results.',
 	legalEntity: '[Legal entity, country]',
 	// The home page video. Details match the YouTube listing; they also feed the VideoObject schema.

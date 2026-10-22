@@ -3,22 +3,40 @@ import Layout from '../layouts/Layout.astro';
 import { site, routes, tests, orgs } from '../data/site';
 import { posts as blogPosts } from '../data/blog';
 import { socialLinks, socialProfiles } from '../data/social';
+import { testimonials } from '../data/live';
 
 const title = 'Free Online Eye Test & Eye Test App | EyeCheck.app';
 const description =
-	'Check your eyes online in about 5 minutes. A free eye test for adults and children that runs in your browser on any phone, tablet or computer, with no app to install.';
+	'Check your eyes online in under 5 minutes. EyeCheck.app is a free online vision test for children from age 3 and adults, with no app or appointment needed.';
 
 const steps = [
-	{ title: 'Set up your screen', text: 'We check your screen size and tell you how far away to sit.' },
-	{ title: 'Cover one eye and answer', text: 'Children aged 3 to 7 match shapes. From age 8 you answer with Landolt C rings.' },
-	{ title: 'Get your results', text: 'A score for each eye, what it means, and a PDF report to keep.' },
+	{
+		title: 'Set up your screen',
+		text: 'Use a bright screen of at least 33 cm (13″) and a wireless mouse on a flat surface. Sit 3 m (10 ft) away.',
+	},
+	{
+		title: 'Cover one eye and answer',
+		text: 'Picture shapes for ages 3–7, Landolt C rings for ages 8 and up. About 1–2 minutes per eye.',
+	},
+	{
+		title: 'Get your results',
+		text: 'A Pass or Refer result for each eye. Want more detail? Get the full PDF report for $2.',
+	},
 ];
 
-// Placeholders until approved testimonials are supplied.
-const testimonials = [
-	{ quote: '[Approved testimonial]', by: '[Name, role]' },
-	{ quote: '[Approved testimonial]', by: '[Name, role]' },
-	{ quote: '[Approved testimonial]', by: '[Name, role]' },
+const slides = [
+	{ label: 'toddler screening', alt: 'Toddler performing online vision screening using shape matching cards on a laptop' },
+	{ label: 'the test screen', alt: 'Interface of EyeCheck.app online vision screening tool showing a shape matching test' },
+	{ label: 'family', alt: 'Happy family with parents and children, illustrating that EyeCheck is suitable for vision screening of all ages' },
+	{ label: 'PDF report', alt: 'Preview of the PDF vision screening report showing eye test results' },
+	{ label: 'classroom tablets', alt: 'Elementary school children using a tablet in a classroom for school vision screening' },
+].map((s, i) => ({ ...s, src: `/images/hero/slide-${i + 1}.jpg` }));
+
+const goals = [
+	{ n: 3, title: 'Good health and well-being', text: 'Accessible screening supports early detection of vision issues.' },
+	{ n: 4, title: 'Quality education', text: 'Fixing vision problems removes a barrier to learning.' },
+	{ n: 8, title: 'Decent work and economic growth', text: 'Better vision health supports productivity and employment.' },
+	{ n: 10, title: 'Reduced inequalities', text: 'Free screening for underserved communities narrows the gap in care.' },
 ];
 
 const posts = [
@@ -30,11 +48,11 @@ const posts = [
 const faqs = [
 	{
 		q: 'Can I check my eyes online for free?',
-		a: 'Yes. Every EyeCheck test is free and runs in your browser on a phone, tablet or computer.',
+		a: 'Yes. Every EyeCheck test is free and runs in your browser on a computer, with no app or appointment needed.',
 	},
 	{
 		q: 'Is there a free eye test app I can use on my phone?',
-		a: 'EyeCheck works like an eye test app, but it runs in your phone’s browser, so there is nothing to download. Open the site and start the test.',
+		a: 'EyeCheck works like an eye test app, but it runs in your browser, so there is nothing to download. For accurate results it needs a screen of at least 33 cm (13″), so use a laptop or desktop computer rather than a phone.',
 	},
 	{
 		q: 'How accurate is an online eye test?',
@@ -105,11 +123,11 @@ const schema = [
 	<section class="hero">
 		<div class="wrap hero-in">
 			<div class="hero-copy">
-				<span class="pill">Free · No app · About 5 minutes</span>
-				<h1>Free online eye test: check your eyes in 5 minutes</h1>
+				<span class="pill">Free · No download · 3–4 minutes</span>
+				<h1>Free online eye test: check your eyes in under 5 minutes</h1>
 				<p class="lead">
-					A quick vision screening for adults and children on any phone, tablet or computer. It’s the eye test app that runs in
-					your browser, so there’s nothing to install.
+					EyeCheck.app is a free online vision test that helps you screen for vision problems from your computer, with no app or
+					appointment needed. For children from age 3 and adults.
 				</p>
 				<div class="actions">
 					<a href={routes.start} class="btn solid">
@@ -129,12 +147,36 @@ const schema = [
 					</span>
 				</div>
 			</div>
-			<div class="hero-art">
-				<div class="ph shot">[Product shot: the test running on a laptop and a phone]</div>
-				<img class="rings" src="/images/test-astigmatism.svg" alt="" width="150" height="103" />
-				<div class="result">
-					<img src="/images/result-check.svg" alt="" width="64" height="44" />
-					<span><b>Right eye 6/6</b><br /><span class="ok">Within normal range</span></span>
+			<div class="hero-art" data-slides>
+				<div class="frame-wrap">
+					<div class="frame">
+						{
+							slides.map((s, i) => (
+								<img
+									src={s.src}
+									alt={s.alt}
+									width="1280"
+									height="720"
+									class:list={['slide', { active: i === 0 }]}
+									loading={i === 0 ? 'eager' : 'lazy'}
+									fetchpriority={i === 0 ? 'high' : undefined}
+								/>
+							))
+						}
+					</div>
+					<div class="suits">
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
+						<span>Suitable for children &amp; adults</span>
+					</div>
+				</div>
+				<div class="thumbs" role="group" aria-label="Slides">
+					{
+						slides.map((s, i) => (
+							<button type="button" class:list={['thumb', { active: i === 0 }]} aria-label={`Slide ${i + 1}: ${s.label}`} aria-pressed={i === 0 ? 'true' : 'false'}>
+								<img src={s.src} alt="" width="1280" height="720" loading="lazy" />
+							</button>
+						))
+					}
 				</div>
 			</div>
 		</div>
@@ -241,7 +283,7 @@ const schema = [
 			</div>
 			<div class="card stat impact">
 				<img src="/images/test-visual-acuity.svg" alt="" width="130" height="89" loading="lazy" />
-				<p>Free for every school and charity.</p>
+				<p>Used at home by families, and by schools, clinics and charity programmes.</p>
 			</div>
 		</div>
 		<div class="wrap">
@@ -259,10 +301,11 @@ const schema = [
 				<span class="eyebrow">Medically reviewed</span>
 				<h2>Screening, not a diagnosis</h2>
 				<p>
-					EyeCheck is reviewed by {site.reviewer}. It can flag signs that your vision needs attention, but it cannot diagnose eye
-					conditions or replace a full eye exam. If a result is outside the normal range, or anything about your vision worries
-					you, book an exam.
+					EyeCheck.app is a digital screening tool, not a substitute for a professional eye exam. A <b>Pass</b> suggests vision is
+					within the normal range for your age. A <b>Refer</b> means you may benefit from a full eye exam by an eye care
+					professional.
 				</p>
+				<p class="reviewed-by">Reviewed by {site.reviewer}</p>
 				<div class="actions">
 					<a href={routes.howWeTest} class="btn">How we test</a>
 					<a href={routes.medicalReview} class="btn">Our medical reviewer</a>
@@ -272,21 +315,71 @@ const schema = [
 	</section>
 
 	<section class="sec band">
-		<div class="wrap stack">
-			<h2>What people say</h2>
-			<div class="grid3">
-				{
-					testimonials.map((t) => (
-						<figure class="card quote">
-							<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 7h4v4c0 3-1.5 5-4 6l-.8-1.3C7.6 14.8 8.3 13.6 8.3 12H7zM14 7h4v4c0 3-1.5 5-4 6l-.8-1.3c1.4-.9 2.1-2.1 2.1-3.7H14z"></path></svg>
-							<blockquote>{t.quote}</blockquote>
-							<figcaption class="meta">{t.by}</figcaption>
-						</figure>
-					))
-				}
+		<div class="wrap story">
+			<img src="/images/our-story.webp" alt="Vision screening session using the Children Eye Screening Book shapes cards" width="694" height="388" loading="lazy" />
+			<div class="story-copy">
+				<span class="eyebrow">Our story</span>
+				<h2>Can someone live with a cataract and not even know it?</h2>
+				<p>
+					Our founder Andy was born with a cataract in his right eye. Nobody knew until a school vision screening at age 8.
+					EyeCheck.app exists so problems like his are caught early, at home or at school.
+				</p>
+				<a href={routes.about} class="btn">Read our story</a>
 			</div>
 		</div>
 	</section>
+
+	<section class="sec">
+		<div class="wrap stack">
+			<div class="head goals-head">
+				<span class="eyebrow">Global goals</span>
+				<h2>Our commitment to the UN Sustainable Development Goals</h2>
+				<p>EyeCheck.app promotes equal access to early eye screening for every child.</p>
+			</div>
+			<ul class="goals">
+				{
+					goals.map((g) => (
+						<li>
+							<img src={`/images/sdg/sdg${g.n}.png`} alt={`SDG ${g.n} icon: ${g.title}`} width="64" height="64" loading="lazy" />
+							<span>
+								<b>
+									SDG {g.n} · {g.title}
+								</b>
+								<span>{g.text}</span>
+							</span>
+						</li>
+					))
+				}
+			</ul>
+			<p class="meta">
+				SDG icons courtesy of the United Nations. Learn more at <a href="https://sdgs.un.org/goals">sdgs.un.org/goals</a>.
+			</p>
+		</div>
+	</section>
+
+	{
+		testimonials.length > 0 && (
+			<section class="sec band">
+				<div class="wrap stack">
+					<h2>What people say</h2>
+					<div class="grid3">
+						{testimonials.map((t) => (
+							<figure class="card quote">
+								<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+									<path d="M7 7h4v4c0 3-1.5 5-4 6l-.8-1.3C7.6 14.8 8.3 13.6 8.3 12H7zM14 7h4v4c0 3-1.5 5-4 6l-.8-1.3c1.4-.9 2.1-2.1 2.1-3.7H14z" />
+								</svg>
+								<blockquote>{t.message}</blockquote>
+								<figcaption>
+									<b>{t.name}</b>
+									{t.role && <span>{t.role}</span>}
+								</figcaption>
+							</figure>
+						))}
+					</div>
+				</div>
+			</section>
+		)
+	}
 
 	<section class="sec">
 		<div class="wrap">
@@ -294,7 +387,7 @@ const schema = [
 				<div class="charts-copy">
 					<span class="eyebrow">Free printables</span>
 					<h2>Free printable eye charts</h2>
-					<p>Snellen, 10-foot, pediatric and tumbling E charts as PDFs for home and school.</p>
+					<p>Snellen, 10-foot, pediatric shapes and tumbling E charts as PDFs for home and school.</p>
 					<a href={routes.eyeCharts} class="btn solid">Browse eye charts</a>
 				</div>
 				<div class="charts-art">
@@ -407,7 +500,7 @@ const schema = [
 		<div class="wrap closing-in">
 			<img src="/images/logo-on-blue.svg" alt="" width="331" height="48" loading="lazy" />
 			<h2>Check your eyes now</h2>
-			<p>Free, about 5 minutes, results for each eye.</p>
+			<p>Free, 3–4 minutes, a result for each eye.</p>
 			<a href={routes.start} class="btn">
 				Start free eye test
 				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
@@ -417,6 +510,31 @@ const schema = [
 </Layout>
 
 <script>
+	// Hero slideshow: advances every 5 seconds, pauses while hovered or focused, and stays put for reduced motion.
+	const show = document.querySelector<HTMLElement>('[data-slides]');
+	if (show) {
+		const slides = [...show.querySelectorAll<HTMLElement>('.slide')];
+		const thumbs = [...show.querySelectorAll<HTMLButtonElement>('.thumb')];
+		let current = 0;
+		let paused = false;
+		const go = (n: number) => {
+			current = (n + slides.length) % slides.length;
+			slides.forEach((s, i) => s.classList.toggle('active', i === current));
+			thumbs.forEach((t, i) => {
+				t.classList.toggle('active', i === current);
+				t.setAttribute('aria-pressed', String(i === current));
+			});
+		};
+		thumbs.forEach((t, i) => t.addEventListener('click', () => go(i)));
+		show.addEventListener('mouseenter', () => (paused = true));
+		show.addEventListener('mouseleave', () => (paused = false));
+		show.addEventListener('focusin', () => (paused = true));
+		show.addEventListener('focusout', () => (paused = false));
+		if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			window.setInterval(() => !paused && go(current + 1), 5000);
+		}
+	}
+
 	// Click-to-load: the poster links to YouTube, and with JavaScript it swaps in the player on click,
 	// so no YouTube script is requested until the visitor presses play.
 	const video = document.querySelector<HTMLElement>('[data-video]');
@@ -541,32 +659,42 @@ const schema = [
 		color: var(--green);
 	}
 	.hero-art {
-		position: relative;
 		flex: 1 1 440px;
-		min-height: 420px;
+		display: flex;
+		flex-direction: column;
+		gap: 28px;
 	}
-	.shot {
-		position: absolute;
-		inset: 20px 0 0 30px;
-		border: 1px solid var(--line);
-		border-radius: 16px;
+	.frame-wrap {
+		position: relative;
+	}
+	.frame {
+		position: relative;
+		overflow: hidden;
+		aspect-ratio: 16 / 9;
+		border: 2px solid var(--lens-line);
+		border-radius: 20px;
 		background: var(--surface);
 		box-shadow: 0 24px 60px rgba(36, 99, 235, 0.14);
 	}
-	.rings {
+	.slide {
 		position: absolute;
-		left: -10px;
-		top: -10px;
-		width: 150px;
-		height: auto;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		opacity: 0;
+		transition: opacity 0.5s;
 	}
-	.result {
+	.slide.active {
+		opacity: 1;
+	}
+	.suits {
 		position: absolute;
 		right: -10px;
 		bottom: -18px;
 		display: flex;
 		align-items: center;
-		gap: 12px;
+		gap: 10px;
 		padding: 12px 16px;
 		border: 1px solid var(--line);
 		border-radius: 16px;
@@ -574,17 +702,37 @@ const schema = [
 		box-shadow: 0 12px 30px rgba(16, 24, 40, 0.1);
 		font-size: 14px;
 		line-height: 20px;
-	}
-	.result img {
-		width: 64px;
-		height: auto;
-	}
-	.result b {
 		font-weight: 600;
 	}
-	.ok {
-		color: var(--green-text);
-		font-weight: 500;
+	.suits svg {
+		color: var(--green);
+	}
+	.thumbs {
+		display: flex;
+		gap: 8px;
+	}
+	.thumb {
+		flex: 1 1 0;
+		min-width: 0;
+		overflow: hidden;
+		aspect-ratio: 16 / 9;
+		padding: 0;
+		border: 2px solid var(--line);
+		border-radius: 10px;
+		background: var(--surface);
+		opacity: 0.7;
+		cursor: pointer;
+	}
+	.thumb.active,
+	.thumb:hover {
+		border-color: var(--blue);
+		opacity: 1;
+	}
+	.thumb img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
 
 	/* Eye tests */
@@ -768,6 +916,74 @@ const schema = [
 		line-height: 20px;
 	}
 
+	.reviewed-by {
+		font-size: 14px;
+	}
+
+	/* Our story */
+	.story {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 40px;
+	}
+	.story img {
+		flex: 1 1 420px;
+		min-width: 0;
+		width: 100%;
+		max-width: 560px;
+		height: auto;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		border-radius: 20px;
+	}
+	.story-copy {
+		flex: 1 1 420px;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+	.story-copy .btn {
+		align-self: flex-start;
+	}
+
+	/* UN goals */
+	.goals-head {
+		max-width: 720px;
+	}
+	.goals {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		gap: 24px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.goals li {
+		display: flex;
+		align-items: flex-start;
+		gap: 14px;
+	}
+	.goals img {
+		flex: 0 0 auto;
+		width: 64px;
+		height: 64px;
+		border-radius: 8px;
+	}
+	.goals li > span {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		color: var(--slate);
+		font-size: 14px;
+		line-height: 21px;
+	}
+	.goals b {
+		color: var(--ink);
+		font-size: 16px;
+		font-weight: 600;
+	}
+
 	/* Medical review */
 	.review {
 		display: flex;
@@ -812,6 +1028,16 @@ const schema = [
 	.quote blockquote {
 		margin: 0;
 		color: var(--ink);
+	}
+	.quote figcaption {
+		display: flex;
+		flex-direction: column;
+		margin-top: auto;
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.quote figcaption span {
+		color: var(--muted);
 	}
 
 	/* Printable charts */
@@ -969,17 +1195,9 @@ const schema = [
 		}
 		.hero-art {
 			flex-basis: 100%;
-			min-height: 300px;
 		}
-		.shot {
-			inset: 20px 0 0 0;
-		}
-		.rings {
-			left: 0;
-			width: 110px;
-		}
-		.result {
-			right: 0;
+		.suits {
+			right: 8px;
 		}
 		.tests-sec {
 			padding-top: 40px;
