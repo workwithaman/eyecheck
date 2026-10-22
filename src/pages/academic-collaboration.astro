@@ -1,29 +1,38 @@
 ---
 import AudiencePage from '../components/AudiencePage.astro';
-
-const copy = {
-	"crumb": "Research",
-	"h1": "Vision Research Collaboration",
-	"intro": "[Who it’s for, what it costs, how it works.]",
-	"photo": "[Photo]",
-	"whyTitle": "[Why it matters heading]",
-	"howTitle": "[How it works heading]",
-	"steps": [
-		"[Step 1]",
-		"[Step 2]",
-		"[Step 3]"
-	],
-	"resourcesTitle": "[Free resources heading]",
-	"story": "[Quote + organisation name + result]",
-	"faqTitle": "[FAQ heading]",
-	"faqs": [
-		"[Question 1]",
-		"[Question 2]",
-		"[Question 3]"
-	],
-	"orgLabel": "Organisation",
-	"sizeLabel": "[Size field]"
-};
 ---
 
-<AudiencePage {...copy} />
+<AudiencePage
+	crumb="Research"
+	h1="Vision Research Collaboration"
+	intro="Partner with universities and research institutions to advance vision science."
+	why={{
+		title: 'Research collaboration',
+		list: ['Real-time, large-scale data collection', 'Standardised, consistent testing protocols', 'Big-data analysis across populations'],
+	}}
+	faq={{ title: '[FAQ heading]', questions: ['[Question 1]', '[Question 2]', '[Question 3]'] }}
+	form={{
+		fields: [
+			{ label: 'Institution', required: true },
+			{ label: 'Department' },
+			{ label: 'Institution website', type: 'url' },
+			{ label: 'Lead researcher', required: true },
+			{ label: 'Email', type: 'email', required: true },
+			{ label: 'Phone', type: 'tel' },
+			{ label: 'Project title', required: true },
+			{ label: 'Estimated timeframe' },
+			{ label: 'Funding source (optional)' },
+			{ label: 'Ethics committee approval status' },
+			{ label: 'Research description', type: 'textarea', required: true },
+			{ label: 'Expected outcomes (optional)', type: 'textarea' },
+			{
+				label: 'Additional documents',
+				type: 'file',
+				accept: '.pdf,.doc,.docx',
+				hint: 'PDF, DOC or DOCX, up to 5 files, max 5 MB each',
+			},
+		],
+		consents: ['I consent to media usage', 'I agree to the terms and conditions'],
+		button: 'Submit research proposal',
+	}}
+/>

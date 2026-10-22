@@ -1,29 +1,37 @@
 ---
 import AudiencePage from '../components/AudiencePage.astro';
-
-const copy = {
-	"crumb": "Charities",
-	"h1": "Free Vision Screening for Charities",
-	"intro": "[Who it’s for, what it costs, how it works.]",
-	"photo": "[Photo]",
-	"whyTitle": "[Why it matters heading]",
-	"howTitle": "[How it works heading]",
-	"steps": [
-		"[Step 1]",
-		"[Step 2]",
-		"[Step 3]"
-	],
-	"resourcesTitle": "[Free resources heading]",
-	"story": "[Quote + organisation name + result]",
-	"faqTitle": "[FAQ heading]",
-	"faqs": [
-		"[Question 1]",
-		"[Question 2]",
-		"[Question 3]"
-	],
-	"orgLabel": "Organisation",
-	"sizeLabel": "[Size field]"
-};
 ---
 
-<AudiencePage {...copy} />
+<AudiencePage
+	crumb="Charities"
+	h1="Free Vision Screening Support for Charities"
+	intro="Free screening tools for organisations that provide vision screening to underprivileged children around the world."
+	why={{
+		title: 'Charity support programme',
+		closing: 'Together, we can ensure that every child, regardless of their circumstances, has access to quality vision screening.',
+	}}
+	stories={[
+		{
+			title: 'School Vision Project',
+			text: 'Screened over 5,000 children in rural communities, identifying over 800 cases requiring further care.',
+		},
+		{
+			title: 'Urban Health Initiative',
+			text: 'Screenings at community centres in underserved neighbourhoods, reaching 1,200 children in one month.',
+		},
+	]}
+	faq={{ title: '[FAQ heading]', questions: ['[Question 1]', '[Question 2]', '[Question 3]'] }}
+	form={{
+		fields: [
+			{ label: 'Organisation name', required: true },
+			{ label: 'Website', type: 'url' },
+			{ label: 'Contact person', required: true },
+			{ label: 'Email', type: 'email', required: true },
+			{ label: 'Phone', type: 'tel' },
+			{ label: 'Expected number of screenings', type: 'number' },
+			{ label: 'Project description', type: 'textarea', hint: 'Location, target population, and goals', required: true },
+		],
+		consents: ['I agree to the terms and conditions', 'I consent to media usage'],
+		button: 'Submit application',
+	}}
+/>

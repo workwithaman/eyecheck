@@ -1,29 +1,35 @@
 ---
 import AudiencePage from '../components/AudiencePage.astro';
-
-const copy = {
-	"crumb": "Clinics",
-	"h1": "Vision Screening Tools for Clinics",
-	"intro": "[Who it’s for, what it costs, how it works.]",
-	"photo": "[Photo]",
-	"whyTitle": "[Why it matters heading]",
-	"howTitle": "[How it works heading]",
-	"steps": [
-		"[Step 1]",
-		"[Step 2]",
-		"[Step 3]"
-	],
-	"resourcesTitle": "[Free resources heading]",
-	"story": "[Quote + organisation name + result]",
-	"faqTitle": "[FAQ heading]",
-	"faqs": [
-		"[Question 1]",
-		"[Question 2]",
-		"[Question 3]"
-	],
-	"orgLabel": "Organisation",
-	"sizeLabel": "[Size field]"
-};
 ---
 
-<AudiencePage {...copy} />
+<AudiencePage
+	crumb="Clinics"
+	h1="Vision Screening Tools for Clinics"
+	intro="Perform eyesight screening at home, in your clinic or at large events."
+	why={{
+		title: 'Healthcare professionals',
+		list: [
+			'Patients run guided self-screening at home or in clinic',
+			'Email secure screening links for remote follow-ups',
+			'Run screening days on several laptops at once',
+			'Reduce clinic appointment time; scale from one patient to hundreds',
+		],
+	}}
+	plan={{
+		label: 'Healthcare plan',
+		price: 'SGD 100',
+		unit: '100 eyesight screenings (SGD 1 per screening)',
+		items: ['PDF report for each screening', 'Easy setup and deployment', 'No software installation', 'Training provided'],
+	}}
+	faq={{ title: '[FAQ heading]', questions: ['[Question 1]', '[Question 2]', '[Question 3]'] }}
+	form={{
+		fields: [
+			{ label: 'Name', required: true },
+			{ label: 'Profession (e.g. Optometrist, Nurse, Doctor)' },
+			{ label: 'Email', type: 'email', required: true },
+			{ label: 'Contact number', type: 'tel' },
+			{ label: 'Remarks (optional)', type: 'textarea' },
+		],
+		button: 'Schedule an online session',
+	}}
+/>
