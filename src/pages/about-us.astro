@@ -1,9 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { routes } from '../data/site';
+import { routes, site } from '../data/site';
 ---
 
-<Layout title={"About EyeCheck.app: Free Vision Screening for Everyone (fix the audit’s title error)"} active="about">
+<Layout title={"About EyeCheck.app: Free Vision Screening for Everyone"} active="about">
 	<div class="inner">
 	<div class="wrap crumb">Home › About</div>
 	<section class="wrap" style="padding-top:20px;padding-bottom:44px;display:flex;flex-wrap:wrap;gap:36px;align-items:center">
@@ -30,10 +30,11 @@ import { routes } from '../data/site';
 	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
 	  <h2>Our impact</h2>
 	  <div style="display:flex;flex-wrap:wrap;gap:20px">
-	    <div class="card" style="flex:1 1 220px"><span style="font-size:36px;font-weight:700">[N]</span><span class="muted">People screened</span></div>
-	    <div class="card" style="flex:1 1 220px"><span style="font-size:36px;font-weight:700">[N]</span><span class="muted">Referred to an eye doctor</span></div>
+	    <div class="card" style="flex:1 1 220px"><span style="font-size:36px;font-weight:700">{site.peopleScreened}</span><span class="muted">People screened</span></div>
+	    <div class="card" style="flex:1 1 220px"><span style="font-size:36px;font-weight:700">{site.peopleReferred}</span><span class="muted">Referred to an eye doctor</span></div>
 	    <div class="card" style="flex:1 1 220px"><span style="font-size:36px;font-weight:700">[N]</span><span class="muted">Countries</span></div>
 	  </div>
+	  <p class="note">{site.statsNote}</p>
 	  <div class="ph" style="height:120px">[UN Sustainable Development Goals we support: SDG 3, 4, 8, 10 icons]</div>
 	</div></section>
 	

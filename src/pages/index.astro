@@ -78,6 +78,17 @@ const schema = [
 	},
 	{
 		'@context': 'https://schema.org',
+		'@type': 'VideoObject',
+		name: site.video.title,
+		description: 'A step-by-step guide to the free online eye screening on EyeCheck.app, for kids and adults.',
+		thumbnailUrl: new URL(site.video.poster, origin).href,
+		uploadDate: site.video.uploadDate,
+		duration: site.video.duration,
+		embedUrl: `https://www.youtube.com/embed/${site.video.id}`,
+		contentUrl: `https://www.youtube.com/watch?v=${site.video.id}`,
+	},
+	{
+		'@context': 'https://schema.org',
 		'@type': 'FAQPage',
 		mainEntity: faqs.map((f) => ({
 			'@type': 'Question',
@@ -177,22 +188,19 @@ const schema = [
 	<section class="sec">
 		<div class="wrap video-sec">
 			<span class="eyebrow">Video overview</span>
-			<h2>Watch: how EyeCheck works in 90 seconds</h2>
-			<p>See how to set up your screen, take the test with a child and read the result.</p>
-			<div class="video" data-video={site.videoId}>
-				<img class="video-logo" src="/images/logo-white.svg" alt="" width="221" height="32" loading="lazy" />
-				{
-					site.videoId ? (
-						<button type="button" class="play" aria-label="Play video: how EyeCheck works">
-							<svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
-						</button>
-					) : (
-						<span class="play" aria-hidden="true">
-							<svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
-						</span>
-					)
-				}
-				<span class="video-title">How EyeCheck works · 1:30</span>
+			<h2>Watch: how to use EyeCheck</h2>
+			<p>A step-by-step guide to the free online eye screening, for kids and adults.</p>
+			<div class="video" data-video={site.video.id}>
+				<a href={`https://www.youtube.com/watch?v=${site.video.id}`} class="poster" aria-label={`Play video: ${site.video.title}`}>
+					<img src={site.video.poster} alt="" width="1280" height="720" loading="lazy" />
+					<span class="play" aria-hidden="true">
+						<svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+					</span>
+				</a>
+			</div>
+			<div class="video-meta">
+				<b>{site.video.title}</b>
+				<span>YouTube · {site.video.channel}</span>
 			</div>
 		</div>
 	</section>
@@ -235,6 +243,9 @@ const schema = [
 				<img src="/images/test-visual-acuity.svg" alt="" width="130" height="89" loading="lazy" />
 				<p>Free for every school and charity.</p>
 			</div>
+		</div>
+		<div class="wrap">
+			<p class="stats-note">{site.statsNote}</p>
 		</div>
 	</section>
 
@@ -406,15 +417,18 @@ const schema = [
 </Layout>
 
 <script>
-	// Click-to-load: no YouTube script is requested until the visitor presses play.
+	// Click-to-load: the poster links to YouTube, and with JavaScript it swaps in the player on click,
+	// so no YouTube script is requested until the visitor presses play.
 	const video = document.querySelector<HTMLElement>('[data-video]');
-	video?.querySelector('button')?.addEventListener('click', () => {
+	video?.querySelector('a')?.addEventListener('click', (e) => {
+		e.preventDefault();
 		const frame = document.createElement('iframe');
-		frame.src = `https://www.youtube-nocookie.com/embed/${video.dataset.video}?autoplay=1&cc_load_policy=1`;
-		frame.title = 'How EyeCheck works';
+		frame.src = `https://www.youtube-nocookie.com/embed/${video.dataset.video}?autoplay=1&cc_load_policy=1&rel=0`;
+		frame.title = 'How to use EyeCheck (video)';
 		frame.allow = 'autoplay; encrypted-media; picture-in-picture';
 		frame.allowFullscreen = true;
 		video.replaceChildren(frame);
+		frame.focus();
 	});
 </script>
 
@@ -622,57 +636,63 @@ const schema = [
 	}
 	.video {
 		position: relative;
-		display: flex;
-		align-items: center;
-		justify-content: center;
 		overflow: hidden;
 		width: 100%;
 		aspect-ratio: 16 / 9;
+		border: 1px solid var(--line);
 		border-radius: 20px;
-		background: var(--night);
+		background: var(--lens);
 	}
 	.video :global(iframe) {
+		display: block;
 		width: 100%;
 		height: 100%;
 		border: 0;
 	}
-	.video-logo {
+	.poster {
 		position: absolute;
-		left: 28px;
-		top: 24px;
-		width: auto;
-		height: 32px;
-		opacity: 0.9;
+		inset: 0;
+		display: flex;
+		align-items: flex-end;
+		padding: 36px 40px;
+	}
+	.poster img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
 	.play {
+		position: relative;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		width: 88px;
 		height: 88px;
-		padding: 0;
-		border: 0;
 		border-radius: 44px;
 		background: var(--blue);
 		color: var(--on-blue);
-		box-shadow: 0 0 0 12px rgba(36, 99, 235, 0.25);
+		box-shadow:
+			0 0 0 12px rgba(36, 99, 235, 0.25),
+			0 12px 32px rgba(16, 24, 40, 0.25);
+		transition: background 0.15s;
 	}
-	button.play {
-		cursor: pointer;
-	}
-	button.play:hover {
+	.poster:hover .play {
 		background: var(--blue-strong);
 	}
-	button.play:focus-visible {
-		outline-color: var(--on-blue);
+	.video-meta {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 6px 20px;
+		color: var(--slate);
+		font-size: 14px;
+		line-height: 20px;
 	}
-	.video-title {
-		position: absolute;
-		left: 28px;
-		bottom: 24px;
-		color: #f3f6fc;
-		font-size: 15px;
-		font-weight: 500;
+	.video-meta b {
+		color: var(--ink);
+		font-weight: 600;
 	}
 
 	/* Adults and parents */
@@ -739,6 +759,13 @@ const schema = [
 	.impact img {
 		width: 130px;
 		height: auto;
+	}
+
+	.stats-note {
+		margin-top: 16px;
+		color: var(--muted);
+		font-size: 13px;
+		line-height: 20px;
 	}
 
 	/* Medical review */

@@ -3,11 +3,19 @@ export const site = {
 	name: 'EyeCheck',
 	reviewer: '[NAME], OD',
 	reviewerRole: 'Optometrist',
-	peopleScreened: '[N]',
-	peopleReferred: '[N]',
+	peopleScreened: '8,417',
+	peopleReferred: '348',
+	statsNote: 'Data updated October 2025. Based on anonymised screening results.',
 	legalEntity: '[Legal entity, country]',
-	// YouTube ID of the "How EyeCheck works" video. The player only loads once this is set.
-	videoId: '',
+	// The home page video. Details match the YouTube listing; they also feed the VideoObject schema.
+	video: {
+		id: 'fom8Sd_yakE',
+		title: 'How to Use EyeCheck.app – Free Online Eye Screening Tool for Kids & Adults',
+		channel: 'Potential Dynamics',
+		uploadDate: '2025-07-21T09:01:07-07:00',
+		duration: 'PT0M53S',
+		poster: '/images/video-poster.jpg',
+	},
 	// Profile URLs for the footer and home page social links. Until one is set, its icon links nowhere.
 	social: {
 		facebook: '',
