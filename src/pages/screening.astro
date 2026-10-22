@@ -16,8 +16,8 @@ import { routes } from '../data/site';
 	    <span class="eyebrow">Step 1 of 3</span>
 	    <h2 id="age-heading">Who is taking the test?</h2>
 	    <div class="ages" role="group" aria-labelledby="age-heading" data-ages>
-	      <button type="button" class="card age" data-optotype="shapes" aria-pressed="false"><div class="ph" style="width:100%;height:110px">[Shapes illustration]</div><h3>Child, ages 3–7</h3><span class="muted">Picture shapes</span></button>
-	      <button type="button" class="card age selected" data-optotype="landolt" aria-pressed="true"><div class="ph" style="width:100%;height:110px">[Landolt C illustration]</div><h3>Ages 8 and up</h3><span class="muted">Landolt C rings</span></button>
+	      <button type="button" class="card age" data-optotype="shapes" aria-pressed="false"><span class="age-art"><img src="/images/test-color-blind.svg" alt="" width="132" height="90" /></span><h3>Child, ages 3–7</h3><span class="muted">Picture shapes</span></button>
+	      <button type="button" class="card age selected" data-optotype="landolt" aria-pressed="true"><span class="age-art"><img src="/images/test-visual-acuity.svg" alt="" width="132" height="90" /></span><h3>Ages 8 and up</h3><span class="muted">Landolt C rings</span></button>
 	    </div>
 	  </div>
 
@@ -25,9 +25,9 @@ import { routes } from '../data/site';
 	    <span class="eyebrow">Step 2 of 3</span>
 	    <h2>Check your setup</h2>
 	    <div class="grid3">
-	      <div style="display:flex;flex-direction:column;gap:8px"><div class="ph" style="height:100px">[Screen size icon]</div><h3>A bright screen, 33 cm (13″) or larger</h3><p class="muted">A laptop or desktop. Phones are too small for accurate results.</p></div>
-	      <div style="display:flex;flex-direction:column;gap:8px"><div class="ph" style="height:100px">[Distance icon]</div><h3>Sit 3 m (10 ft) away</h3><p class="muted">About 4 big steps for an adult.</p></div>
-	      <div style="display:flex;flex-direction:column;gap:8px"><div class="ph" style="height:100px">[Mouse icon]</div><h3>Wireless mouse on a flat surface</h3><p class="muted">So you can answer from 3 m away.</p></div>
+	      <div style="display:flex;flex-direction:column;gap:8px"><span class="setup-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg></span><h3>A bright screen, 33 cm (13″) or larger</h3><p class="muted">A laptop or desktop. Phones are too small for accurate results.</p></div>
+	      <div style="display:flex;flex-direction:column;gap:8px"><span class="setup-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18M6 9l-3 3 3 3M18 9l3 3-3 3" /></svg></span><h3>Sit 3 m (10 ft) away</h3><p class="muted">About 4 big steps for an adult.</p></div>
+	      <div style="display:flex;flex-direction:column;gap:8px"><span class="setup-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="5" /><path d="M12 7v3" /></svg></span><h3>Wireless mouse on a flat surface</h3><p class="muted">So you can answer from 3 m away.</p></div>
 	    </div>
 	  </div>
 
@@ -57,7 +57,7 @@ import { routes } from '../data/site';
 	    </div>
 	    <p class="status" role="status" aria-live="polite" data-status></p>
 	  </form>
-	  <div class="ph" style="height:180px;border-style:dashed">[After Start: Unity WebGL test in a full-screen overlay (shape or landolt build). Results posted to /user/update-results, then redirect to /result]</div>
+	  <!-- After Start: the Unity WebGL test opens in a full-screen overlay (shape or landolt build). Results are posted to /user/update-results, then the visitor is redirected to /result. -->
 	</section>
 
 	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="max-width:860px;display:flex;flex-direction:column;gap:14px">
@@ -65,7 +65,7 @@ import { routes } from '../data/site';
 	  <p class="muted">Wear your usual glasses or contact lenses, use good lighting, and test one eye at a time.</p>
 	  <p class="muted">Testing a young child? Show them the <a href={routes.chartPediatric}>Shapes Chart</a> first so they know the shapes (optional).</p>
 	  <p class="muted">No screen big enough? <a href={routes.eyeCharts}>Print an eye chart instead</a>.</p>
-	  <p class="muted">EyeCheck.app is a screening tool, not a diagnosis. Read <a href={routes.howWeTest}>how we test</a> or get <a href={routes.help}>help</a>.</p>
+	  <p class="muted">EyeCheck.app is a screening tool, not a diagnosis. If you notice sudden changes in your vision, see an eye doctor straight away. Read <a href={`${routes.howWeTest}/`}>how we test</a> or <a href={`${routes.help}/`}>get help</a>.</p>
 	</div></section>
 	</div>
 </Layout>
@@ -139,6 +139,29 @@ import { routes } from '../data/site';
 		background: var(--surface);
 		font: inherit;
 		cursor: pointer;
+	}
+	.age-art {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 110px;
+		border-radius: 14px;
+		background: var(--lens);
+	}
+	.age-art img {
+		width: auto;
+		height: 90px;
+	}
+	.setup-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 56px;
+		height: 56px;
+		border-radius: 14px;
+		background: var(--lens);
+		color: var(--blue);
 	}
 	.age.selected {
 		border: 2px solid var(--blue);
