@@ -8,51 +8,181 @@ import { routes } from '../data/site';
 	<div class="wrap crumb">Home › Start eye test</div>
 	<section class="wrap" style="padding-top:20px;padding-bottom:32px;display:flex;flex-direction:column;gap:12px;max-width:860px;margin-left:auto;margin-right:auto">
 	  <h1>Start Your Free Eye Test</h1>
-	  <p class="muted">[One line: three quick steps, then the test runs full screen. About 5 minutes.]</p>
+	  <p class="muted">Three quick steps, then the test runs full screen. About 1–2 minutes per eye.</p>
 	</section>
-	
+
 	<section class="wrap" style="max-width:860px;display:flex;flex-direction:column;gap:20px;padding-bottom:48px">
 	  <div class="card">
 	    <span class="eyebrow">Step 1 of 3</span>
-	    <h2>Who is taking the test?</h2>
-	    <div style="display:flex;flex-wrap:wrap;gap:16px">
-	      <button class="card" style="flex:1 1 240px;align-items:center;font:inherit;background:var(--surface);cursor:pointer"><div class="ph" style="width:100%;height:110px">[Shapes illustration]</div><h3>Child, ages 3–7</h3><span class="muted">Picture shapes</span></button>
-	      <button class="card" style="flex:1 1 240px;align-items:center;font:inherit;background:var(--surface);cursor:pointer;border-width:2px;border-color:var(--ink)"><div class="ph" style="width:100%;height:110px">[Landolt C illustration]</div><h3>Ages 8 and up</h3><span class="muted">Landolt C rings</span></button>
+	    <h2 id="age-heading">Who is taking the test?</h2>
+	    <div class="ages" role="group" aria-labelledby="age-heading" data-ages>
+	      <button type="button" class="card age" data-optotype="shapes" aria-pressed="false"><div class="ph" style="width:100%;height:110px">[Shapes illustration]</div><h3>Child, ages 3–7</h3><span class="muted">Picture shapes</span></button>
+	      <button type="button" class="card age selected" data-optotype="landolt" aria-pressed="true"><div class="ph" style="width:100%;height:110px">[Landolt C illustration]</div><h3>Ages 8 and up</h3><span class="muted">Landolt C rings</span></button>
 	    </div>
 	  </div>
-	
+
 	  <div class="card">
 	    <span class="eyebrow">Step 2 of 3</span>
 	    <h2>Check your setup</h2>
 	    <div class="grid3">
-	      <div style="display:flex;flex-direction:column;gap:8px"><div class="ph" style="height:100px">[Screen size icon]</div><h3>Screen [X]″ or larger</h3><p class="muted">[Laptop or desktop works best]</p></div>
-	      <div style="display:flex;flex-direction:column;gap:8px"><div class="ph" style="height:100px">[Distance icon]</div><h3>Sit [X] m away</h3><p class="muted">[How to measure]</p></div>
-	      <div style="display:flex;flex-direction:column;gap:8px"><div class="ph" style="height:100px">[Mouse icon]</div><h3>Wireless mouse or keyboard</h3><p class="muted">[To answer from a distance]</p></div>
+	      <div style="display:flex;flex-direction:column;gap:8px"><div class="ph" style="height:100px">[Screen size icon]</div><h3>A bright screen, 33 cm (13″) or larger</h3><p class="muted">A laptop or desktop. Phones are too small for accurate results.</p></div>
+	      <div style="display:flex;flex-direction:column;gap:8px"><div class="ph" style="height:100px">[Distance icon]</div><h3>Sit 3 m (10 ft) away</h3><p class="muted">About 4 big steps for an adult.</p></div>
+	      <div style="display:flex;flex-direction:column;gap:8px"><div class="ph" style="height:100px">[Mouse icon]</div><h3>Wireless mouse on a flat surface</h3><p class="muted">So you can answer from 3 m away.</p></div>
 	    </div>
 	  </div>
-	
-	  <div class="card">
-	    <span class="eyebrow">Step 3 of 3 · optional</span>
-	    <h2>Get your report by email</h2>
-	    <div style="display:flex;flex-wrap:wrap;gap:16px">
-	      <label style="flex:1 1 240px">First name<input type="text"></label>
-	      <label style="flex:1 1 240px">Email<input type="email"></label>
+
+	  <form id="screening-form" class="details" data-screening>
+	    <div class="card">
+	      <span class="eyebrow">Step 3 of 3</span>
+	      <h2>Your details</h2>
+	      <div class="fields">
+	        <label for="full-name">Full name<input type="text" id="full-name" name="fullName" autocomplete="name" required /></label>
+	        <label for="email">Email address<input type="email" id="email" name="email" autocomplete="email" required /></label>
+	        <label for="birth-date" class="short">Birth date<input type="date" id="birth-date" name="birthDate" autocomplete="bday" required /></label>
+	        <label for="country" class="short">Country<input type="text" id="country" name="country" autocomplete="country-name" required /></label>
+	        <label for="city" class="short">City<input type="text" id="city" name="city" autocomplete="address-level2" required /></label>
+	      </div>
+	      <label for="screening-consent" class="check">
+	        <input type="checkbox" id="screening-consent" name="consent" required />
+	        <span>I understand that EyeCheck.app is a digital screening tool and not a substitute for a professional eye exam.</span>
+	      </label>
+	      <p class="muted terms">
+	        By proceeding, you agree to the <a href={`${routes.privacy}/`}>Privacy Policy</a> and <a href={`${routes.terms}/`}>Terms of Service</a>.
+	      </p>
 	    </div>
-	    <span class="note">Consent checkbox + privacy link. Saved via /user/save-info only after Start.</span>
-	  </div>
-	
-	  <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
-	    <button class="btn solid">Start test</button>
-	    <span class="muted" style="font-size:14px">Opens full screen. Press Esc to exit.</span>
-	  </div>
+
+	    <div class="start">
+	      <button type="submit" class="btn solid">Start screening</button>
+	      <span class="muted" style="font-size:14px">Opens full screen. Press Esc to exit.</span>
+	    </div>
+	    <p class="status" role="status" aria-live="polite" data-status></p>
+	  </form>
 	  <div class="ph" style="height:180px;border-style:dashed">[After Start: Unity WebGL test in a full-screen overlay (shape or landolt build). Results posted to /user/update-results, then redirect to /result]</div>
 	</section>
-	
+
 	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="max-width:860px;display:flex;flex-direction:column;gap:14px">
 	  <h2>Before you start</h2>
-	  <p class="muted">[3–4 short tips: wear your usual glasses, good lighting, test each eye separately.]</p>
+	  <p class="muted">Wear your usual glasses or contact lenses, use good lighting, and test one eye at a time.</p>
+	  <p class="muted">Testing a young child? Show them the <a href={routes.chartPediatric}>Shapes Chart</a> first so they know the shapes (optional).</p>
 	  <p class="muted">No screen big enough? <a href={routes.eyeCharts}>Print an eye chart instead</a>.</p>
-	  <p class="note">[Disclaimer: screening, not a diagnosis.] Links: /how-we-test, /help</p>
+	  <p class="muted">EyeCheck.app is a screening tool, not a diagnosis. Read <a href={routes.howWeTest}>how we test</a> or get <a href={routes.help}>help</a>.</p>
 	</div></section>
 	</div>
 </Layout>
+
+<script>
+	// Nothing is sent on page load. The session is created and the details saved only after "Start screening".
+	const API = 'https://monkfish-app-lnjjx.ondigitalocean.app';
+
+	const ages = document.querySelector<HTMLElement>('[data-ages]');
+	const form = document.querySelector<HTMLFormElement>('[data-screening]');
+	const status = document.querySelector<HTMLElement>('[data-status]');
+	let optotype = 'landolt';
+
+	ages?.querySelectorAll<HTMLButtonElement>('button').forEach((btn) => {
+		btn.addEventListener('click', () => {
+			optotype = btn.dataset.optotype ?? 'landolt';
+			ages.querySelectorAll('button').forEach((b) => {
+				b.classList.toggle('selected', b === btn);
+				b.setAttribute('aria-pressed', String(b === btn));
+			});
+		});
+	});
+
+	const post = async (path: string, body?: unknown) => {
+		const res = await fetch(API + path, {
+			method: 'POST',
+			headers: body ? { 'Content-Type': 'application/json' } : undefined,
+			body: body ? JSON.stringify(body) : undefined,
+			credentials: 'include',
+		});
+		if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
+	};
+
+	form?.addEventListener('submit', async (e) => {
+		e.preventDefault();
+		const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+		const data = new FormData(form);
+		if (button) button.disabled = true;
+		if (status) status.textContent = 'Saving your details…';
+		try {
+			await post('/user/create-user');
+			await post('/user/save-info', {
+				name: data.get('fullName'),
+				emailAddress: data.get('email'),
+				birthDate: data.get('birthDate'),
+				country: data.get('country'),
+				city: data.get('city'),
+			});
+			// "shapes" for ages 3–7, "landolt" for 8 and up: picks the Unity build the test opens with.
+			await post('/user/update-optotype', { optotype });
+			if (status) status.textContent = 'Your details are saved.';
+			// TODO: open the Unity test (/builds/shape or /builds/landolt) full screen here.
+		} catch (err) {
+			console.error('Could not start the screening:', err);
+			if (status) status.textContent = 'We couldn’t save your details. Please check your connection and try again.';
+		} finally {
+			if (button) button.disabled = false;
+		}
+	});
+</script>
+
+<style>
+	.ages {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px;
+	}
+	.age {
+		flex: 1 1 240px;
+		align-items: center;
+		background: var(--surface);
+		font: inherit;
+		cursor: pointer;
+	}
+	.age.selected {
+		border: 2px solid var(--blue);
+	}
+	.details {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+	.fields {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px;
+	}
+	.fields label {
+		flex: 1 1 240px;
+	}
+	.fields label.short {
+		flex-basis: 160px;
+	}
+	.inner .check {
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 10px;
+		font-weight: 400;
+	}
+	.inner .check input {
+		flex: 0 0 auto;
+		width: 18px;
+		height: 18px;
+		min-height: 0;
+		margin: 2px 0 0;
+		padding: 0;
+	}
+	.terms {
+		font-size: 14px;
+	}
+	.start {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 12px;
+	}
+	.status:empty {
+		display: none;
+	}
+</style>
