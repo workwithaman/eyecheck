@@ -203,7 +203,7 @@ const fields = [
 
 <script>
 	// Nothing is sent on page load. The session is created and the details saved only after "Start screening".
-	const API = 'https://monkfish-app-lnjjx.ondigitalocean.app';
+	import { BACKEND_URL as API } from '../data/backend';
 
 	const form = document.querySelector<HTMLFormElement>('[data-screening]');
 	const status = document.querySelector<HTMLElement>('[data-status]');

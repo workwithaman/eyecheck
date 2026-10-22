@@ -1,6 +1,6 @@
 // Figures and testimonials from the EyeCheck backend, read once at build time so they are in the static HTML.
 // No client-side fetch: search engines see the same numbers visitors do.
-const API = 'https://monkfish-app-lnjjx.ondigitalocean.app';
+import { BACKEND_URL as API } from './backend';
 
 async function get<T>(path: string): Promise<T | null> {
 	try {

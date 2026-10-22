@@ -1,11 +1,14 @@
 ---
 import AudiencePage from '../components/AudiencePage.astro';
+import { routes } from '../data/site';
 ---
 
 <AudiencePage
+	slug="schools"
 	crumb="Schools"
 	h1="Vision Screening for Schools"
 	intro="Make sure every student can see clearly enough to learn well. Runs on school computers or tablets, from preschool up, with minimal staff training."
+	description="Vision screening for schools from SGD 1 per student. Runs in the browser on school computers or tablets, from preschool up, with a PDF report for every screening."
 	image={{ src: '/images/schools-hero.jpg', alt: 'Students and teachers using vision screening technology', width: 1000, height: 667 }}
 	why={{
 		title: 'Why screen vision in schools',
@@ -23,7 +26,14 @@ import AudiencePage from '../components/AudiencePage.astro';
 			'Scales from one classroom to a whole district',
 		],
 	}}
-	how={{ title: 'How school screening works', steps: ['Set up a station', 'Screen each student', 'Share results with parents'] }}
+	how={{
+		title: 'How school screening works',
+		steps: [
+			{ title: 'Set up a station', text: 'A screen of 33 cm (13″) or more, a wireless mouse, and a 3 m mark on the floor.' },
+			{ title: 'Screen each student', text: 'One eye at a time, about 1–2 minutes per eye. Picture shapes for ages 3–7.' },
+			{ title: 'Share results with parents', text: 'A Pass or Refer result for each eye, with a PDF report per screening.' },
+		],
+	}}
 	plan={{
 		label: 'School plan',
 		price: 'SGD 100',
@@ -31,19 +41,49 @@ import AudiencePage from '../components/AudiencePage.astro';
 		items: ['PDF report for each screening', 'Easy setup and deployment', 'No software installation', 'Training provided'],
 	}}
 	resources={{ title: 'Free resources for schools' }}
+	service={{ name: 'Vision screening for schools', price: '100', currency: 'SGD', offer: '100 eyesight screenings' }}
 	faq={{
 		title: 'School vision screening FAQ',
-		questions: ['How much does school screening cost?', 'What equipment do we need?', 'How is student data handled?'],
+		items: [
+			{
+				q: 'How much does school screening cost?',
+				a: 'The school plan is SGD 100 for 100 eyesight screenings (SGD 1 per screening). It includes a PDF report for each screening, setup and staff training.',
+			},
+			{
+				q: 'What equipment do we need?',
+				a: 'A laptop, desktop or tablet with a screen of at least 33 cm (13″), a web browser, a wireless mouse, and room for the student to sit 3 m (10 ft) from the screen. There is no software to install.',
+			},
+			{
+				q: 'How is student data handled?',
+				a: `Personal information is kept for a maximum of 7 days to deliver results. Email addresses are only kept if a parent opts in to reminders. See our <a href="${routes.privacy}/">privacy policy</a>.`,
+			},
+		],
 	}}
 	form={{
+		endpoint: '/email/school-form',
+		success: 'Thanks! We’ll be in touch soon to schedule your online session.',
 		fields: [
-			{ label: 'School / institution name', required: true },
-			{ label: 'Contact person name', required: true },
-			{ label: 'Role (e.g. Principal, Nurse, Teacher)' },
-			{ label: 'Email', type: 'email', required: true },
-			{ label: 'Contact number', type: 'tel' },
-			{ label: 'School level', placeholder: 'Preschool, Elementary, High School' },
-			{ label: 'Additional comments or requirements (optional)', type: 'textarea' },
+			{ label: 'School / institution name', name: 'schoolName', required: true, minLength: 2, autocomplete: 'organization' },
+			{ label: 'Contact person name', name: 'contactName', required: true, minLength: 2, autocomplete: 'name' },
+			{ label: 'Role (e.g. Principal, Nurse, Teacher)', name: 'role', required: true, minLength: 2, autocomplete: 'organization-title' },
+			{ label: 'Email', name: 'email', type: 'email', required: true, autocomplete: 'email' },
+			{
+				label: 'Contact number',
+				name: 'contactNumber',
+				type: 'tel',
+				required: true,
+				minLength: 10,
+				autocomplete: 'tel',
+				hint: 'Include country code, e.g. +65 9123 4567',
+			},
+			{
+				label: 'School level',
+				name: 'institutionType',
+				type: 'select',
+				required: true,
+				options: ['Preschool', 'Primary / Elementary', 'Secondary / High school', 'Other'],
+			},
+			{ label: 'Additional comments or requirements (optional)', name: 'remarks', type: 'textarea' },
 		],
 		button: 'Schedule an online session',
 	}}

@@ -3,6 +3,7 @@ import AudiencePage from '../components/AudiencePage.astro';
 ---
 
 <AudiencePage
+	slug="charity-support"
 	crumb="Charities"
 	h1="Free Vision Screening Support for Charities"
 	intro="Free screening tools for organisations that provide vision screening to underprivileged children around the world."
@@ -20,7 +21,7 @@ import AudiencePage from '../components/AudiencePage.astro';
 			text: 'Screenings at community centres in underserved neighbourhoods, reaching 1,200 children in one month.',
 		},
 	]}
-	faq={{ title: '[FAQ heading]', questions: ['[Question 1]', '[Question 2]', '[Question 3]'] }}
+	faq={{ title: '[FAQ heading]', items: [{ q: '[Question 1]' }, { q: '[Question 2]' }, { q: '[Question 3]' }] }}
 	form={{
 		fields: [
 			{ label: 'Organisation name', required: true },

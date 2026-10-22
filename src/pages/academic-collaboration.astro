@@ -3,6 +3,7 @@ import AudiencePage from '../components/AudiencePage.astro';
 ---
 
 <AudiencePage
+	slug="academic-collaboration"
 	crumb="Research"
 	h1="Vision Research Collaboration"
 	intro="Partner with universities and research institutions to advance vision science."
@@ -10,7 +11,7 @@ import AudiencePage from '../components/AudiencePage.astro';
 		title: 'Research collaboration',
 		list: ['Real-time, large-scale data collection', 'Standardised, consistent testing protocols', 'Big-data analysis across populations'],
 	}}
-	faq={{ title: '[FAQ heading]', questions: ['[Question 1]', '[Question 2]', '[Question 3]'] }}
+	faq={{ title: '[FAQ heading]', items: [{ q: '[Question 1]' }, { q: '[Question 2]' }, { q: '[Question 3]' }] }}
 	form={{
 		fields: [
 			{ label: 'Institution', required: true },
