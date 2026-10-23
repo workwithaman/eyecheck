@@ -5,6 +5,7 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Layout from '../layouts/Layout.astro';
 import ApiForm, { type Props as FormProps } from './ApiForm.astro';
+import FaqItem from './FaqItem.astro';
 import { routes } from '../data/site';
 
 
@@ -227,13 +228,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 				{
 					p.faq.items.map((f) =>
 						f.a ? (
-							<details class="qa">
-								<summary>
-									<span>{f.q}</span>
-									<span class="sign" aria-hidden="true" />
-								</summary>
-								<p set:html={f.a} />
-							</details>
+							<FaqItem q={f.q} a={f.a} />
 						) : (
 							<div class="faq">
 								<span>{f.q}</span>
@@ -351,36 +346,6 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 	}
 	.faq-list h2 {
 		margin-bottom: 12px;
-	}
-	.qa {
-		border-bottom: 1px solid var(--line);
-	}
-	.qa summary {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 16px;
-		padding: 18px 0;
-		font-weight: 600;
-		list-style: none;
-		cursor: pointer;
-	}
-	.qa summary::-webkit-details-marker {
-		display: none;
-	}
-	.sign::before {
-		content: '+';
-		color: var(--blue);
-		font-size: 20px;
-		font-weight: 600;
-	}
-	.qa[open] .sign::before {
-		content: '−';
-	}
-	.qa p {
-		padding-bottom: 18px;
-		font-size: 15px;
-		line-height: 24px;
 	}
 
 </style>

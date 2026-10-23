@@ -1,0 +1,53 @@
+---
+// One FAQ row: a <details> that opens on click or keyboard, with + turning into − when open.
+// The answer may contain links (HTML) and is in the page HTML, so it works without JavaScript.
+interface Props {
+	q: string;
+	a: string;
+	id?: string;
+}
+
+const { q, a, id } = Astro.props;
+---
+
+<details class="qa" id={id}>
+	<summary>
+		<span>{q}</span>
+		<span class="sign" aria-hidden="true"></span>
+	</summary>
+	<div class="answer" set:html={a} />
+</details>
+
+<style>
+	.qa {
+		border-bottom: 1px solid var(--line);
+	}
+	.qa summary {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 16px;
+		padding: 18px 0;
+		font-weight: 600;
+		list-style: none;
+		cursor: pointer;
+	}
+	.qa summary::-webkit-details-marker {
+		display: none;
+	}
+	.sign::before {
+		content: '+';
+		color: var(--blue);
+		font-size: 20px;
+		font-weight: 600;
+	}
+	.qa[open] .sign::before {
+		content: '−';
+	}
+	.answer {
+		padding-bottom: 18px;
+		color: var(--slate);
+		font-size: 15px;
+		line-height: 24px;
+	}
+</style>

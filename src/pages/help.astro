@@ -1,44 +1,318 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqItem from '../components/FaqItem.astro';
+import { routes } from '../data/site';
+
+interface Item {
+	topic: string;
+	id: string;
+	q: string;
+	// HTML: may contain links. The plain-text version goes into the FAQPage schema.
+	a: string;
+	// TODO CONFIRM: true = the answer still needs checking with Andy or the reviewer. It renders normally.
+	confirm?: boolean;
+}
+
+const topics = [
+	{ id: 'taking-the-test', title: 'Taking the test' },
+	{ id: 'testing-children', title: 'Testing children' },
+	{ id: 'understanding-results', title: 'Understanding results' },
+	{ id: 'privacy-data', title: 'Privacy & data' },
+	{ id: 'schools-organisations', title: 'Schools & organisations' },
+	{ id: 'technical-problems', title: 'Technical problems' },
+];
+
+const support = '<a href="mailto:support@eyecheck.app">support@eyecheck.app</a>';
+
+// One list drives both the page and the FAQPage schema, so they always match.
+const items: Item[] = [
+	{
+		topic: 'taking-the-test',
+		id: 'what-do-i-need',
+		q: 'What do I need to take the test?',
+		a: 'A bright screen of at least 33 cm (13″) such as a laptop or desktop, a wireless mouse on a flat surface, and space to sit 3 m (10 ft) away. No download or account is needed.',
+	},
+	{
+		topic: 'taking-the-test',
+		id: 'phone',
+		q: 'Can I take the test on my phone?',
+		a: 'For accurate results, use a screen of at least 33 cm (13 inches). Most phone screens are too small for an accurate vision check.',
+		confirm: true, // TODO CONFIRM: phone support
+	},
+	{
+		topic: 'taking-the-test',
+		id: 'glasses',
+		q: 'Should I wear my glasses?',
+		a: 'Yes. Wear the glasses or contact lenses you normally use for seeing at a distance.',
+		confirm: true, // TODO CONFIRM: reviewer
+	},
+	{
+		topic: 'taking-the-test',
+		id: 'how-long',
+		q: 'How long does the test take?',
+		a: 'About 1–2 minutes per eye, so roughly 3–4 minutes for both eyes.',
+	},
+	{
+		topic: 'taking-the-test',
+		id: 'account',
+		q: 'Do I need to create an account?',
+		a: 'No. For the paid report we collect minimal information (name, email, date of birth) to create and send your PDF.',
+	},
+	{
+		topic: 'testing-children',
+		id: 'child-age',
+		q: 'What age can my child take the test?',
+		a: 'From age 3. There are two modes: one for children aged 3–7 and one for ages 8 and up.',
+	},
+	{
+		topic: 'testing-children',
+		id: 'no-letters',
+		q: 'My child doesn’t know letters. Can they still take it?',
+		a: `Yes. The 3–7 mode uses picture shapes instead of letters. Show your child the <a href="${routes.chartPediatric}/">Shapes Chart</a> first so they know the shapes.`,
+	},
+	{
+		topic: 'understanding-results',
+		id: 'accuracy',
+		q: 'How accurate is the screening?',
+		a: `EyeCheck.app is based on clinically validated methods for detecting potential vision issues. It’s a reliable first screening, but not a substitute for a comprehensive eye exam by a healthcare professional. <a href="${routes.howWeTest}/">How we test</a>`,
+	},
+	{
+		topic: 'understanding-results',
+		id: 'results-meaning',
+		q: 'What do the results mean?',
+		a: 'A Pass suggests vision is within the normal range for your age. A Refer means you may benefit from a more comprehensive eye exam by an eye care professional.',
+	},
+	{
+		topic: 'understanding-results',
+		id: '6-6-20-20',
+		q: 'What does 6/6 or 20/20 mean?',
+		a: 'Both mean normal distance vision. 6/6 is the metric version (metres) and 20/20 uses feet. The detailed PDF report shows your score for each eye.',
+		confirm: true, // TODO CONFIRM: reviewer
+	},
+	{
+		topic: 'understanding-results',
+		id: 'refer',
+		q: 'My result says Refer. What now?',
+		a: 'Book a full eye exam with an optometrist or ophthalmologist. A Refer result isn’t a diagnosis. If your vision has changed suddenly, get care straight away.',
+	},
+	{
+		topic: 'understanding-results',
+		id: 'free-vs-paid',
+		q: 'What’s the difference between the free and paid test?',
+		a: 'The free test gives a Pass/Refer result and shows ads. The paid test ($2) is ad-free and gives a detailed PDF report with specific vision measurements you can share with your eye doctor.',
+		confirm: true, // TODO CONFIRM: is the $2 report live?
+	},
+	{
+		topic: 'privacy-data',
+		id: 'data-kept',
+		q: 'What data do you keep, and for how long?',
+		a: `Personal information is kept for a maximum of 7 days to deliver your results. Your email is kept longer only if you opt in to reminders. See our <a href="${routes.privacy}/">privacy policy</a>.`,
+	},
+	{
+		topic: 'privacy-data',
+		id: 'unsubscribe',
+		q: 'How do I unsubscribe from reminders?',
+		a: `Use the unsubscribe link in any reminder email, or contact ${support}.`,
+	},
+	{
+		topic: 'privacy-data',
+		id: 'delete-data',
+		q: 'How do I delete my data?',
+		a: `Use “Delete my data” on your results page, or email ${support}.`,
+	},
+	{
+		topic: 'schools-organisations',
+		id: 'schools-clinics',
+		q: 'Can schools or clinics use EyeCheck?',
+		a: `Yes. Plans start at SGD 100 for 100 screenings, with a PDF report for each. See <a href="${routes.schools}/">schools</a> and <a href="${routes.clinics}/">clinics</a>.`,
+	},
+	{
+		topic: 'schools-organisations',
+		id: 'charities',
+		q: 'Do you support charities?',
+		a: `Yes. Charities screening underprivileged children can apply for free access. <a href="${routes.charities}/">Apply for charity support</a>`,
+	},
+	{
+		topic: 'schools-organisations',
+		id: 'researchers',
+		q: 'Can researchers work with you?',
+		a: `Yes. Universities and research institutions can submit a proposal. <a href="${routes.research}/">Research collaboration</a>`,
+	},
+	{
+		topic: 'technical-problems',
+		id: 'technical-issues',
+		q: 'What if I have technical issues during the test?',
+		a: `Refresh the page, or give it a moment to load. If it still doesn’t work, email ${support}.`,
+	},
+	{
+		topic: 'technical-problems',
+		id: 'black-screen',
+		q: 'The test won’t load or goes black. What can I do?',
+		a: 'Use an up-to-date Chrome, Edge, Firefox or Safari, close other tabs, and check hardware acceleration is turned on in your browser settings. Then refresh the page.',
+		confirm: true, // TODO CONFIRM
+	},
+];
+
+const plain = (html: string) => html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+const origin = Astro.site?.href ?? '/';
+const schema = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', origin).href },
+				{ '@type': 'ListItem', position: 2, name: 'Help & FAQ', item: new URL('/help/', origin).href },
+			],
+		},
+		{
+			'@type': 'FAQPage',
+			mainEntity: items.map((i) => ({ '@type': 'Question', name: i.q, acceptedAnswer: { '@type': 'Answer', text: plain(i.a) } })),
+		},
+	],
+};
 ---
 
-<Layout title={"Help & FAQ: Using the EyeCheck Online Eye Test"}>
+<Layout
+	title="Help & FAQ: Using the EyeCheck Online Eye Test"
+	description="Answers to common questions about EyeCheck.app: what you need for the test, testing children, understanding Pass or Refer results, privacy and technical help."
+>
+	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 	<div class="inner">
-	<div class="wrap crumb">Home › Help</div>
-	<section class="wrap" style="padding-top:20px;padding-bottom:32px;display:flex;flex-direction:column;gap:14px;max-width:860px;margin-left:auto;margin-right:auto">
-	  <h1>Help &amp; FAQ</h1>
-	  <p class="muted">[One line: answers about taking the test, results, privacy and organisations.]</p>
-	  <label class="note" style="display:flex;flex-direction:column;gap:6px">Search questions<input type="search"></label>
-	</section>
-	
-	<section class="wrap" style="display:flex;flex-wrap:wrap;gap:40px;padding-bottom:48px">
-	  <nav class="toc" aria-label="Topics" style="flex:0 1 220px;border-top:2px solid var(--ink);padding-top:10px">
-	    <span class="eyebrow">Topics</span>
-	    <a href="#">Taking the test</a><a href="#">Testing children</a><a href="#">Understanding results</a><a href="#">Privacy &amp; data</a><a href="#">Schools &amp; organisations</a><a href="#">Technical problems</a>
-	  </nav>
-	  <div style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:12px">
-	    <div class="grp"><h2>Taking the test</h2>
-	      <div class="faq"><span>What do I need to take the test?</span><span>+</span></div>
-	      <div class="faq"><span>Can I take the test on my phone?</span><span>+</span></div>
-	      <div class="faq"><span>Should I wear my glasses?</span><span>+</span></div>
-	    </div>
-	    <div class="grp"><h2>Testing children</h2>
-	      <div class="faq"><span>What age can my child take the test?</span><span>+</span></div>
-	      <div class="faq"><span>My child doesn’t know letters. Can they still take it?</span><span>+</span></div>
-	    </div>
-	    <div class="grp"><h2>Understanding results</h2>
-	      <div class="faq"><span>What does 6/6 or 20/20 mean?</span><span>+</span></div>
-	      <div class="faq"><span>My result says see an eye doctor. What now?</span><span>+</span></div>
-	    </div>
-	    <div class="grp"><h2>Privacy &amp; data</h2>
-	      <div class="faq"><span>What data do you keep, and for how long?</span><span>+</span></div>
-	      <div class="faq"><span>How do I unsubscribe from reminders?</span><span>+</span></div>
-	    </div>
-	    <div class="grp"><h2>Technical problems</h2>
-	      <div class="faq"><span>The test won’t load or goes black. What can I do?</span><span>+</span></div>
-	    </div>
-	    <p class="muted">Still stuck? <a href="#">Contact us</a></p>
-	  </div>
-	</section>
+		<div class="wrap crumb">Home › Help</div>
+		<section class="wrap intro">
+			<h1>Help &amp; FAQ</h1>
+			<p class="muted">Answers to common questions about our vision screening tool.</p>
+			<div class="search">
+				<label for="faq-search">Search questions</label>
+				<input id="faq-search" type="search" autocomplete="off" aria-describedby="faq-count" />
+				<p id="faq-count" class="count" aria-live="polite"></p>
+			</div>
+		</section>
+
+		<section class="wrap layout">
+			<nav class="toc" aria-label="Help topics">
+				<span class="eyebrow">Topics</span>
+				{topics.map((t) => <a href={`#${t.id}`}>{t.title}</a>)}
+			</nav>
+			<div class="groups" data-faq>
+				{
+					topics.map((t) => (
+						<section class="group" aria-labelledby={t.id} data-group>
+							<h2 id={t.id}>{t.title}</h2>
+							{items
+								.filter((i) => i.topic === t.id)
+								.map((i) => (
+									<div data-item>
+										<FaqItem q={i.q} a={i.a} id={i.id} />
+									</div>
+								))}
+						</section>
+					))
+				}
+				<p class="no-results" data-no-results hidden>
+					No questions match your search. Contact support (<a href="mailto:support@eyecheck.app">support@eyecheck.app</a>).
+				</p>
+				<p class="muted still">
+					Still stuck? Email <a href="mailto:support@eyecheck.app">support@eyecheck.app</a> or use the
+					<a href={`${routes.about}/#contact`}>contact form</a>.
+				</p>
+			</div>
+		</section>
 	</div>
 </Layout>
+
+<script>
+	// Filter as you type. Without JavaScript every question stays visible.
+	const input = document.querySelector<HTMLInputElement>('#faq-search');
+	const count = document.querySelector<HTMLElement>('#faq-count');
+	const groups = [...document.querySelectorAll<HTMLElement>('[data-group]')];
+	const none = document.querySelector<HTMLElement>('[data-no-results]');
+
+	input?.addEventListener('input', () => {
+		const query = input.value.trim().toLowerCase();
+		let found = 0;
+		groups.forEach((group) => {
+			let inGroup = 0;
+			group.querySelectorAll<HTMLElement>('[data-item]').forEach((item) => {
+				const match = !query || (item.textContent ?? '').toLowerCase().includes(query);
+				item.hidden = !match;
+				if (match) inGroup++;
+			});
+			group.hidden = inGroup === 0;
+			found += inGroup;
+		});
+		if (none) none.hidden = found > 0;
+		if (count) count.textContent = query ? `${found} ${found === 1 ? 'question' : 'questions'} found` : '';
+	});
+</script>
+
+<style>
+	.intro {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		max-width: 860px;
+		margin-left: auto;
+		margin-right: auto;
+		padding-top: 20px;
+		padding-bottom: 32px;
+	}
+	.search {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+	.search label {
+		color: var(--ink);
+		font-size: 14px;
+		font-weight: 600;
+	}
+	.search input {
+		width: 100%;
+		box-sizing: border-box;
+	}
+	.count {
+		min-height: 20px;
+		color: var(--muted);
+		font-size: 14px;
+	}
+	.layout {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 40px;
+		padding-bottom: 48px;
+	}
+	.toc {
+		flex: 0 1 220px;
+		align-self: flex-start;
+		padding-top: 10px;
+		border-top: 2px solid var(--ink);
+	}
+	.groups {
+		flex: 999 1 560px;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+	.group {
+		display: flex;
+		flex-direction: column;
+		padding-bottom: 28px;
+	}
+	.group h2 {
+		margin-bottom: 4px;
+		/* Added to the site-wide 88px scroll padding, so a topic jump lands just below the sticky header. */
+		scroll-margin-top: 16px;
+	}
+	.no-results {
+		padding: 16px 18px;
+		border-radius: 12px;
+		background: var(--lens);
+		color: var(--ink);
+	}
+	.still {
+		margin-top: 8px;
+	}
+</style>
