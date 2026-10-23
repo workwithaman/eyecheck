@@ -1,36 +1,219 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import StatsBand from '../components/StatsBand.astro';
+import { routes } from '../data/site';
+import { socialLinks } from '../data/social';
+
+const donate = {
+	stripeUrl: 'https://buy.stripe.com/7sY00j3My5fU7mddqp53O00',
+	// TODO CONFIRM WITH ANDY: does the Stripe link let donors choose the amount? If it's a fixed amount, use 'Secure payment by Stripe.'
+	paymentNote: 'Secure payment by Stripe. You’ll choose your amount on the next page.',
+	// TODO CONFIRM WITH ANDY: add tax-deductible wording here only if the tax status is confirmed. Empty = not shown.
+	taxNote: '',
+	// TODO CONFIRM WITH ANDY: wording.
+	whereMoneyGoes:
+		'EyeCheck.app is developed and run by Potential Dynamics Pte Ltd in Singapore. Donations go towards hosting, development and bringing free screening to schools and charities.',
+};
+
+const helps = [
+	{
+		title: 'Improve technology',
+		text: 'Refine our screening tools and solutions.',
+		icon: '<rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"></path>',
+	},
+	{
+		title: 'Expand reach',
+		text: 'Bring our tools to underserved communities worldwide.',
+		icon: '<circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path>',
+	},
+	{
+		title: 'Support running costs',
+		text: 'Cover ongoing hosting and development costs.',
+		icon: '<rect x="3" y="4" width="18" height="7" rx="2"></rect><rect x="3" y="13" width="18" height="7" rx="2"></rect><path d="M7 7.5h.01M7 16.5h.01"></path>',
+	},
+];
+
+// Social links appear only once their real profile URLs are set in data/site.ts.
+const socials = socialLinks.filter((s) => s.href);
+
+const origin = Astro.site?.href ?? '/';
+const schema = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', origin).href },
+				{ '@type': 'ListItem', position: 2, name: 'Donate', item: new URL('/donation/', origin).href },
+			],
+		},
+		{
+			'@id': new URL('/#organization', origin).href,
+			potentialAction: { '@type': 'DonateAction', name: 'Donate to EyeCheck.app', target: donate.stripeUrl },
+		},
+	],
+};
 ---
 
-<Layout title={"Donate: Help Fund Free Vision Screening | EyeCheck.app"} active="orgs">
+<Layout
+	title="Donate: Help Fund Free Vision Screening | EyeCheck.app"
+	description="Support free online vision screening for children and underserved communities. Donate securely to EyeCheck.app through Stripe."
+>
+	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 	<div class="inner">
-	<div class="wrap crumb">Home › Donate</div>
-	<section class="wrap" style="padding-top:20px;padding-bottom:44px;display:flex;flex-wrap:wrap;gap:36px;align-items:center">
-	  <div style="flex:1 1 460px;display:flex;flex-direction:column;gap:14px">
-	    <h1>Help Fund Free Vision Screening</h1>
-	    <p class="muted">[Why donations matter, what they pay for, who benefits.]</p>
-	  </div>
-	  <div class="card" style="flex:1 1 360px">
-	    <h3>Choose an amount</h3>
-	    <div style="display:flex;flex-wrap:wrap;gap:10px"><button class="btn">$[10]</button><button class="btn">$[25]</button><button class="btn">$[50]</button><button class="btn">Other</button></div>
-	    <a href="#" class="btn solid">Donate securely with Stripe</a>
-	    <span class="note">Opens Stripe payment link · [Tax status if applicable]</span>
-	  </div>
-	</section>
-	
-	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
-	  <h2>What your donation does</h2>
-	  <div class="grid3">
-	    <div class="card"><span style="font-size:30px;font-weight:700">$[X]</span><p class="muted">[Screens N children]</p></div>
-	    <div class="card"><span style="font-size:30px;font-weight:700">$[X]</span><p class="muted">[Equips one school]</p></div>
-	    <div class="card"><span style="font-size:30px;font-weight:700">$[X]</span><p class="muted">[Funds a charity programme]</p></div>
-	  </div>
-	</div></section>
-	
-	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:12px">
-	  <h2>Where the money goes</h2>
-	  <p class="muted">[Transparency: hosting, development, outreach. Who runs EyeCheck.]</p>
-	  <div class="ph" style="height:120px">[Simple breakdown bar, real figures only]</div>
-	</div></section>
+		<div class="wrap crumb">Home › Donate</div>
+		<section class="wrap hero">
+			<div class="hero-copy">
+				<h1>Help Fund Free Vision Screening</h1>
+				<p class="muted">
+					Your donation helps us provide accessible, free eye screening to children and underserved communities worldwide.
+				</p>
+			</div>
+			<div class="card donate-card">
+				<h2 class="h3">Make a donation</h2>
+				<!-- TODO: send the donate_click event through the analytics helper once GA4 is added. The link works without it. -->
+				<a href={donate.stripeUrl} target="_blank" rel="noopener" class="btn solid donate-btn" data-event="donate_click">
+					Donate now
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+						><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg
+					>
+					<span class="sr-only">(opens Stripe in a new tab)</span>
+				</a>
+				<p class="pay-note">{donate.paymentNote}</p>
+				{donate.taxNote && <p class="pay-note">{donate.taxNote}</p>}
+			</div>
+		</section>
+	</div>
+
+	<StatsBand note="Data updated October 2025." />
+
+	<div class="inner">
+		<section class="sec">
+			<div class="wrap stack">
+				<h2>Your donation helps us</h2>
+				<div class="grid3">
+					{
+						helps.map((h) => (
+							<div class="card">
+								<span class="tile">
+									<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={h.icon} />
+								</span>
+								<h3>{h.title}</h3>
+								<p class="muted">{h.text}</p>
+							</div>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="sec band-2">
+			<div class="wrap narrow stack">
+				<h2>Where the money goes</h2>
+				<p class="muted">{donate.whereMoneyGoes}</p>
+			</div>
+		</section>
+
+		<section class="sec">
+			<div class="wrap narrow stack">
+				<h2>Other ways to help</h2>
+				<ul class="ways">
+					<li>Run a screening programme for children? <a href={`${routes.charities}/`}>Apply for free access</a>.</li>
+					<li>
+						Share EyeCheck with a <a href={`${routes.schools}/`}>school</a> or <a href={`${routes.clinics}/`}>clinic</a>.
+					</li>
+					{
+						socials.length > 0 && (
+							<li>
+								Follow us on{' '}
+								{socials.map((s, i) => (
+									<>
+										{i > 0 && ' and '}
+										<a href={s.href} target="_blank" rel="noopener">
+											{s.name}
+										</a>
+									</>
+								))}
+								.
+							</li>
+						)
+					}
+				</ul>
+			</div>
+		</section>
 	</div>
 </Layout>
+
+<style>
+	.hero {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 36px;
+		padding-top: 20px;
+		padding-bottom: 44px;
+	}
+	.hero-copy {
+		flex: 1 1 460px;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+	.donate-card {
+		flex: 1 1 340px;
+		gap: 14px;
+		padding: 28px;
+		border-radius: 20px;
+		box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+	}
+	.h3 {
+		font-size: 20px;
+		line-height: 28px;
+	}
+	.donate-btn {
+		align-self: flex-start;
+		min-height: 52px;
+		padding: 0 28px;
+		font-size: 16px;
+	}
+	.pay-note {
+		color: var(--slate);
+		font-size: 14px;
+		line-height: 21px;
+	}
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+	}
+	.stack {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+	.band-2 {
+		background: var(--surface-2);
+	}
+	.tile {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 52px;
+		height: 52px;
+		border-radius: 14px;
+		background: var(--lens);
+		color: var(--blue);
+	}
+	.ways {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		margin: 0;
+		padding-left: 20px;
+		color: var(--slate);
+		line-height: 26px;
+	}
+</style>

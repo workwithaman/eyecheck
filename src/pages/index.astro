@@ -4,6 +4,7 @@ import { site, routes, tests, orgs } from '../data/site';
 import { posts as blogPosts } from '../data/blog';
 import { socialLinks, socialProfiles } from '../data/social';
 import { testimonials } from '../data/live';
+import StatsBand from '../components/StatsBand.astro';
 
 const title = 'Free Online Eye Test & Eye Test App | EyeCheck.app';
 const description =
@@ -73,6 +74,7 @@ const schema = [
 	{
 		'@context': 'https://schema.org',
 		'@type': 'Organization',
+		'@id': new URL('/#organization', origin).href,
 		name: site.name,
 		url: origin,
 		logo: new URL('/icon-512.png', origin).href,
@@ -271,25 +273,7 @@ const schema = [
 		</div>
 	</section>
 
-	<section class="sec band">
-		<div class="wrap stats">
-			<div class="card stat">
-				<span class="figure">{site.peopleScreened}</span>
-				<p>People screened</p>
-			</div>
-			<div class="card stat">
-				<span class="figure">{site.peopleReferred}</span>
-				<p>Referred for a full eye exam</p>
-			</div>
-			<div class="card stat impact">
-				<img src="/images/test-visual-acuity.svg" alt="" width="130" height="89" loading="lazy" />
-				<p>Used at home by families, and by schools, clinics and charity programmes.</p>
-			</div>
-		</div>
-		<div class="wrap">
-			<p class="stats-note">{site.statsNote}</p>
-		</div>
-	</section>
+	<StatsBand impact="Used at home by families, and by schools, clinics and charity programmes." />
 
 	<section class="sec">
 		<div class="wrap review">
@@ -878,42 +862,6 @@ const schema = [
 	}
 	.parents h3 {
 		padding-right: 110px;
-	}
-
-	/* Stats */
-	.stats {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: stretch;
-		gap: 24px;
-	}
-	.stat {
-		flex: 1 1 240px;
-		border: 0;
-	}
-	.figure {
-		color: var(--blue);
-		font-size: 52px;
-		line-height: 56px;
-		font-weight: 600;
-		letter-spacing: -0.02em;
-	}
-	.impact {
-		flex: 2 1 420px;
-		flex-direction: row;
-		align-items: center;
-		gap: 20px;
-	}
-	.impact img {
-		width: 130px;
-		height: auto;
-	}
-
-	.stats-note {
-		margin-top: 16px;
-		color: var(--muted);
-		font-size: 13px;
-		line-height: 20px;
 	}
 
 	.reviewed-by {

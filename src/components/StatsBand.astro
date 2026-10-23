@@ -1,0 +1,75 @@
+---
+// Screening figures band (Home, Donate). The numbers come from the backend at build time (see data/live.ts).
+import { site } from '../data/site';
+
+interface Props {
+	// Third card with an illustration and a short line. Leave out for a two-figure band.
+	impact?: string;
+	// Line under the figures. Defaults to the site-wide data note.
+	note?: string;
+	// Background band class, e.g. "band" (Mist). The section always keeps the standard section padding.
+	tone?: 'band' | 'plain';
+}
+
+const { impact, note = site.statsNote, tone = 'band' } = Astro.props;
+---
+
+<section class:list={['sec', { band: tone === 'band' }]}>
+	<div class="wrap stats">
+		<div class="card stat">
+			<span class="figure">{site.peopleScreened}</span>
+			<p>People screened</p>
+		</div>
+		<div class="card stat">
+			<span class="figure">{site.peopleReferred}</span>
+			<p>Referred for a full eye exam</p>
+		</div>
+		{
+			impact && (
+				<div class="card stat impact">
+					<img src="/images/test-visual-acuity.svg" alt="" width="130" height="89" loading="lazy" />
+					<p>{impact}</p>
+				</div>
+			)
+		}
+	</div>
+	<div class="wrap">
+		<p class="stats-note">{note}</p>
+	</div>
+</section>
+
+<style>
+	.stats {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: stretch;
+		gap: 24px;
+	}
+	.stat {
+		flex: 1 1 240px;
+		border: 0;
+	}
+	.figure {
+		color: var(--blue);
+		font-size: 52px;
+		line-height: 56px;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+	.impact {
+		flex: 2 1 420px;
+		flex-direction: row;
+		align-items: center;
+		gap: 20px;
+	}
+	.impact img {
+		width: 130px;
+		height: auto;
+	}
+	.stats-note {
+		margin-top: 16px;
+		color: var(--muted);
+		font-size: 13px;
+		line-height: 20px;
+	}
+</style>
