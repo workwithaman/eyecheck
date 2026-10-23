@@ -1,55 +1,431 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
+import ApiForm from '../components/ApiForm.astro';
 import { routes, site } from '../data/site';
+import { socialProfiles } from '../data/social';
+import storyImage from '../assets/our-story.webp';
+import potentialDynamicsLogo from '../assets/potential-dynamics.png';
+
+// TODO CONFIRM WITH ANDY: leave a value empty (or null) and that line is hidden on the page.
+const confirm = {
+	founderSurname: '',
+	countries: null as string | null,
+	// TODO CONFIRM SOURCE: the "one in four" figure has no citation yet.
+	oneInFourSource: '',
+};
+
+// A value still in [brackets] is a placeholder and is not shown.
+const known = (value: string) => (value && !value.includes('[') ? value : '');
+const founderName = ['Andy', known(confirm.founderSurname)].filter(Boolean).join(' ');
+const reviewerName = known(site.reviewer);
+
+const values = [
+	{ title: 'Accessibility', text: 'Healthcare technology available and affordable, whatever your location or income.' },
+	{ title: 'Precision', text: 'Accurate, reliable results through rigorous testing and continuous improvement.' },
+	{ title: 'Excellence', text: 'High standards, from product development to customer service.' },
+];
+
+const goals = [
+	{ n: 3, title: 'Good health and well-being' },
+	{ n: 4, title: 'Quality education' },
+	{ n: 8, title: 'Decent work and economic growth' },
+	{ n: 10, title: 'Reduced inequalities' },
+];
+
+const contact = {
+	email: 'support@eyecheck.app',
+	phone: '+65 8020 2608',
+	phoneHref: 'tel:+6580202608',
+	address: ['220 Orchard Road, #03-05 Midpoint', 'Singapore 238852'],
+};
+
+const origin = Astro.site?.href ?? '/';
+const pageUrl = new URL('/about-us/', origin).href;
+const schema = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', origin).href },
+				{ '@type': 'ListItem', position: 2, name: 'About us', item: pageUrl },
+			],
+		},
+		{
+			'@type': 'AboutPage',
+			name: 'About EyeCheck.app',
+			url: pageUrl,
+			about: { '@id': new URL('/#organization', origin).href },
+		},
+		{
+			'@type': 'Organization',
+			'@id': new URL('/#organization', origin).href,
+			name: 'EyeCheck.app',
+			url: origin,
+			logo: new URL('/icon-512.png', origin).href,
+			email: contact.email,
+			telephone: contact.phone,
+			address: {
+				'@type': 'PostalAddress',
+				streetAddress: contact.address[0],
+				addressLocality: 'Singapore',
+				postalCode: '238852',
+				addressCountry: 'SG',
+			},
+			founder: { '@type': 'Person', name: founderName },
+			...(socialProfiles.length > 0 && { sameAs: socialProfiles }),
+		},
+	],
+};
 ---
 
-<Layout title={"About EyeCheck.app: Free Vision Screening for Everyone"} active="about">
+<Layout
+	title="About EyeCheck.app: Free Vision Screening for Everyone"
+	description="EyeCheck.app makes early detection of vision problems simple and accessible. Our story, values, impact and how to contact us."
+	active="about"
+>
+	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 	<div class="inner">
-	<div class="wrap crumb">Home › About</div>
-	<section class="wrap" style="padding-top:20px;padding-bottom:44px;display:flex;flex-wrap:wrap;gap:36px;align-items:center">
-	  <div style="flex:1 1 460px;display:flex;flex-direction:column;gap:14px">
-	    <h1>About EyeCheck.app</h1>
-	    <p class="muted">[Mission in 2 sentences: free vision screening anyone can access, so problems are caught early.]</p>
-	  </div>
-	  <div class="ph" style="flex:1 1 380px;height:280px">[Image: our story]</div>
-	</section>
-	
-	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:12px">
-	  <h2>Our story</h2><p class="muted">[Why EyeCheck was started, by whom, key milestones]</p>
-	</div></section>
-	
-	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
-	  <h2>Who’s behind EyeCheck</h2>
-	  <div class="grid3">
-	    <div class="card"><div class="ph" style="height:140px">[Photo]</div><h3>[Founder name]</h3><span class="muted">[Role]</span></div>
-	    <div class="card"><div class="ph" style="height:140px">[Photo]</div><h3>[Medical reviewer]</h3><span class="muted">[OD] · <a href="#">Profile</a></span></div>
-	    <div class="card"><div class="ph" style="height:140px">[Logo]</div><h3>[Partner organisation]</h3><span class="muted">[Role]</span></div>
-	  </div>
-	</div></section>
-	
-	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
-	  <h2>Our impact</h2>
-	  <div style="display:flex;flex-wrap:wrap;gap:20px">
-	    <div class="card" style="flex:1 1 220px"><span style="font-size:36px;font-weight:700">{site.peopleScreened}</span><span class="muted">People screened</span></div>
-	    <div class="card" style="flex:1 1 220px"><span style="font-size:36px;font-weight:700">{site.peopleReferred}</span><span class="muted">Referred to an eye doctor</span></div>
-	    <div class="card" style="flex:1 1 220px"><span style="font-size:36px;font-weight:700">[N]</span><span class="muted">Countries</span></div>
-	  </div>
-	  <p class="note">{site.statsNote}</p>
-	  <div class="ph" style="height:120px">[UN Sustainable Development Goals we support: SDG 3, 4, 8, 10 icons]</div>
-	</div></section>
-	
-	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:12px">
-	  <h2>How we keep our tests accurate</h2>
-	  <p class="muted">[2 lines + link]</p>
-	  <a href={routes.howWeTest} class="btn" style="align-self:flex-start">How we test</a>
-	</div></section>
-	
-	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:16px">
-	  <h2>Contact us</h2>
-	  <div style="display:flex;flex-wrap:wrap;gap:16px"><label style="flex:1 1 240px">Name<input type="text"></label><label style="flex:1 1 240px">Email<input type="email"></label></div>
-	  <label>Message<textarea></textarea></label>
-	  <button class="btn solid" style="align-self:flex-start">Send message</button>
-	  <span class="note">Or email support@eyecheck.app</span>
-	</div></section>
+		<div class="wrap crumb">Home › About</div>
+		<section class="wrap hero">
+			<div class="hero-copy">
+				<h1>About EyeCheck.app</h1>
+				<p class="muted">
+					Our mission is to make early detection of vision issues simple, accessible and effective for everyone. Everyone deserves
+					access to quality healthcare screening.
+				</p>
+			</div>
+			<Image
+				class="hero-img"
+				src={storyImage}
+				alt="Vision screening session using the Children Eye Screening Book method"
+				width={694}
+				height={388}
+				format="webp"
+				loading="eager"
+			/>
+		</section>
+
+		<section class="sec">
+			<div class="wrap narrow stack">
+				<h2>Our story</h2>
+				<p class="pull-quote">Can someone live with a cataract and not even know it?</p>
+				<p class="muted">
+					Our founder Andy was born with a cataract in his right eye. He didn’t know his vision was impaired until a school vision
+					screening at age eight.
+				</p>
+				<p class="muted">
+					Roughly one in four school-aged children have undiagnosed vision problems, and by 2050 half of the world’s population is
+					projected to be myopic.<sup><a href="#source-1" id="cite-1" aria-label="Source 1">1</a></sup>
+				</p>
+				<p class="muted">
+					It started with the <a
+						href="https://www.indiegogo.com/projects/children-eye-screening-book-for-teachers-parents"
+						target="_blank"
+						rel="noopener">Children Eye Screening Book</a
+					>, a guide for teachers and parents to spot children’s vision problems, funded on Indiegogo. That project became
+					EyeCheck.app: a platform for individuals, schools, clinics, charities and researchers to detect vision problems early.
+				</p>
+				<div class="sources">
+					<h3 class="eyebrow">Sources</h3>
+					<ol>
+						<li id="source-1">
+							Holden BA et al. Global prevalence of myopia and high myopia and temporal trends from 2000 through 2050.
+							Ophthalmology, 2016. <a href="#cite-1" aria-label="Back to the text">↩</a>
+						</li>
+					</ol>
+				</div>
+			</div>
+		</section>
+
+		<section class="sec band-2">
+			<div class="wrap stack">
+				<h2>Our values</h2>
+				<div class="grid3">
+					{
+						values.map((v) => (
+							<div class="card">
+								<h3>{v.title}</h3>
+								<p class="muted">{v.text}</p>
+							</div>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="sec">
+			<div class="wrap stack">
+				<h2>Who’s behind EyeCheck</h2>
+				<div class="grid3">
+					<div class="card person">
+						<span class="avatar" aria-hidden="true">A</span>
+						<h3>{founderName}</h3>
+						<span class="muted">Founder</span>
+					</div>
+					<div class="card person">
+						<span class="avatar" aria-hidden="true">
+							<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+								><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg
+							>
+						</span>
+						<h3>{reviewerName || 'Our medical reviewer'}</h3>
+						<span class="muted">{site.reviewerRole}</span>
+						<a href={`${routes.medicalReview}/`}>View profile</a>
+					</div>
+					<div class="card person">
+						<span class="logo-tile">
+							<Image src={potentialDynamicsLogo} alt="Potential Dynamics logo" width={170} height={52} />
+						</span>
+						<h3>Potential Dynamics Pte Ltd</h3>
+						<span class="muted">Developer of EyeCheck.app · Singapore</span>
+						<a href="https://www.potentialdynamics.org" target="_blank" rel="noopener">potentialdynamics.org</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="sec band-2">
+			<div class="wrap stack">
+				<h2>Our impact</h2>
+				<div class="stats">
+					<div class="card stat">
+						<span class="figure">{site.peopleScreened}</span>
+						<span class="muted">People screened</span>
+					</div>
+					<div class="card stat">
+						<span class="figure">{site.peopleReferred}</span>
+						<span class="muted">Referred to an eye doctor</span>
+					</div>
+					{
+						confirm.countries && (
+							<div class="card stat">
+								<span class="figure">{confirm.countries}</span>
+								<span class="muted">Countries</span>
+							</div>
+						)
+					}
+				</div>
+				<p class="note">{site.statsNote}</p>
+				<div class="goals">
+					<ul>
+						{
+							goals.map((g) => (
+								<li>
+									<img src={`/images/sdg/sdg${g.n}.png`} alt={`SDG ${g.n}: ${g.title}`} width="88" height="88" loading="lazy" />
+								</li>
+							))
+						}
+					</ul>
+					<p class="muted">
+						We support UN SDG 3 (health), 4 (education), 8 (decent work) and 10 (reduced inequalities). Icons courtesy of the United
+						Nations.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="sec">
+			<div class="wrap narrow stack">
+				<h2>How we keep our tests accurate</h2>
+				<p class="muted">
+					Our tests are based on clinically validated screening methods and reviewed by a qualified optometrist. Each eye gets a clear
+					Pass or Refer result, and we’re open about what an online screening can and can’t tell you.
+				</p>
+				<a href={`${routes.howWeTest}/`} class="btn" style="align-self:flex-start">How we test</a>
+			</div>
+		</section>
+
+		<section id="contact" class="sec band-2">
+			<div class="wrap narrow stack">
+				<h2>Contact us</h2>
+				<div class="contact-details">
+					<div>
+						<span class="eyebrow">Email</span>
+						<a href={`mailto:${contact.email}`}>{contact.email}</a>
+					</div>
+					<div>
+						<span class="eyebrow">Phone</span>
+						<a href={contact.phoneHref}>{contact.phone}</a>
+					</div>
+					<div>
+						<span class="eyebrow">Address</span>
+						<address>{contact.address[0]}<br />{contact.address[1]}</address>
+					</div>
+				</div>
+				<ApiForm
+					title="Send us a message"
+					endpoint="/email/contact"
+					success="Thanks! We’ve received your message and will get back to you soon."
+					fields={[
+						{ label: 'Name', name: 'name', required: true, minLength: 2, autocomplete: 'name' },
+						{ label: 'Email', name: 'email', type: 'email', required: true, autocomplete: 'email' },
+						{
+							label: 'Subject',
+							name: 'subject',
+							type: 'select',
+							required: true,
+							placeholder: 'Select a topic',
+							options: [
+								{ value: 'general', label: 'General inquiry' },
+								{ value: 'partnership', label: 'Partnership' },
+								{ value: 'support', label: 'Technical support' },
+								{ value: 'media', label: 'Media & press' },
+							],
+						},
+						{ label: 'Message', name: 'message', type: 'textarea', required: true, minLength: 10 },
+					]}
+					button="Send message"
+				/>
+			</div>
+		</section>
 	</div>
 </Layout>
+
+<style>
+	.hero {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 36px;
+		padding-top: 20px;
+		padding-bottom: 44px;
+	}
+	.hero-copy {
+		flex: 1 1 460px;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+	.hero-img {
+		flex: 1 1 380px;
+		min-width: 0;
+		width: 100%;
+		height: 300px;
+		object-fit: cover;
+		border-radius: 20px;
+	}
+	.stack {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+	.band-2 {
+		background: var(--surface-2);
+	}
+	.pull-quote {
+		margin: 4px 0;
+		color: var(--ink);
+		font-size: 23px;
+		line-height: 32px;
+		font-weight: 600;
+		letter-spacing: -0.01em;
+	}
+	sup {
+		margin-left: 2px;
+		font-size: 12px;
+	}
+	.sources {
+		margin-top: 8px;
+		padding-top: 14px;
+		border-top: 1px solid var(--line);
+	}
+	.sources ol {
+		margin: 8px 0 0;
+		padding-left: 18px;
+		color: var(--muted);
+		font-size: 13px;
+		line-height: 20px;
+	}
+	.sources a {
+		text-decoration: none;
+	}
+	.person a {
+		margin-top: auto;
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.avatar {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 72px;
+		height: 72px;
+		border-radius: 36px;
+		background: var(--lens);
+		color: var(--blue);
+		font-size: 28px;
+		font-weight: 600;
+	}
+	.logo-tile {
+		display: flex;
+		align-items: center;
+		height: 72px;
+	}
+	.logo-tile img {
+		width: auto;
+		height: 48px;
+	}
+	.stats {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 20px;
+	}
+	.figure {
+		color: var(--blue);
+		font-size: 44px;
+		line-height: 50px;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+	.goals {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 16px 24px;
+		margin-top: 8px;
+	}
+	.goals ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.goals img {
+		display: block;
+		width: 88px;
+		height: 88px;
+		border-radius: 8px;
+	}
+	.goals p {
+		flex: 1 1 280px;
+		font-size: 15px;
+	}
+	.contact-details {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 16px;
+		padding: 20px 22px;
+		border-radius: 16px;
+		background: var(--surface);
+	}
+	.contact-details div {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.contact-details a,
+	.contact-details address {
+		color: var(--ink);
+		font-style: normal;
+		font-weight: 500;
+		line-height: 22px;
+	}
+	.contact-details a {
+		color: var(--blue);
+		text-decoration: none;
+	}
+</style>

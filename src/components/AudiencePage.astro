@@ -1,29 +1,12 @@
 ---
 // Template for /schools, /clinics, /charity-support and /academic-collaboration (the AudienceTemplate artboard).
 // Each page passes its own copy; sections without data are left out.
-// Forms without an endpoint are not connected to the backend yet.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Layout from '../layouts/Layout.astro';
+import ApiForm, { type Props as FormProps } from './ApiForm.astro';
 import { routes } from '../data/site';
 
-export interface Field {
-	label: string;
-	name?: string;
-	type?: 'text' | 'email' | 'tel' | 'url' | 'number' | 'textarea' | 'file' | 'select';
-	placeholder?: string;
-	hint?: string;
-	accept?: string;
-	required?: boolean;
-	minLength?: number;
-	min?: number;
-	inputmode?: string;
-	autocomplete?: string;
-	options?: (string | { value: string; label: string })[];
-	// File inputs only: checked in the browser before sending.
-	maxFiles?: number;
-	maxSizeMB?: number;
-}
 
 export interface Faq {
 	q: string;
@@ -48,21 +31,7 @@ interface Props {
 	faq: { title: string; items: Faq[] };
 	// Adds a Service entry to the page's structured data.
 	service?: { name: string; serviceType?: string; audience?: string; areaServed?: string; price?: string; currency?: string; offer?: string };
-	form: {
-		fields: Field[];
-		// Checkboxes are checked in the browser only and never sent to the backend. A label may contain links (HTML).
-		consents?: (string | { name: string; label: string })[];
-		note?: string;
-		title?: string;
-		button: string;
-		// Backend path (e.g. /email/school-form). Without one the form is not sent anywhere yet.
-		endpoint?: string;
-		// multipart: sent as FormData (needed for file uploads). Otherwise JSON.
-		encoding?: 'json' | 'multipart';
-		// Send the checkboxes too, as "true". By default they are checked in the browser only.
-		sendConsents?: boolean;
-		success?: string;
-	};
+	form: FormProps;
 }
 
 const p = Astro.props;
@@ -278,198 +247,12 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 
 		<section id="contact" class="sec band-2">
 			<div class="wrap narrow" data-form-wrap>
-				<form class="form" novalidate={!!p.form.endpoint} data-endpoint={p.form.endpoint} data-success={p.form.success} data-encoding={p.form.encoding ?? 'json'}>
-					<h2>{p.form.title ?? 'Talk to us'}</h2>
-					<p class="required-note muted">Fields marked * are required.</p>
-					<div class="fields">
-						{
-							p.form.fields.map((f) => {
-								const name = f.name ?? slugify(f.label);
-								const id = `f-${name}`;
-								const describedBy = [f.hint && `${id}-hint`, `${id}-error`].filter(Boolean).join(' ');
-								const label = (
-									<label for={id}>
-										{f.label}
-										{f.required && <span aria-hidden="true"> *</span>}
-									</label>
-								);
-								const hint = f.hint && (
-									<span class="hint" id={`${id}-hint`}>
-										{f.hint}
-									</span>
-								);
-								const error = <p class="error" id={`${id}-error`} hidden />;
-								const common = { id, name, required: f.required, 'aria-required': f.required ? 'true' : undefined, 'aria-describedby': describedBy };
-								let control;
-								if (f.type === 'textarea') control = <textarea {...common} minlength={f.minLength} />;
-								else if (f.type === 'select')
-									control = (
-										<select {...common}>
-											<option value="" disabled selected>
-												Select…
-											</option>
-											{f.options?.map((o) =>
-												typeof o === 'string' ? <option value={o}>{o}</option> : <option value={o.value}>{o.label}</option>,
-											)}
-										</select>
-									);
-								else if (f.type === 'file')
-									control = <input type="file" {...common} accept={f.accept} multiple data-max-files={f.maxFiles} data-max-mb={f.maxSizeMB} />;
-								else
-									control = (
-										<input
-											type={f.type ?? 'text'}
-											{...common}
-											placeholder={f.placeholder}
-											minlength={f.minLength}
-											min={f.min}
-											inputmode={f.inputmode}
-											autocomplete={f.autocomplete}
-										/>
-									);
-								const wide = f.type === 'textarea' || f.type === 'file';
-								return (
-									<div class:list={['field', { wide }]}>
-										{label}
-										{hint}
-										{control}
-										{error}
-									</div>
-								);
-							})
-						}
-					</div>
-					{
-						p.form.consents?.map((c) => {
-							const consent = typeof c === 'string' ? { name: slugify(c), label: c } : c;
-							const id = `f-${consent.name}`;
-							return (
-								<div class="consent">
-									<label class="check" for={id}>
-										<input
-											type="checkbox"
-											id={id}
-											name={consent.name}
-											value="true"
-											required
-											aria-required="true"
-											aria-describedby={`${id}-error`}
-											data-local={p.form.sendConsents ? undefined : true}
-										/>
-										<span set:html={consent.label} />
-									</label>
-									<p class="error" id={`${id}-error`} hidden />
-								</div>
-							);
-						})
-					}
-					{p.form.note && <p class="form-note">{p.form.note}</p>}
-					<button type="submit" class="btn solid">{p.form.button}</button>
-					<p class="form-error" role="alert" data-form-error hidden></p>
-				</form>
+				<ApiForm {...p.form} />
 			</div>
 		</section>
 	</div>
 </Layout>
 
-<script>
-	import { BACKEND_URL } from '../data/backend';
-
-	// Only forms with an endpoint are sent; the others stay as static layouts for now.
-	document.querySelectorAll<HTMLFormElement>('form[data-endpoint]').forEach((form) => {
-		const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
-		const label = button.textContent ?? '';
-		const formError = form.querySelector<HTMLElement>('[data-form-error]')!;
-		type Control = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-		const controls = [...form.querySelectorAll<Control>('input, select, textarea')];
-
-		const messageFor = (el: Control) => {
-			const name = (el.labels?.[0]?.textContent ?? 'this field').replace('*', '').replace(/\(.*?\)/, '').trim().toLowerCase();
-			if (el instanceof HTMLInputElement && el.type === 'checkbox') return 'Tick the box to continue.';
-			if (el.validity.valueMissing) return el instanceof HTMLSelectElement ? `Choose a ${name}.` : `Enter the ${name}.`;
-			if (el.validity.typeMismatch)
-				return el.type === 'url' ? 'Enter a full web address, like https://example.org.' : 'Enter a valid email address, like name@example.org.';
-			if (el.validity.rangeUnderflow) return `Enter a number of at least ${(el as HTMLInputElement).min}.`;
-			if (el.validity.badInput) return 'Enter a number.';
-			return el.validationMessage;
-		};
-		const check = (el: Control) => {
-			const box = form.querySelector<HTMLElement>(`#${el.id}-error`);
-			// The browser only applies minlength to typed input, so check it for every value.
-			const min = 'minLength' in el ? el.minLength : -1;
-			let problem = min > 0 && el.value && el.value.length < min ? `Enter at least ${min} characters.` : '';
-			if (el instanceof HTMLInputElement && el.type === 'file' && el.files) {
-				const maxFiles = Number(el.dataset.maxFiles || Infinity);
-				const maxBytes = Number(el.dataset.maxMb || Infinity) * 1024 * 1024;
-				const allowed = el.accept ? el.accept.split(',').map((s) => s.trim().toLowerCase()) : [];
-				const files = [...el.files];
-				if (files.length > maxFiles) problem = `Choose up to ${maxFiles} files.`;
-				else if (files.some((f) => f.size > maxBytes)) problem = `Each file must be ${el.dataset.maxMb} MB or smaller.`;
-				else if (allowed.length && files.some((f) => !allowed.some((ext) => f.name.toLowerCase().endsWith(ext))))
-					problem = `Use ${allowed.join(', ').replace(/\./g, '').toUpperCase()} files only.`;
-			}
-			el.setCustomValidity(problem);
-			const ok = el.checkValidity();
-			el.setAttribute('aria-invalid', String(!ok));
-			if (box) {
-				box.hidden = ok;
-				box.textContent = ok ? '' : messageFor(el);
-			}
-			return ok;
-		};
-
-		controls.forEach((el) => {
-			el.addEventListener('blur', () => el.value && check(el));
-			el.addEventListener('input', () => el.getAttribute('aria-invalid') === 'true' && check(el));
-			el.addEventListener('change', () => el.getAttribute('aria-invalid') === 'true' && check(el));
-		});
-
-		form.addEventListener('submit', async (e) => {
-			e.preventDefault();
-			formError.hidden = true;
-			const invalid = controls.filter((el) => !check(el));
-			if (invalid.length > 0) {
-				invalid[0].focus();
-				return;
-			}
-			button.disabled = true;
-			button.textContent = 'Sending…';
-			try {
-				// Checkboxes marked data-local are only checked here and never sent.
-				const entries = [...new FormData(form)].filter(
-					([key, value]) => !form.querySelector(`[name="${key}"][data-local]`) && !(value instanceof File && value.size === 0),
-				);
-				let init: RequestInit;
-				if (form.dataset.encoding === 'multipart') {
-					// No Content-Type header: the browser sets it, with the boundary. Each file is sent as "files".
-					const body = new FormData();
-					entries.forEach(([key, value]) => body.append(key, value));
-					init = { method: 'POST', body };
-				} else {
-					init = {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify(Object.fromEntries(entries.map(([key, value]) => [key, String(value)]))),
-					};
-				}
-				const res = await fetch(BACKEND_URL + form.dataset.endpoint, init);
-				// Any non-2xx, including 429 from the rate limiter, shows the same message.
-				if (!res.ok) throw new Error(`HTTP ${res.status}`);
-				const done = document.createElement('p');
-				done.className = 'form-done';
-				done.setAttribute('role', 'status');
-				done.textContent = form.dataset.success ?? 'Thanks! We’ll be in touch soon.';
-				form.replaceWith(done);
-			} catch (err) {
-				console.error('Form not sent:', err);
-				formError.textContent = 'Sorry, something went wrong. Please try again or email support@eyecheck.app.';
-				formError.hidden = false;
-				button.disabled = false;
-				button.textContent = label;
-			}
-		});
-	});
-</script>
 
 <style>
 	.hero {
@@ -546,16 +329,6 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 		font-weight: 600;
 		text-decoration: none;
 	}
-	.consent {
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
-	}
-	.form-note {
-		color: var(--slate);
-		font-size: 14px;
-		line-height: 21px;
-	}
 	.step-text {
 		color: var(--slate);
 		font-size: 15px;
@@ -610,101 +383,4 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 		line-height: 24px;
 	}
 
-	.form {
-		display: flex;
-		flex-direction: column;
-		gap: 16px;
-	}
-	.required-note {
-		margin-top: -8px;
-		font-size: 14px;
-	}
-	.fields {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 16px;
-	}
-	.field {
-		/* Two per row on desktop, so a long label never pushes its input below its neighbours. */
-		flex: 1 1 280px;
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
-		min-width: 0;
-	}
-	.field.wide {
-		flex-basis: 100%;
-	}
-	.inner .field label {
-		display: block;
-		color: var(--ink);
-	}
-	.inner .field select {
-		width: 100%;
-		min-height: 44px;
-		padding: 0 12px;
-		border: 1px solid var(--muted);
-		border-radius: 6px;
-		background: var(--surface);
-		color: var(--ink);
-		font: inherit;
-	}
-	.inner .field input,
-	.inner .field textarea {
-		width: 100%;
-		box-sizing: border-box;
-	}
-	.field [aria-invalid='true'] {
-		border-color: var(--ink);
-		outline: 1px solid var(--ink);
-	}
-	.hint {
-		color: var(--muted);
-		font-size: 13px;
-		line-height: 18px;
-	}
-	.error,
-	.form-error {
-		margin: 0;
-		color: var(--ink);
-		font-size: 13px;
-		line-height: 18px;
-		font-weight: 500;
-	}
-	.error::before,
-	.form-error::before {
-		content: '! ';
-		color: var(--blue);
-		font-weight: 700;
-	}
-	.form-error {
-		font-size: 15px;
-	}
-	.inner .check {
-		flex-direction: row;
-		align-items: flex-start;
-		gap: 10px;
-		font-weight: 400;
-	}
-	.inner .check input {
-		min-height: 0;
-		width: 18px;
-		height: 18px;
-		margin: 1px 0 0;
-		padding: 0;
-	}
-	.inner input[type='file'] {
-		padding: 9px 12px;
-	}
-	.form .btn {
-		align-self: flex-start;
-	}
-	:global(.form-done) {
-		padding: 20px 22px;
-		border-radius: 14px;
-		background: var(--lens);
-		color: var(--ink);
-		font-size: 17px;
-		font-weight: 500;
-	}
 </style>
