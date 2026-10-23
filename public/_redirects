@@ -1,0 +1,11 @@
+# Old blog URLs (301, permanent). Cloudflare Workers static assets read this file.
+/blog/screen-time-and-eye-health    /blog/20-20-20-rule/                301
+/blog/screen-time-and-eye-health/   /blog/20-20-20-rule/                301
+/blog/eye-screening                 /blog/pediatric-vision-screening/   301
+/blog/eye-screening/                /blog/pediatric-vision-screening/   301
+/blog/vision-care-adults            /blog/how-often-eye-exam/           301
+/blog/vision-care-adults/           /blog/how-often-eye-exam/           301
+/blog/tech-revolution               /how-we-test/                       301
+/blog/tech-revolution/              /how-we-test/                       301
+/blog/tech-access-eye-care          /how-we-test/                       301
+/blog/tech-access-eye-care/         /how-we-test/                       301

@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { site, routes, tests, orgs } from '../data/site';
-import { posts as blogPosts } from '../data/blog';
+import { blogMap } from '../data/blogMap';
 import { socialLinks, socialProfiles } from '../data/social';
 import { testimonials } from '../data/live';
 import StatsBand from '../components/StatsBand.astro';
@@ -41,9 +41,9 @@ const goals = [
 ];
 
 const posts = [
-	{ topic: 'Screen time', title: 'The 20-20-20 rule for eye strain', href: routes.blog + blogPosts[0].slug },
-	{ topic: 'Children’s vision', title: 'Pediatric vision screening: what parents should know', href: routes.blog + blogPosts[1].slug },
-	{ topic: 'Adult vision', title: 'How often should you get an eye exam?', href: routes.blog + blogPosts[2].slug },
+	{ topic: 'Screen time', title: 'The 20-20-20 rule for eye strain', href: routes.blog + blogMap[0].newSlug + '/' },
+	{ topic: 'Children’s vision', title: 'Pediatric vision screening: what parents should know', href: routes.blog + blogMap[1].newSlug + '/' },
+	{ topic: 'Adult vision', title: 'How often should you get an eye exam?', href: routes.blog + blogMap[2].newSlug + '/' },
 ];
 
 const faqs = [

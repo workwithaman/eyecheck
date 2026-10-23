@@ -1,7 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { routes } from '../../data/site';
-import { posts, type Post } from '../../data/blog';
+import PostCover from '../../components/PostCover.astro';
+import { routes, site } from '../../data/site';
+import { posts, formatDate, isoDate, type Post } from '../../data/posts';
+import { sanityImageUrl } from '../../data/sanity';
 
 export function getStaticPaths() {
 	return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
@@ -12,55 +14,260 @@ interface Props {
 }
 
 const { post } = Astro.props;
-// Only the first post is drawn in the wireframes; the rest fall back to placeholders.
-const summary = post.summary ?? '[Answer-first summary]';
-const toc = post.toc ?? ['[Section]', '[Section]', '[Section]', '[Section]', '[Section]'];
-const sections = post.sections ?? Array.from({ length: 5 }, () => ['[Section heading]', '[Body paragraph]']);
+// A reviewer name still in [brackets] is a placeholder, so the "Reviewed by" part is hidden.
+const reviewer = site.reviewer.includes('[') ? '' : site.reviewer;
+
+const related = posts
+	.filter((p) => p.slug !== post.slug)
+	.sort((a, b) => Number(b.category === post.category) - Number(a.category === post.category))
+	.slice(0, 3);
+
+const origin = Astro.site?.href ?? '/';
+const url = new URL(`/blog/${post.slug}/`, origin).href;
+const imageUrl = post.image
+	? post.image.remote && typeof post.image.src === 'string'
+		? sanityImageUrl(post.image.src, 1200)
+		: new URL(typeof post.image.src === 'string' ? post.image.src : post.image.src.src, origin).href
+	: undefined;
+const schema = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'BlogPosting',
+			headline: post.title,
+			description: post.description,
+			...(imageUrl && { image: imageUrl }),
+			datePublished: post.publishedAt,
+			dateModified: post.updatedAt,
+			author: { '@type': 'Person', name: post.author },
+			publisher: { '@id': new URL('/#organization', origin).href },
+			mainEntityOfPage: url,
+			...(reviewer && { reviewedBy: { '@type': 'Person', name: reviewer } }),
+		},
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', origin).href },
+				{ '@type': 'ListItem', position: 2, name: 'Blog', item: new URL('/blog/', origin).href },
+				{ '@type': 'ListItem', position: 3, name: post.title, item: url },
+			],
+		},
+	],
+};
 ---
 
-<Layout title={`${post.title} | EyeCheck.app`} active="blog">
+<Layout title={`${post.title} | EyeCheck.app`} description={post.description} active="blog">
+	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 	<div class="inner">
-		<div class="wrap crumb">Home › Blog › {post.category}</div>
+		<nav aria-label="Breadcrumb" class="wrap crumb"><a href={routes.home}>Home</a> › <a href={routes.blog}>Blog</a> › <span>{post.category}</span></nav>
 		<article>
-			<header class="wrap" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:14px;max-width:860px">
+			<header class="wrap head">
 				<span class="eyebrow">{post.category}</span>
 				<h1>{post.title}</h1>
-				<p class="muted">{summary}</p>
-				<div style="display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center" class="note">
-					<span class="ph" style="width:36px;height:36px;border-radius:18px;padding:0"></span>
-					<span>By [AUTHOR]</span><span>Reviewed by [NAME], OD</span><span>Updated [DATE]</span><span>[N] min read</span>
-				</div>
-				<div class="ph" style="height:340px;border-radius:10px">[Hero image]</div>
+				<p class="byline">
+					<span>By {post.author}</span>
+					{reviewer && <span>Reviewed by {reviewer}</span>}
+					<span>Updated <time datetime={isoDate(post.updatedAt)}>{formatDate(post.updatedAt)}</time></span>
+					<span>{post.readMinutes} min read</span>
+				</p>
+				{post.summary && <p class="summary">{post.summary}</p>}
+				{post.image && <PostCover image={post.image} width={860} class="cover" eager />}
 			</header>
 
-			<div class="wrap" style="display:flex;flex-wrap:wrap;gap:40px;padding-bottom:48px">
-				<nav class="toc" aria-label="In this article" style="flex:0 1 220px;border-top:2px solid var(--ink);padding-top:10px">
-					<span class="eyebrow">In this article</span>
-					{toc.map((item) => <a href="#">{item}</a>)}
-				</nav>
-				<div style="flex:999 1 560px;min-width:0;max-width:720px;display:flex;flex-direction:column;gap:22px">
-					<h2>{sections[0][0]}</h2><p class="muted">{sections[0][1]}</p>
-					<h2>{sections[1][0]}</h2><p class="muted">{sections[1][1]}</p>
-					<div class="ph" style="height:180px">[Inline illustration]</div>
-					<h2>{sections[2][0]}</h2><p class="muted">{sections[2][1]}</p>
-					<div class="card" style="background:var(--surface-2);flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between">
-						<div style="display:flex;flex-direction:column;gap:6px;flex:1 1 280px"><h3>Blurry or tired eyes?</h3><span class="muted">Check your vision in 5 minutes.</span></div>
-						<a href={routes.start} class="btn solid">Start free eye test</a>
-					</div>
-					<h2>{sections[3][0]}</h2><p class="muted">{sections[3][1]}</p>
-					<h2>{sections[4][0]}</h2><p class="muted">{sections[4][1]}</p>
-					<div style="border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Sources</span><p class="note">[1] [AAO …] [2] [AOA …]</p></div>
+			<div class="wrap layout">
+				{
+					post.toc.length >= 3 && (
+						<nav class="toc" aria-label="In this article">
+							<span class="eyebrow">In this article</span>
+							{post.toc.map((t) => (
+								<a href={`#${t.id}`}>{t.text}</a>
+							))}
+						</nav>
+					)
+				}
+				<div class:list={['prose', { full: post.toc.length < 3 }]}>
+					<Fragment set:html={post.html} />
+
+					<aside class="cta" aria-label="Check your eyes">
+						<p class="cta-title">Check your eyes in under 5 minutes</p>
+						<div class="cta-actions">
+							<a href={`${routes.start}/`} class="btn solid">Start free eye test</a>
+							{post.cta && <a href={post.cta.href} class="more">{post.cta.text} →</a>}
+						</div>
+					</aside>
+
+					<p class="disclaimer">This article is for general information and isn’t a substitute for advice from an eye care professional.</p>
 				</div>
 			</div>
 		</article>
 
-		<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
-			<h2>Related</h2>
-			<div class="grid3">
-				<a href={routes.blog} class="card"><div class="ph" style="height:120px">[Image]</div><h3>[Related post]</h3></a>
-				<a href={routes.blog} class="card"><div class="ph" style="height:120px">[Image]</div><h3>[Related post]</h3></a>
-				<a href={routes.home} class="card"><div class="ph" style="height:120px">[Tool]</div><h3>[Related test page]</h3></a>
-			</div>
-		</div></section>
+		{
+			related.length > 0 && (
+				<section class="sec related">
+					<div class="wrap stack">
+						<h2>Related articles</h2>
+						<div class="grid3">
+							{related.map((p) => (
+								<a href={`${routes.blog}${p.slug}/`} class="card post-card">
+									{p.image && <PostCover image={p.image} width={380} class="card-img" />}
+									<span class="note">{p.category}</span>
+									<h3>{p.title}</h3>
+									<span class="note">
+										<time datetime={isoDate(p.publishedAt)}>{formatDate(p.publishedAt)}</time> · {p.readMinutes} min read
+									</span>
+								</a>
+							))}
+						</div>
+					</div>
+				</section>
+			)
+		}
 	</div>
 </Layout>
+
+<style>
+	.crumb a {
+		color: var(--muted);
+		text-decoration: none;
+	}
+	.crumb span {
+		color: var(--ink);
+	}
+	.head {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		max-width: 860px;
+		padding-top: 20px;
+		padding-bottom: 28px;
+	}
+	.byline {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px 18px;
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.byline span + span::before {
+		content: '·';
+		margin-right: 18px;
+		margin-left: -12px;
+	}
+	.summary {
+		color: var(--ink);
+		font-size: 18px;
+		line-height: 28px;
+	}
+	.head :global(.cover) {
+		width: 100%;
+		height: auto;
+		max-height: 420px;
+		object-fit: cover;
+		border-radius: 16px;
+	}
+	.layout {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 40px;
+		padding-bottom: 48px;
+	}
+	.toc {
+		position: sticky;
+		top: 96px;
+		flex: 0 1 220px;
+		align-self: flex-start;
+		padding-top: 10px;
+		border-top: 2px solid var(--ink);
+	}
+	.prose {
+		flex: 999 1 560px;
+		min-width: 0;
+		max-width: 720px;
+		color: var(--slate);
+		font-size: 17px;
+		line-height: 28px;
+	}
+	.prose.full {
+		margin: 0 auto;
+	}
+	.prose :global(h2) {
+		margin: 36px 0 12px;
+		font-size: 26px;
+		line-height: 32px;
+		/* Added to the site-wide 88px scroll padding, so a contents link lands just below the sticky header. */
+		scroll-margin-top: 16px;
+	}
+	.prose :global(h2:first-child) {
+		margin-top: 0;
+	}
+	.prose :global(h3) {
+		margin: 28px 0 10px;
+	}
+	.prose :global(p),
+	.prose :global(ul),
+	.prose :global(ol) {
+		margin: 0 0 16px;
+		color: var(--slate);
+	}
+	.prose :global(li) {
+		margin-bottom: 6px;
+	}
+	.prose :global(strong) {
+		color: var(--ink);
+	}
+	.prose :global(figure) {
+		margin: 24px 0;
+	}
+	.prose :global(figure img) {
+		width: 100%;
+		height: auto;
+		border-radius: 12px;
+	}
+	.cta {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		margin: 36px 0 20px;
+		padding: 24px;
+		border-radius: 16px;
+		background: var(--lens);
+	}
+	.cta-title {
+		color: var(--ink);
+		font-size: 20px;
+		line-height: 28px;
+		font-weight: 600;
+	}
+	.cta-actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 12px 20px;
+	}
+	.disclaimer {
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 21px;
+	}
+	.related {
+		background: var(--surface-2);
+	}
+	.stack {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+	.post-card {
+		overflow: hidden;
+		padding: 0 0 20px;
+	}
+	.post-card > :not(:global(.card-img)) {
+		padding: 0 20px;
+	}
+	.post-card :global(.card-img) {
+		width: 100%;
+		height: 170px;
+		object-fit: cover;
+	}
+</style>

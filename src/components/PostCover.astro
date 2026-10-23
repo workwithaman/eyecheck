@@ -1,0 +1,35 @@
+---
+// Blog cover: a Sanity image (resized and converted by Sanity's CDN) or a local fallback (optimised by Astro).
+import { Image } from 'astro:assets';
+import type { Post } from '../data/posts';
+import { sanityImageUrl } from '../data/sanity';
+
+interface Props {
+	image: NonNullable<Post['image']>;
+	// Largest width the image is shown at, in CSS pixels.
+	width: number;
+	class?: string;
+	eager?: boolean;
+}
+
+const { image, width, class: className, eager = false } = Astro.props;
+const height = Math.round((image.height / image.width) * width);
+const loading = eager ? 'eager' : 'lazy';
+---
+
+{
+	image.remote && typeof image.src === 'string' ? (
+		<img
+			class={className}
+			src={sanityImageUrl(image.src, width)}
+			srcset={`${sanityImageUrl(image.src, width)} 1x, ${sanityImageUrl(image.src, width * 2)} 2x`}
+			alt={image.alt}
+			width={width}
+			height={height}
+			loading={loading}
+			decoding="async"
+		/>
+	) : (
+		<Image class={className} src={image.src} alt={image.alt} width={width} height={height} format="webp" loading={loading} />
+	)
+}

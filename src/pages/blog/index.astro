@@ -1,38 +1,202 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import PostCover from '../../components/PostCover.astro';
 import { routes } from '../../data/site';
+import { posts, formatDate, isoDate, shorten } from '../../data/posts';
+
+// TODO: add pagination (/blog/page/[n]/) before there are more than 12 posts. Until then there is no pagination control.
+const featured = posts.find((p) => p.featured) ?? posts[0];
+const rest = posts.filter((p) => p !== featured);
+// Chips only for categories that have at least one built post, in the order posts appear.
+const categories = [...new Set(posts.map((p) => p.category))];
+const slugOf = (c: string) => c.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+const origin = Astro.site?.href ?? '/';
+const blogUrl = new URL('/blog/', origin).href;
+const schema = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{ '@type': 'Blog', name: 'EyeCheck.app Eye Health Blog', url: blogUrl, publisher: { '@id': new URL('/#organization', origin).href } },
+		{
+			'@type': 'ItemList',
+			itemListElement: posts.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: `${blogUrl}${p.slug}/`, name: p.title })),
+		},
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', origin).href },
+				{ '@type': 'ListItem', position: 2, name: 'Blog', item: blogUrl },
+			],
+		},
+	],
+};
 ---
 
-<Layout title={"Eye Health Blog: Guides for Parents & Adults | EyeCheck.app"} active="blog">
+<Layout
+	title="Eye Health Blog: Guides for Parents & Adults | EyeCheck.app"
+	description="Eye health guides for parents and adults: screen time, children's vision screening, eye exams and reading glasses, reviewed by an optometrist."
+	active="blog"
+>
+	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 	<div class="inner">
-	<div class="wrap crumb">Home › Blog</div>
-	<section class="wrap" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:16px">
-	  <h1>Eye Health Blog</h1>
-	  <p class="muted">[One line: practical, medically reviewed guides on vision for families.]</p>
-	  <nav aria-label="Categories" style="display:flex;flex-wrap:wrap;gap:10px">
-	    <a href="#" class="chip on">All</a><a href="#" class="chip">Children’s vision</a><a href="#" class="chip">Adult vision</a><a href="#" class="chip">Screen time</a>
-	  </nav>
-	</section>
-	
-	<section class="wrap" style="padding-bottom:28px">
-	  <a href={routes.blog + '20-20-20-rule'} class="card" style="flex-direction:row;flex-wrap:wrap;gap:28px;align-items:center">
-	    <div class="ph" style="flex:1 1 380px;height:260px">[Featured image]</div>
-	    <div style="flex:1 1 380px;display:flex;flex-direction:column;gap:10px">
-	      <span class="note">Featured · Screen time</span>
-	      <h2>The 20-20-20 Rule for Eye Strain</h2>
-	      <p class="muted">[Excerpt, 1–2 lines]</p>
-	      <span class="note">[Date] · Reviewed by [NAME], OD · [N] min read</span>
-	    </div>
-	  </a>
-	</section>
-	
-	<section class="wrap" style="padding-bottom:56px">
-	  <div class="grid3">
-	    <a href={routes.blog + 'pediatric-vision-screening'} class="card"><div class="ph" style="height:160px">[Image]</div><span class="note">Children’s vision</span><h3>Pediatric Vision Screening: What Parents Should Know</h3><span class="note">[Date] · [N] min</span></a>
-	    <a href={routes.blog + 'how-often-eye-exam'} class="card"><div class="ph" style="height:160px">[Image]</div><span class="note">Adult vision</span><h3>How Often Should You Get an Eye Exam?</h3><span class="note">[Date] · [N] min</span></a>
-	    <a href={routes.blog + 'presbyopia-symptoms'} class="card"><div class="ph" style="height:160px">[Image]</div><span class="note">Adult vision</span><h3>Presbyopia Symptoms: Signs You Need Reading Glasses</h3><span class="note">New post · [Date]</span></a>
-	  </div>
-	  <nav aria-label="Pagination" style="display:flex;gap:10px;justify-content:center;margin-top:32px"><a href="#" class="chip on">1</a><a href="#" class="chip">2</a><a href="#" class="chip">Next</a></nav>
-	</section>
+		<div class="wrap crumb">Home › Blog</div>
+		<section class="wrap intro">
+			<h1>Eye Health Blog</h1>
+			<p class="muted">Practical, medically reviewed guides on vision for children and adults.</p>
+			{
+				categories.length > 1 && (
+					<div class="chips" role="group" aria-label="Filter by category" data-chips>
+						<button type="button" class="chip on" aria-pressed="true" data-filter="all">
+							All
+						</button>
+						{categories.map((c) => (
+							<button type="button" class="chip" aria-pressed="false" data-filter={slugOf(c)}>
+								{c}
+							</button>
+						))}
+					</div>
+				)
+			}
+			<p class="sr-only" aria-live="polite" data-count></p>
+		</section>
+
+		<section class="wrap posts">
+			{
+				featured && (
+					<a href={`${routes.blog}${featured.slug}/`} class="card featured" data-post data-category={slugOf(featured.category)}>
+						{featured.image && <PostCover image={featured.image} width={560} class="featured-img" eager />}
+						<div class="featured-copy">
+							<span class="note">Featured · {featured.category}</span>
+							<h2>{featured.title}</h2>
+							<p class="muted">{shorten(featured.summary)}</p>
+							<span class="note">
+								By {featured.author} · <time datetime={isoDate(featured.publishedAt)}>{formatDate(featured.publishedAt)}</time> ·{' '}
+								{featured.readMinutes} min read
+							</span>
+						</div>
+					</a>
+				)
+			}
+			<div class="grid3">
+				{
+					rest.map((p) => (
+						<a href={`${routes.blog}${p.slug}/`} class="card post-card" data-post data-category={slugOf(p.category)}>
+							{p.image && <PostCover image={p.image} width={380} class="card-img" />}
+							<span class="note">{p.category}</span>
+							<h3>{p.title}</h3>
+							<p class="muted excerpt">{shorten(p.summary, 120)}</p>
+							<span class="note">
+								<time datetime={isoDate(p.publishedAt)}>{formatDate(p.publishedAt)}</time> · {p.readMinutes} min read
+							</span>
+						</a>
+					))
+				}
+			</div>
+		</section>
 	</div>
 </Layout>
+
+<script>
+	// Category filter. Without JavaScript every post stays visible.
+	const chips = document.querySelector<HTMLElement>('[data-chips]');
+	const cards = [...document.querySelectorAll<HTMLElement>('[data-post]')];
+	const count = document.querySelector<HTMLElement>('[data-count]');
+	chips?.querySelectorAll<HTMLButtonElement>('button').forEach((btn) => {
+		btn.addEventListener('click', () => {
+			const filter = btn.dataset.filter;
+			chips.querySelectorAll('button').forEach((b) => {
+				b.classList.toggle('on', b === btn);
+				b.setAttribute('aria-pressed', String(b === btn));
+			});
+			let shown = 0;
+			cards.forEach((card) => {
+				const match = filter === 'all' || card.dataset.category === filter;
+				card.hidden = !match;
+				if (match) shown++;
+			});
+			if (count) count.textContent = `${shown} ${shown === 1 ? 'article' : 'articles'} shown`;
+		});
+	});
+</script>
+
+<style>
+	.intro {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		padding-top: 20px;
+		padding-bottom: 28px;
+	}
+	.chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+	.chip {
+		font: inherit;
+		font-size: 14px;
+		cursor: pointer;
+		background: var(--surface);
+	}
+	.chip:focus-visible {
+		outline: 3px solid var(--blue);
+		outline-offset: 2px;
+	}
+	.posts {
+		display: flex;
+		flex-direction: column;
+		gap: 28px;
+		padding-bottom: 72px;
+	}
+	.featured {
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 28px;
+		padding: 0;
+		overflow: hidden;
+	}
+	.featured :global(.featured-img) {
+		flex: 1 1 380px;
+		min-width: 0;
+		width: 100%;
+		height: 300px;
+		object-fit: cover;
+	}
+	.featured-copy {
+		flex: 1 1 380px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 24px 28px 28px 0;
+	}
+	.post-card {
+		overflow: hidden;
+		padding: 0 0 20px;
+	}
+	.post-card > :not(:global(.card-img)) {
+		padding: 0 20px;
+	}
+	.post-card :global(.card-img) {
+		width: 100%;
+		height: 190px;
+		object-fit: cover;
+	}
+	.excerpt {
+		font-size: 15px;
+		line-height: 23px;
+	}
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+	}
+	@media (max-width: 820px) {
+		.featured-copy {
+			padding: 0 22px 24px;
+		}
+	}
+</style>

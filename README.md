@@ -44,3 +44,26 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Blog (Sanity)
+
+Blog posts are read from Sanity (project `s5vozrwc`, dataset `production`) through the public CDN **at build time only**; there is no client-side fetching. Set `PUBLIC_SANITY_PROJECT_ID` and `PUBLIC_SANITY_DATASET` in the build environment (see `.env.example`).
+
+- `src/data/sanity.ts` runs the query; `src/data/posts.ts` turns posts into pages.
+- `src/data/blogMap.ts` maps the new SEO slugs to existing Sanity posts and holds the per-post H1, meta description and call to action.
+- Old blog URLs are redirected (301) in `public/_redirects`.
+
+### Rebuild when a post is published
+
+Because posts are fetched at build time, publishing in Sanity only shows on the site after a new build. To make that automatic:
+
+1. In Cloudflare: **Workers & Pages → eyecheck → Settings → Builds → Deploy hooks**, create a hook for the `main` branch and copy its URL.
+2. In Sanity: **manage.sanity.io → project s5vozrwc → API → Webhooks → Create webhook**.
+   - URL: the Cloudflare deploy hook URL
+   - Dataset: `production`
+   - Trigger on: Create, Update, Delete
+   - Filter: `_type == "post"`
+   - HTTP method: `POST`, no payload needed
+3. Publish a post and check that a new build starts in Cloudflare.
+
+Until the hook is set up, push any commit to `main` (or retry the latest deployment in Cloudflare) to pick up new posts.
