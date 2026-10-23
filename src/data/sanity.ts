@@ -41,11 +41,25 @@ const POSTS_QUERY = `*[_type == "post" && defined(slug.current) && !(_id in path
 }`;
 
 async function query<T>(groq: string): Promise<T> {
-	const url = `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodeURIComponent(groq)}`;
-	const res = await fetch(url, { signal: AbortSignal.timeout(20_000) });
+	const path = `/v${apiVersion}/data/query/${dataset}?query=${encodeURIComponent(groq)}`;
+	// The CDN first; the live API as a fallback. Each is tried up to 3 times before giving up.
+	const hosts = [`https://${projectId}.apicdn.sanity.io`, `https://${projectId}.api.sanity.io`];
+	let lastError: unknown;
+	for (const host of hosts) {
+		for (let attempt = 1; attempt <= 3; attempt++) {
+			try {
+				const res = await fetch(host + path, { signal: AbortSignal.timeout(20_000) });
+				if (!res.ok) throw new Error(`HTTP ${res.status}`);
+				return ((await res.json()) as { result: T }).result;
+			} catch (err) {
+				lastError = err;
+				console.warn(`[eyecheck] Sanity query to ${host} failed (attempt ${attempt}): ${err}`);
+				await new Promise((r) => setTimeout(r, 1000 * attempt));
+			}
+		}
+	}
 	// Fail the build rather than publish an empty blog.
-	if (!res.ok) throw new Error(`[eyecheck] Sanity query failed: HTTP ${res.status}`);
-	return ((await res.json()) as { result: T }).result;
+	throw new Error(`[eyecheck] Could not load blog posts from Sanity: ${lastError}`);
 }
 
 // Fetched once per build and shared by every page that imports it.
