@@ -2,7 +2,7 @@
 import { getImage } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import PostCover from '../../components/PostCover.astro';
-import { routes, site } from '../../data/site';
+import { routes } from '../../data/site';
 import { posts, formatDate, isoDate, type Post } from '../../data/posts';
 import { sanityImageUrl } from '../../data/sanity';
 
@@ -15,8 +15,6 @@ interface Props {
 }
 
 const { post } = Astro.props;
-// A reviewer name still in [brackets] is a placeholder, so the "Reviewed by" part is hidden.
-const reviewer = site.reviewer.includes('[') ? '' : site.reviewer;
 
 const related = posts
 	.filter((p) => p.slug !== post.slug)
@@ -51,7 +49,6 @@ const schema = {
 			author: { '@type': 'Person', name: post.author },
 			publisher: { '@id': new URL('/#organization', origin).href },
 			mainEntityOfPage: url,
-			...(reviewer && { reviewedBy: { '@type': 'Person', name: reviewer } }),
 		},
 		{
 			'@type': 'BreadcrumbList',
@@ -75,7 +72,6 @@ const schema = {
 				<h1>{post.title}</h1>
 				<p class="byline">
 					<span>By {post.author}</span>
-					{reviewer && <span>Reviewed by {reviewer}</span>}
 					<span>Updated <time datetime={isoDate(post.updatedAt)}>{formatDate(post.updatedAt)}</time></span>
 					<span>{post.readMinutes} min read</span>
 				</p>

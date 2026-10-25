@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { routes } from '../../data/site';
+import { routes, buildDate } from '../../data/site';
+import { testHref } from '../../data/tests';
 ---
 
 <Layout title={"Color Blind Test: Free Online Ishihara-Style Test | EyeCheck.app"} active="tests">
@@ -9,7 +10,7 @@ import { routes } from '../../data/site';
 	<section class="wrap narrow" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:14px">
 	  <h1>Color Blind Test (Free Online Ishihara-Style Test)</h1>
 	  <p class="muted">[Answer-first intro, 40–60 words: checks red-green and blue-yellow color vision with [N] plates, about 3 minutes, result shows likely type.]</p>
-	  <span class="note">[Avatar] Medically reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	  <span class="note">Last updated <time datetime={buildDate.iso}>{buildDate.text}</time></span>
 	</section>
 	
 	<section class="wrap narrow" style="padding-bottom:40px">
@@ -30,7 +31,7 @@ import { routes } from '../../data/site';
 	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:16px">
 	  <span class="eyebrow">Video overview</span>
 	  <h2>Video: how the color blind test works</h2>
-	  <p class="muted">[60–90 sec: screen brightness, reading the plates, what red-green vs blue-yellow results mean. Reviewed by [NAME], OD.]</p>
+	  <p class="muted">[60–90 sec: screen brightness, reading the plates, what red-green vs blue-yellow results mean.]</p>
 	  <div class="ph" style="aspect-ratio:16/9;width:100%;border-radius:12px;flex-direction:column;gap:12px">
 	    <span style="width:76px;height:76px;border-radius:38px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></span>
 	    <span>[Poster frame · 1:15]</span>
@@ -67,9 +68,9 @@ import { routes } from '../../data/site';
 	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
 	  <h2>Related tests</h2>
 	  <div class="grid3">
-	    <a href={routes.colorBlindKids} class="card" style="text-decoration:none"><h3>Color blind test for kids</h3><span class="note">→ /color-blind-test/kids</span></a>
+	    <a href={testHref('color-blind-test/kids')} class="card" style="text-decoration:none"><h3>Color blind test for kids</h3><span class="note">→ /color-blind-test/kids</span></a>
 	    <a href={routes.visualAcuity} class="card" style="text-decoration:none"><h3>Visual acuity test</h3><span class="note">→ /visual-acuity-test</span></a>
-	    <a href={routes.astigmatism} class="card" style="text-decoration:none"><h3>Astigmatism test</h3><span class="note">→ /astigmatism-test</span></a>
+	    <a href={testHref('astigmatism-test')} class="card" style="text-decoration:none"><h3>Astigmatism test</h3><span class="note">→ /astigmatism-test</span></a>
 	  </div>
 	</div></section>
 	</div>

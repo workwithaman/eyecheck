@@ -51,6 +51,8 @@ Approved charity and research partners may have additional terms, agreed with th
 
 The EyeCheck.app name, logo, tests, software and content belong to Potential Dynamics Pte Ltd. You may use our printable resources for personal, school and clinical screening, but not resell them.
 
+<div id="disclaimer"></div>
+
 ## Disclaimer and liability
 
 The service is provided "as is", without warranties of any kind. To the extent the law allows, we aren't liable for damages arising from your use of the service.

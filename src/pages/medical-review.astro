@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { routes } from '../data/site';
+import { routes, tests } from '../data/site';
 ---
 
 <Layout title={"Medical Review: [NAME], OD | EyeCheck.app"} active="about">
@@ -29,8 +29,8 @@ import { routes } from '../data/site';
 	  <h2>What [FIRST NAME] reviews</h2>
 	  <p class="muted">[Scope: test logic, result wording, every health article before publishing and on a [12]-month cycle]</p>
 	  <div class="grid3">
-	    <a href={routes.astigmatism} class="card" style="text-decoration:none"><h3>Astigmatism test</h3><span class="note">Reviewed [DATE]</span></a>
-	    <a href={routes.colorBlind} class="card" style="text-decoration:none"><h3>Color blind test</h3><span class="note">Reviewed [DATE]</span></a>
+	    {/* Lists only live tests (src/data/tests.ts). */}
+	    {tests.map((t) => <a href={t.href} class="card" style="text-decoration:none"><h3>{t.title}</h3><span class="note">Reviewed [DATE]</span></a>)}
 	    <a href="#" class="card" style="text-decoration:none"><h3>[Auto-listed: every page with this reviewer]</h3><span class="note">Generated at build time</span></a>
 	  </div>
 	</div></section>

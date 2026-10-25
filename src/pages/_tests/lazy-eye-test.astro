@@ -1,6 +1,7 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { routes } from '../data/site';
+import Layout from '../../layouts/Layout.astro';
+import { routes, buildDate } from '../../data/site';
+import { testHref } from '../../data/tests';
 ---
 
 <Layout title={"Lazy Eye Test: Check Your Child for Amblyopia | EyeCheck.app"} active="tests">
@@ -9,7 +10,7 @@ import { routes } from '../data/site';
 	<section class="wrap narrow" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:14px">
 	  <h1>Lazy Eye Test: Spot the Signs of Amblyopia Early</h1>
 	  <p class="muted">[Answer-first intro: a short checklist plus a one-eye-at-a-time vision check that can flag a difference between the eyes. Early detection matters because treatment works best in young children.]</p>
-	  <span class="note">[Avatar] Medically reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	  <span class="note">Last updated <time datetime={buildDate.iso}>{buildDate.text}</time></span>
 	</section>
 	
 	<section class="wrap narrow" style="padding-bottom:40px">
@@ -31,7 +32,7 @@ import { routes } from '../data/site';
 	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:16px">
 	  <span class="eyebrow">Video overview</span>
 	  <h2>Video: spotting a lazy eye in your child</h2>
-	  <p class="muted">[60–90 sec: the warning signs to watch for, running the eye-by-eye check, when to book a children’s eye exam. Reviewed by [NAME], OD.]</p>
+	  <p class="muted">[60–90 sec: the warning signs to watch for, running the eye-by-eye check, when to book a children’s eye exam.]</p>
 	  <div class="ph" style="aspect-ratio:16/9;width:100%;border-radius:12px;flex-direction:column;gap:12px;background:#e2e2e2">
 	    <span style="width:76px;height:76px;border-radius:38px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></span>
 	    <span>[Poster frame · 1:30]</span>
@@ -57,7 +58,7 @@ import { routes } from '../data/site';
 	<section class="sec"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
 	  <h2>More for parents</h2>
 	  <div class="grid3">
-	    <a href={routes.colorBlindKids} class="card" style="text-decoration:none"><h3>Color blind test for kids</h3><span class="note">→ /color-blind-test/kids</span></a>
+	    <a href={testHref('color-blind-test/kids')} class="card" style="text-decoration:none"><h3>Color blind test for kids</h3><span class="note">→ /color-blind-test/kids</span></a>
 	    <a href={routes.chartPediatric} class="card" style="text-decoration:none"><h3>Pediatric eye chart</h3><span class="note">→ /eye-charts/pediatric</span></a>
 	    <a href={routes.schools} class="card" style="text-decoration:none"><h3>For schools</h3><span class="note">→ /schools</span></a>
 	  </div>

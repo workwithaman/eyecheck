@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import FaqItem from '../../components/FaqItem.astro';
-import { routes, site } from '../../data/site';
+import { routes } from '../../data/site';
 import shapesCard from '../../assets/eye-charts/shapes-card.jpg';
 
 // TODO CONFIRM WITH ANDY / REVIEWER: every value in this object. Empty values hide the element or section they feed.
@@ -21,9 +21,6 @@ const description =
 	'Free printable shapes card for children aged 3 and up who can’t read letters yet. Practise the shapes, then screen your child’s vision online with EyeCheck.';
 const pdf = '/downloads/eyecheck-shapes-card.pdf';
 
-// A value still in [brackets] is a placeholder, so it counts as unset.
-const known = (value: string) => (value && !value.includes('[') ? value : '');
-const reviewer = known(site.reviewer);
 const showAges = confirm.ageExpectations.length > 0 && Boolean(confirm.ageSource.text && confirm.ageSource.url);
 
 const updatedIso = confirm.updated || new Date().toISOString().slice(0, 10);
@@ -92,7 +89,6 @@ const schema = {
 			lastReviewed: updatedIso,
 			audience: { '@type': 'PeopleAudience', suggestedMinAge: 3 },
 			publisher: { '@id': 'https://eyecheck.app/#organization' },
-			...(reviewer && { reviewedBy: { '@type': 'Person', name: reviewer.split(',')[0].trim() } }),
 		},
 		{ '@type': 'DigitalDocument', name: 'EyeCheck shapes card', url: `https://eyecheck.app${pdf}`, encodingFormat: 'application/pdf' },
 		{
@@ -138,7 +134,6 @@ const schema = {
 				</div>
 				<p class="byline">
 					<span>Last updated <time datetime={updatedIso}>{updatedText}</time></span>
-					{reviewer && <span>Reviewed by {reviewer}</span>}
 				</p>
 			</div>
 		</section>
@@ -229,8 +224,7 @@ const schema = {
 							</p>
 						</div>
 						<p class="links">
-							<a href={`${routes.lazyEye}`} class="more">Lazy eye test →</a>
-							<a href={`${routes.colorBlindKids}`} class="more">Colour blind test for kids →</a>
+							<a href={routes.visualAcuity} class="more">Visual acuity test →</a>
 						</p>
 					</section>
 

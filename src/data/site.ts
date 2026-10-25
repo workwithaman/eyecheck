@@ -1,5 +1,6 @@
 // Values in [brackets] are placeholders carried over from the wireframes: replace them with real data.
 import { liveStats } from './live';
+import { liveTests } from './tests';
 
 export const site = {
 	name: 'EyeCheck',
@@ -27,16 +28,37 @@ export const site = {
 	},
 };
 
+// The build date, for "Last updated" lines on pages without a date of their own.
+const buildIso = new Date().toISOString().slice(0, 10);
+export const buildDate = {
+	iso: buildIso,
+	text: new Date(`${buildIso}T00:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }),
+};
+
+// Andy Teo's practice. TODO CONFIRM WITH ANDY: practice URL; "#" until he sends it.
+export const PRACTICE_URL = '#';
+
+// EyeCheck's creator, shown on the home page and used as the Organization founder in JSON-LD.
+export const creator = {
+	name: 'Andy Teo',
+	title: 'Developmental Optometrist, FCOVD',
+	practice: 'Vision and Perception Practice',
+	// TODO: replace with Andy's photo when he sends it (square, at least 400×400).
+	photo: '/images/andy-teo-placeholder.svg',
+};
+export const founderSchema = {
+	'@type': 'Person',
+	name: creator.name,
+	jobTitle: 'Developmental Optometrist',
+	worksFor: { '@type': 'Organization', name: creator.practice },
+};
+
 // Every internal URL lives here. Components and pages link through `routes`, never a literal path.
 export const routes = {
 	home: '/',
 	start: '/screening/',
+	// Eye test pages other than this one come from src/data/tests.ts, so they can be switched on and off.
 	visualAcuity: '/visual-acuity-test/',
-	astigmatism: '/astigmatism-test/',
-	colorBlind: '/color-blind-test/',
-	colorBlindKids: '/color-blind-test/kids/',
-	readingGlasses: '/reading-glasses-test/',
-	lazyEye: '/lazy-eye-test/',
 	eyeCharts: '/eye-charts/',
 	chartSnellen: '/eye-charts/snellen/',
 	chart10Feet: '/eye-charts/10-feet/',
@@ -60,53 +82,8 @@ export const routes = {
 	testimonial: '/testimonial/',
 };
 
-export const tests = [
-	{
-		title: 'Visual acuity test',
-		href: routes.visualAcuity,
-		img: '/images/test-visual-acuity.svg',
-		menu: 'How sharp your vision is',
-		desc: 'See how clearly you can make out detail, with a score for each eye.',
-	},
-	{
-		title: 'Astigmatism test',
-		href: routes.astigmatism,
-		img: '/images/test-astigmatism.svg',
-		menu: '1-minute dial test',
-		desc: 'A 1-minute dial test that looks for uneven focus.',
-	},
-	{
-		title: 'Color blind test',
-		href: routes.colorBlind,
-		img: '/images/test-color-blind.svg',
-		menu: 'Red-green and blue-yellow',
-		desc: 'Ishihara-style plates that check red-green and blue-yellow vision.',
-	},
-	{
-		title: 'Color blind test for kids',
-		href: routes.colorBlindKids,
-		img: '/images/test-color-blind-kids.svg',
-		menu: 'Shapes, from age 3',
-		desc: 'Shapes instead of numbers, so children can take part from age 3.',
-		kids: true,
-		badge: 'Ages 3+',
-	},
-	{
-		title: 'Reading glasses test',
-		href: routes.readingGlasses,
-		img: '/images/test-reading-glasses.svg',
-		menu: 'Find a starting strength',
-		desc: 'Find a starting strength for reading glasses.',
-	},
-	{
-		title: 'Lazy eye test',
-		href: routes.lazyEye,
-		img: '/images/test-lazy-eye.svg',
-		menu: 'Signs to check in children',
-		desc: 'Signs of lazy eye to look for in children.',
-		kids: true,
-	},
-];
+// Only the live eye tests (src/data/tests.ts holds the switch). Header menus, the footer and the home grid use this.
+export const tests = liveTests;
 
 export const charts = [
 	{ title: 'Snellen chart', href: routes.chartSnellen, img: '/images/test-visual-acuity.svg', menu: 'Letters, for 20 ft' },

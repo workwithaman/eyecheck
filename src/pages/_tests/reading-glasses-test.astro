@@ -1,6 +1,7 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { routes } from '../data/site';
+import Layout from '../../layouts/Layout.astro';
+import { routes, buildDate } from '../../data/site';
+import { testHref } from '../../data/tests';
 ---
 
 <Layout title={"Reading Glasses Test: Find Your Strength Online | EyeCheck.app"} active="tests">
@@ -9,7 +10,7 @@ import { routes } from '../data/site';
 	<section class="wrap narrow" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:14px">
 	  <h1>Reading Glasses Test: What Strength Do You Need?</h1>
 	  <p class="muted">[Answer-first intro: a near-vision check at reading distance that suggests a starting strength for over-the-counter readers (+1.00 to +3.00), about 2 minutes.]</p>
-	  <span class="note">[Avatar] Medically reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	  <span class="note">Last updated <time datetime={buildDate.iso}>{buildDate.text}</time></span>
 	</section>
 	
 	<section class="wrap narrow" style="padding-bottom:40px">
@@ -30,7 +31,7 @@ import { routes } from '../data/site';
 	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:16px">
 	  <span class="eyebrow">Video overview</span>
 	  <h2>Video: how to find your reading glasses strength</h2>
-	  <p class="muted">[60–90 sec: holding the device at reading distance, choosing the smallest clear line, what the suggested strength means. Reviewed by [NAME], OD.]</p>
+	  <p class="muted">[60–90 sec: holding the device at reading distance, choosing the smallest clear line, what the suggested strength means.]</p>
 	  <div class="ph" style="aspect-ratio:16/9;width:100%;border-radius:12px;flex-direction:column;gap:12px">
 	    <span style="width:76px;height:76px;border-radius:38px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></span>
 	    <span>[Poster frame · 1:00]</span>
@@ -44,7 +45,7 @@ import { routes } from '../data/site';
 	    <tr><th>Age</th><th>Typical starting strength</th></tr>
 	    <tr><td>40–44</td><td>[+X.XX]</td></tr><tr><td>45–49</td><td>[+X.XX]</td></tr><tr><td>50–59</td><td>[+X.XX]</td></tr><tr><td>60+</td><td>[+X.XX]</td></tr>
 	  </table></div>
-	  <span class="note">Values from a cited clinical source, reviewed by the optometrist.</span>
+	  <span class="note">Values from a cited clinical source.</span>
 	</div></section>
 	
 	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:28px">
@@ -65,7 +66,7 @@ import { routes } from '../data/site';
 	  <h2>Related tests</h2>
 	  <div class="grid3">
 	    <a href={routes.visualAcuity} class="card" style="text-decoration:none"><h3>Visual acuity test</h3><span class="note">→ /visual-acuity-test</span></a>
-	    <a href={routes.astigmatism} class="card" style="text-decoration:none"><h3>Astigmatism test</h3><span class="note">→ /astigmatism-test</span></a>
+	    <a href={testHref('astigmatism-test')} class="card" style="text-decoration:none"><h3>Astigmatism test</h3><span class="note">→ /astigmatism-test</span></a>
 	    <a href={routes.blog + 'how-often-eye-exam/'} class="card" style="text-decoration:none"><h3>How often to get an eye exam</h3><span class="note">→ /blog/how-often-eye-exam</span></a>
 	  </div>
 	</div></section>

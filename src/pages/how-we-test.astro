@@ -1,33 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { routes, site } from '../data/site';
+import { routes } from '../data/site';
 
 // TODO CONFIRM WITH ANDY: every value in this object. Empty values hide the element or section they feed.
 const confirm = {
 	// Date shown as "Last updated" and used as lastReviewed, as YYYY-MM-DD. Empty = the build date.
 	updated: '',
-	// TODO CONFIRM which tests are live at launch. Only "live" rows describe their method.
-	testStatus: {
-		astigmatism: 'coming-soon',
-		colour: 'coming-soon',
-		near: 'coming-soon',
-	} as Record<string, 'live' | 'coming-soon'>,
 	// TODO CONFIRM the $2 detailed report is live. false hides the line about per-eye scores.
 	detailedReportLive: false,
 	// TODO CONFIRM thresholds with Andy/reviewer. Never invent numbers; the table renders only when filled.
 	thresholds: [] as { age: string; pass: string }[],
 	// TODO CONFIRM validation evidence. Renders only when every field is filled.
 	validation: { study: '', sampleSize: '', result: '', url: '' },
-	// TODO CONFIRM reviewer credentials and how often content is reviewed. The section renders only when set.
-	review: { credentials: '', frequency: '' },
 };
 
-// A value still in [brackets] is a placeholder, so it counts as unset.
-const known = (value: string) => (value && !value.includes('[') ? value : '');
-const reviewer = known(site.reviewer);
-// "[NAME], OD" style constants carry the credential after the comma; the name alone goes in the clinical review line.
-const reviewerName = reviewer.split(',')[0].trim();
-const showReview = Boolean(reviewer && confirm.review.credentials && confirm.review.frequency);
 const v = confirm.validation;
 const showValidation = Boolean(v.study && v.sampleSize && v.result && v.url);
 
@@ -43,9 +29,7 @@ const tests = [
 		method: 'Picture shapes for ages 3–7; Landolt C rings (a ring with a gap in one of four directions) for ages 8 and up, viewed from 3 m.',
 		limits: 'Doesn’t check eye pressure, eye health or the need for a specific prescription.',
 	},
-	{ name: 'Astigmatism', href: `${routes.astigmatism}`, status: confirm.testStatus.astigmatism },
-	{ name: 'Colour vision', href: `${routes.colorBlind}`, status: confirm.testStatus.colour },
-	{ name: 'Near vision', href: `${routes.readingGlasses}`, status: confirm.testStatus.near },
+	// Add a row here when another test goes live in src/data/tests.ts.
 ];
 
 const calibration = [
@@ -68,7 +52,6 @@ const sections = [
 	{ id: 'scoring-and-referral', label: 'Scoring and referral' },
 	{ id: 'accuracy-and-limits', label: 'Accuracy and limits' },
 	{ id: 'technology', label: 'Technology' },
-	{ id: 'clinical-review', label: 'Clinical review', hidden: !showReview },
 	{ id: 'your-data', label: 'Your data' },
 	{ id: 'sources', label: 'Sources', hidden: sources.length === 0 },
 ].filter((s) => !s.hidden);
@@ -88,7 +71,6 @@ const schema = {
 			lastReviewed: updatedIso,
 			about: { '@type': 'MedicalTest', name: 'Visual acuity screening' },
 			publisher: { '@id': 'https://eyecheck.app/#organization' },
-			...(reviewer && { reviewedBy: { '@type': 'Person', name: reviewerName } }),
 		},
 		{
 			'@type': 'BreadcrumbList',
@@ -113,7 +95,6 @@ const schema = {
 			</p>
 			<p class="byline">
 				<span>Last updated <time datetime={updatedIso}>{updatedText}</time></span>
-				{reviewer && <span>Reviewed by {reviewer}</span>}
 			</p>
 			<div class="is-isnt">
 				<div class="card">
@@ -257,7 +238,7 @@ const schema = {
 							</p>
 						)
 					}
-					{!showReview && <p><a href={`${routes.medicalReview}`} class="more">Meet our medical reviewer →</a></p>}
+					<p><a href={`${routes.medicalReview}`} class="more">Meet our medical reviewer →</a></p>
 				</section>
 
 				<section aria-labelledby="technology">
@@ -276,19 +257,6 @@ const schema = {
 						<a href={`${routes.start}`} class="btn solid">Start a free eye test</a>
 					</p>
 				</section>
-
-				{
-					showReview && (
-						<section aria-labelledby="clinical-review">
-							<h2 id="clinical-review">Clinical review</h2>
-							<p>
-								Our tests and health content are reviewed by {reviewerName}, {confirm.review.credentials}. Content is reviewed {confirm.review.frequency}{' '}
-								and whenever a test changes.
-							</p>
-							<p><a href={`${routes.medicalReview}`} class="more">Meet our medical reviewer →</a></p>
-						</section>
-					)
-				}
 
 				<section aria-labelledby="your-data">
 					<h2 id="your-data">Your data</h2>

@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { routes } from '../../data/site';
+import { routes, buildDate } from '../../data/site';
 ---
 
 <Layout title={"Tumbling E Eye Chart (Free Printable PDF) | EyeCheck.app"} active="charts">
@@ -16,7 +16,7 @@ import { routes } from '../../data/site';
 	      <div style="display:flex;flex-wrap:wrap;gap:10px"><a href="#" class="btn solid">10 ft · Letter</a><a href="#" class="btn solid">10 ft · A4</a><a href="#" class="btn">20 ft version</a></div>
 	      <span class="note">Print at 100% · [file size]</span>
 	    </div>
-	    <span class="note">[Avatar] Reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	    <span class="note">Last updated <time datetime={buildDate.iso}>{buildDate.text}</time></span>
 	  </div>
 	</section>
 	

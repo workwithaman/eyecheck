@@ -3,8 +3,6 @@ import { site, routes, footerColumns, legalLinks } from '../data/site';
 import { socialLinks } from '../data/social';
 
 const year = new Date().getFullYear();
-// A reviewer still in [brackets] is a placeholder, so the "Medically reviewed" badge is hidden.
-const reviewer = site.reviewer.includes('[') ? '' : site.reviewer;
 // Internal page links get a trailing slash, so they don't take an extra redirect hop. Anchors and mailto links are left alone.
 const slash = (href: string) => (href.startsWith('/') && !href.includes('#') && !href.endsWith('/') ? `${href}/` : href);
 // Shown only once an accessibility statement page exists. TODO: optional short accessibility statement page.
@@ -43,22 +41,6 @@ const hasConsentBanner = false;
 					<img src="/images/logo-white.svg" alt="EyeCheck" width="1103" height="160" loading="lazy" />
 				</a>
 				<span>Free vision screening anyone can use, so eye problems are caught early.</span>
-				{
-					reviewer && (
-						<a href={slash(routes.medicalReview)} class="reviewed">
-							<span class="avatar" />
-							<span class="who">
-								<b>
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.8" aria-hidden="true">
-										<path d="M5 12l5 5 9-10" />
-									</svg>
-									Medically reviewed
-								</b>
-								<span>by {reviewer}</span>
-							</span>
-						</a>
-					)
-				}
 				{/* Only profiles with a URL in site.social are shown, so no icon links to "#". */}
 				{
 					socialLinks.some((s) => s.href) && (

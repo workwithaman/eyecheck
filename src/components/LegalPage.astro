@@ -150,6 +150,10 @@ const schema = {
 		/* Added to the site-wide 88px scroll padding, so a section link lands just below the sticky header. */
 		scroll-margin-top: 16px;
 	}
+	/* Extra anchors in the Markdown (e.g. <div id="disclaimer">) land just below the sticky header, like the headings. */
+	.legal-body :global(div[id]) {
+		scroll-margin-top: 16px;
+	}
 	.legal-body :global(h2:first-child) {
 		margin-top: 0;
 	}

@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import ApiForm from '../components/ApiForm.astro';
-import { routes, site } from '../data/site';
+import { routes, site, founderSchema } from '../data/site';
 import { socialProfiles } from '../data/social';
 import storyImage from '../assets/our-story.webp';
 import potentialDynamicsLogo from '../assets/potential-dynamics.png';
@@ -73,7 +73,7 @@ const schema = {
 				postalCode: '238852',
 				addressCountry: 'SG',
 			},
-			founder: { '@type': 'Person', name: founderName },
+			founder: founderSchema,
 			...(socialProfiles.length > 0 && { sameAs: socialProfiles }),
 		},
 	],

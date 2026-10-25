@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { routes } from '../../data/site';
+import { routes, buildDate } from '../../data/site';
 ---
 
 <Layout title={"Free Printable Eye Charts (PDF) | EyeCheck.app"} active="charts">
@@ -10,7 +10,7 @@ import { routes } from '../../data/site';
 	  <div style="flex:1 1 460px;display:flex;flex-direction:column;gap:14px">
 	    <h1>Free Printable Eye Charts (PDF)</h1>
 	    <p class="muted">[Answer-first intro: print out an eye chart for home, school or clinic use. Each chart is sized for accurate printing on Letter and A4, with instructions.]</p>
-	    <span class="note">[Avatar] Reviewed by [NAME], OD · Last reviewed [DATE]</span>
+	    <span class="note">Last updated <time datetime={buildDate.iso}>{buildDate.text}</time></span>
 	  </div>
 	  <div class="ph" style="flex:1 1 340px;height:240px">[Fanned chart thumbnails]</div>
 	</section>

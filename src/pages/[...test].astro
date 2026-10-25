@@ -1,0 +1,29 @@
+---
+// Builds a page only for each live eye test in src/data/tests.ts. A test that's switched off gets no page at all.
+// Page code is in src/pages/_tests/ (Astro doesn't route _ folders); add new tests to `pages` below.
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import { allTests } from '../data/tests';
+import VisualAcuity from './_tests/visual-acuity-test.astro';
+import Astigmatism from './_tests/astigmatism-test.astro';
+import ColorBlind from './_tests/color-blind-test.astro';
+import ColorBlindKids from './_tests/color-blind-test-kids.astro';
+import ReadingGlasses from './_tests/reading-glasses-test.astro';
+import LazyEye from './_tests/lazy-eye-test.astro';
+
+const pages: Record<string, AstroComponentFactory> = {
+	'visual-acuity-test': VisualAcuity,
+	'astigmatism-test': Astigmatism,
+	'color-blind-test': ColorBlind,
+	'color-blind-test/kids': ColorBlindKids,
+	'reading-glasses-test': ReadingGlasses,
+	'lazy-eye-test': LazyEye,
+};
+
+export function getStaticPaths() {
+	return allTests.filter((t) => t.live).map((t) => ({ params: { test: t.slug } }));
+}
+
+const Page = pages[Astro.params.test as string];
+---
+
+<Page />
