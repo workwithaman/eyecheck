@@ -1,43 +1,482 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { routes } from '../data/site';
+import { routes, site } from '../data/site';
+
+// TODO CONFIRM WITH ANDY: every value in this object. Empty values hide the element or section they feed.
+const confirm = {
+	// Date shown as "Last updated" and used as lastReviewed, as YYYY-MM-DD. Empty = the build date.
+	updated: '',
+	// TODO CONFIRM which tests are live at launch. Only "live" rows describe their method.
+	testStatus: {
+		astigmatism: 'coming-soon',
+		colour: 'coming-soon',
+		near: 'coming-soon',
+	} as Record<string, 'live' | 'coming-soon'>,
+	// TODO CONFIRM the $2 detailed report is live. false hides the line about per-eye scores.
+	detailedReportLive: false,
+	// TODO CONFIRM thresholds with Andy/reviewer. Never invent numbers; the table renders only when filled.
+	thresholds: [] as { age: string; pass: string }[],
+	// TODO CONFIRM validation evidence. Renders only when every field is filled.
+	validation: { study: '', sampleSize: '', result: '', url: '' },
+	// TODO CONFIRM reviewer credentials and how often content is reviewed. The section renders only when set.
+	review: { credentials: '', frequency: '' },
+};
+
+// A value still in [brackets] is a placeholder, so it counts as unset.
+const known = (value: string) => (value && !value.includes('[') ? value : '');
+const reviewer = known(site.reviewer);
+// "[NAME], OD" style constants carry the credential after the comma; the name alone goes in the clinical review line.
+const reviewerName = reviewer.split(',')[0].trim();
+const showReview = Boolean(reviewer && confirm.review.credentials && confirm.review.frequency);
+const v = confirm.validation;
+const showValidation = Boolean(v.study && v.sampleSize && v.result && v.url);
+
+const updatedIso = confirm.updated || new Date().toISOString().slice(0, 10);
+const updatedText = new Date(`${updatedIso}T00:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+const tests = [
+	{
+		name: 'Visual acuity',
+		href: `${routes.visualAcuity}/`,
+		status: 'live',
+		measures: 'How clearly each eye sees detail at a distance.',
+		method: 'Picture shapes for ages 3–7; Landolt C rings (a ring with a gap in one of four directions) for ages 8 and up, viewed from 3 m.',
+		limits: 'Doesn’t check eye pressure, eye health or the need for a specific prescription.',
+	},
+	{ name: 'Astigmatism', href: `${routes.astigmatism}/`, status: confirm.testStatus.astigmatism },
+	{ name: 'Colour vision', href: `${routes.colorBlind}/`, status: confirm.testStatus.colour },
+	{ name: 'Near vision', href: `${routes.readingGlasses}/`, status: confirm.testStatus.near },
+];
+
+const calibration = [
+	{ lead: 'A screen of at least 33 cm (13″)', text: 'Symbols are drawn at precise sizes; smaller screens can’t show the smallest lines accurately.' },
+	{ lead: 'Sit 3 m (10 ft) away', text: 'Symbols are sized for this distance. Sitting closer makes the test easier and the result less accurate.' },
+	{ lead: 'A wireless mouse', text: 'So you can answer without moving closer to the screen.' },
+	{ lead: 'Good, even lighting', text: 'Glare or dim light can change your result.' },
+	{ lead: 'One eye at a time', text: 'Each eye is screened separately so a problem in one eye isn’t hidden by the other.' },
+];
+
+// Only sources cited in the page text are listed. Add AAO/AOA guidelines only when the exact documents are supplied (TODO CONFIRM).
+const sources = [
+	{ id: 'holden-2016', text: 'Holden BA et al. Global prevalence of myopia and high myopia and temporal trends from 2000 through 2050. Ophthalmology, 2016.' },
+];
+const cite = (id: string) => sources.findIndex((s) => s.id === id) + 1;
+
+const sections = [
+	{ id: 'what-each-test-measures', label: 'What each test measures' },
+	{ id: 'screen-calibration', label: 'Screen calibration' },
+	{ id: 'scoring-and-referral', label: 'Scoring and referral' },
+	{ id: 'accuracy-and-limits', label: 'Accuracy and limits' },
+	{ id: 'technology', label: 'Technology' },
+	{ id: 'clinical-review', label: 'Clinical review', hidden: !showReview },
+	{ id: 'your-data', label: 'Your data' },
+	{ id: 'sources', label: 'Sources', hidden: sources.length === 0 },
+].filter((s) => !s.hidden);
+
+const title = 'How We Test: EyeCheck Methodology & Accuracy | EyeCheck.app';
+const description =
+	'How EyeCheck.app’s online eye test works: the methods behind each test, screen and distance calibration, Pass or Refer scoring, accuracy limits and data handling.';
+const pageUrl = 'https://eyecheck.app/how-we-test/';
+const schema = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'MedicalWebPage',
+			name: 'How EyeCheck Tests Your Vision',
+			url: pageUrl,
+			description,
+			lastReviewed: updatedIso,
+			about: { '@type': 'MedicalTest', name: 'Visual acuity screening' },
+			publisher: { '@id': 'https://eyecheck.app/#organization' },
+			...(reviewer && { reviewedBy: { '@type': 'Person', name: reviewerName } }),
+		},
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://eyecheck.app/' },
+				{ '@type': 'ListItem', position: 2, name: 'How we test', item: pageUrl },
+			],
+		},
+	],
+};
 ---
 
-<Layout title={"How We Test: EyeCheck Methodology & Accuracy"} active="about">
+<Layout title={title} description={description} active="about">
+	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 	<div class="inner">
-	<div class="wrap crumb">Home › How we test</div>
-	<section class="wrap" style="padding-top:20px;padding-bottom:32px;display:flex;flex-direction:column;gap:14px;max-width:860px;margin-left:auto;margin-right:auto">
-	  <h1>How EyeCheck Tests Your Vision</h1>
-	  <p class="muted">[Intro: what our tests are built on, who reviews them, and what an online screening can and cannot tell you.]</p>
-	  <span class="note">Reviewed by [NAME], OD · Last updated [DATE]</span>
-	  <div style="display:flex;flex-wrap:wrap;gap:16px">
-	    <div class="card" style="flex:1 1 300px"><h3>What EyeCheck is</h3><p class="muted">[A screening tool that flags possible problems]</p></div>
-	    <div class="card" style="flex:1 1 300px"><h3>What EyeCheck is not</h3><p class="muted">[Not a diagnosis, prescription or full eye exam]</p></div>
-	  </div>
-	</section>
-	
-	<section class="wrap" style="display:flex;flex-wrap:wrap;gap:40px;padding-bottom:48px">
-	  <nav class="toc" aria-label="On this page" style="flex:0 1 220px;border-top:2px solid var(--ink);padding-top:10px">
-	    <span class="eyebrow">On this page</span>
-	    <a href="#">What each test measures</a><a href="#">Screen calibration</a><a href="#">Scoring and referral</a><a href="#">Accuracy and limits</a><a href="#">Clinical review</a><a href="#">Your data</a><a href="#">Sources</a>
-	  </nav>
-	  <div style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:28px">
-	    <div class="block"><h2>What each test measures</h2>
-	      <div style="overflow-x:auto"><table>
-	        <tr><th>Test</th><th>Measures</th><th>Method</th><th>Limits</th></tr>
-	        <tr><td>Visual acuity</td><td>[Detail vision]</td><td>[Landolt C / shapes]</td><td>[ ]</td></tr>
-	        <tr><td>Astigmatism</td><td>[ ]</td><td>[Dial + duochrome]</td><td>[ ]</td></tr>
-	        <tr><td>Color vision</td><td>[ ]</td><td>[Pseudo-isochromatic plates]</td><td>[ ]</td></tr>
-	        <tr><td>Near vision</td><td>[ ]</td><td>[Reading card]</td><td>[ ]</td></tr>
-	      </table></div>
-	    </div>
-	    <div class="block"><h2>How we calibrate your screen and distance</h2><p class="muted">[Screen-size check, distance guidance, why it matters]</p><div class="ph" style="height:140px">[Diagram]</div></div>
-	    <div class="block"><h2>Scoring and when we recommend an eye exam</h2><p class="muted">[Thresholds by age group, written with the reviewer]</p></div>
-	    <div class="block"><h2>Accuracy and limitations</h2><p class="muted">[Validation evidence if any: [STUDY / INTERNAL DATA]. Known limits: lighting, screen, cooperation of young children]</p></div>
-	    <div class="block"><h2>Our clinical review process</h2><p class="muted">[Who reviews, how often, editorial policy]</p><a href={routes.medicalReview}>Meet our medical reviewer →</a></div>
-	    <div class="block"><h2>What happens to your data</h2><p class="muted">[Session deleted after 7 days unless you opt into reminders; link to privacy policy]</p></div>
-	    <div class="block" style="border-bottom:0"><h2>Sources</h2><p class="muted">[Numbered citations: AAO, AOA, peer-reviewed papers]</p></div>
-	  </div>
-	</section>
+		<nav aria-label="Breadcrumb" class="wrap crumb"><a href={routes.home}>Home</a> › <span>How we test</span></nav>
+		<header class="wrap head">
+			<h1>How EyeCheck Tests Your Vision</h1>
+			<p class="summary">
+				EyeCheck.app screens your vision in the browser using standardised, clinically based eye chart methods. This page explains what each test
+				measures, how we score results, what an online screening can and can’t tell you, and how we handle your data.
+			</p>
+			<p class="byline">
+				<span>Last updated <time datetime={updatedIso}>{updatedText}</time></span>
+				{reviewer && <span>Reviewed by {reviewer}</span>}
+			</p>
+			<div class="is-isnt">
+				<div class="card">
+					<h3>What EyeCheck is</h3>
+					<p class="muted">A digital screening tool, based on clinically validated methods, that flags possible vision problems so you know when to see an eye doctor.</p>
+				</div>
+				<div class="card">
+					<h3>What EyeCheck is not</h3>
+					<p class="muted">Not a diagnosis, prescription or full eye exam. Results are a guideline only and can’t be guaranteed to be 100% accurate.</p>
+				</div>
+			</div>
+		</header>
+
+		<div class="wrap layout">
+			<nav class="toc" aria-label="On this page">
+				<span class="eyebrow">On this page</span>
+				{sections.map((s) => <a href={`#${s.id}`}>{s.label}</a>)}
+			</nav>
+
+			<div class="prose">
+				<section aria-labelledby="what-each-test-measures">
+					<h2 id="what-each-test-measures">What each test measures</h2>
+					<p>
+						Visual acuity screening picks up common problems such as myopia (short-sightedness), which is projected to affect around half the world’s
+						population by 2050.<sup><a href="#source-1" aria-label={`Source ${cite('holden-2016')}`}>{cite('holden-2016')}</a></sup>
+					</p>
+					<div class="table-scroll" role="region" aria-label="What each test measures" tabindex="0">
+						<table>
+							<thead>
+								<tr>
+									<th scope="col">Test</th>
+									<th scope="col">What it measures</th>
+									<th scope="col">Method</th>
+									<th scope="col">Limits</th>
+								</tr>
+							</thead>
+							<tbody>
+								{
+									tests.map((t) =>
+										t.status === 'live' && t.measures ? (
+											<tr>
+												<th scope="row"><a href={t.href}>{t.name}</a></th>
+												<td>{t.measures}</td>
+												<td>{t.method}</td>
+												<td>{t.limits}</td>
+											</tr>
+										) : (
+											<tr>
+												<th scope="row"><a href={t.href}>{t.name}</a></th>
+												<td colspan="3"><span class="badge">Coming soon</span></td>
+											</tr>
+										),
+									)
+								}
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<section aria-labelledby="screen-calibration">
+					<h2 id="screen-calibration">How we calibrate your screen and distance</h2>
+					<p>The test only works if each symbol appears at the right size from where you sit. Before you start, we ask for:</p>
+					<ul class="leads">
+						{calibration.map((c) => <li><strong>{c.lead}.</strong> {c.text}</li>)}
+					</ul>
+					<figure class="diagram">
+						<svg viewBox="0 0 560 210" role="img" aria-label="Sit 3 metres from a screen at least 33 cm wide and cover one eye">
+							<g fill="none" stroke="#2463EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+								<!-- Screen and stand -->
+								<rect x="24" y="30" width="150" height="100" rx="8" />
+								<path d="M99 130v22M70 156h58" />
+								<!-- Landolt C rows on the screen -->
+								<circle cx="99" cy="62" r="13" stroke-dasharray="70 12" />
+								<circle cx="76" cy="102" r="7" stroke-dasharray="36 8" />
+								<circle cx="99" cy="102" r="7" stroke-dasharray="36 8" transform="rotate(90 99 102)" />
+								<circle cx="122" cy="102" r="7" stroke-dasharray="36 8" transform="rotate(180 122 102)" />
+								<!-- Person: head, body, arm raised to cover one eye -->
+								<circle cx="470" cy="62" r="20" />
+								<path d="M470 82v62M470 144l-18 44M470 144l18 44M470 100l26 18M470 100l-20 -14l-6 -24" />
+								<path d="M440 58h12" stroke-width="5" />
+								<!-- Dimension arrow -->
+								<path d="M190 128h248" />
+								<path d="M200 120l-10 8l10 8M428 120l10 8l-10 8" />
+							</g>
+							<g fill="#101828" font-family="inherit" font-size="15" text-anchor="middle">
+								<text x="314" y="114" font-weight="600" font-size="17">3 m (10 ft)</text>
+								<text x="99" y="182">Screen 33 cm (13″) or larger</text>
+								<text x="470" y="206">Cover one eye</text>
+							</g>
+						</svg>
+					</figure>
+				</section>
+
+				<section aria-labelledby="scoring-and-referral">
+					<h2 id="scoring-and-referral">Scoring and referral</h2>
+					<p>Each eye gets one of two results:</p>
+					<ul class="leads">
+						<li><strong>Pass.</strong> Your vision is within the normal range for your age.</li>
+						<li><strong>Refer.</strong> You may benefit from a more comprehensive eye exam by an eye care professional.</li>
+					</ul>
+					{confirm.detailedReportLive && <p>The paid detailed report adds the score for each eye (for example 6/6, or 20/20 in feet).</p>}
+					{
+						confirm.thresholds.length > 0 && (
+							<div class="table-scroll" role="region" aria-label="Pass thresholds by age" tabindex="0">
+								<table>
+									<thead>
+										<tr>
+											<th scope="col">Age</th>
+											<th scope="col">Pass if each eye reads at least</th>
+										</tr>
+									</thead>
+									<tbody>
+										{confirm.thresholds.map((r) => (
+											<tr>
+												<td>{r.age}</td>
+												<td>{r.pass}</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						)
+					}
+				</section>
+
+				<section aria-labelledby="accuracy-and-limits">
+					<h2 id="accuracy-and-limits">Accuracy and limits</h2>
+					<p>EyeCheck.app is based on clinically validated screening methods. Like any screening, it can miss problems or flag ones that aren’t there.</p>
+					<p>Things that affect accuracy:</p>
+					<ul>
+						<li>Screen size and brightness</li>
+						<li>Viewing distance</li>
+						<li>Lighting and glare</li>
+						<li>How well a young child understands and cooperates</li>
+						<li>Wearing (or not wearing) your usual glasses</li>
+					</ul>
+					{
+						showValidation && (
+							<p>
+								In <a href={v.url}>{v.study}</a>, with {v.sampleSize} participants, {v.result}
+							</p>
+						)
+					}
+					{!showReview && <p><a href={`${routes.medicalReview}/`} class="more">Meet our medical reviewer →</a></p>}
+				</section>
+
+				<section aria-labelledby="technology">
+					<h2 id="technology">The technology behind EyeCheck</h2>
+					<p>
+						EyeCheck.app runs entirely in your web browser. There’s nothing to install, and the test draws each symbol at a precise size for your screen
+						and distance, using the same principles as a printed eye chart.
+					</p>
+					<p>
+						Because it only needs a computer and an internet connection, schools, clinics and charities can screen many people quickly, including
+						communities that don’t have easy access to an eye doctor.
+					</p>
+					<p class="links">
+						<a href={`${routes.schools}/`} class="more">Screening for schools →</a>
+						<a href={`${routes.charities}/`} class="more">Charity support →</a>
+						<a href={`${routes.start}/`} class="btn solid">Start a free eye test</a>
+					</p>
+				</section>
+
+				{
+					showReview && (
+						<section aria-labelledby="clinical-review">
+							<h2 id="clinical-review">Clinical review</h2>
+							<p>
+								Our tests and health content are reviewed by {reviewerName}, {confirm.review.credentials}. Content is reviewed {confirm.review.frequency}{' '}
+								and whenever a test changes.
+							</p>
+							<p><a href={`${routes.medicalReview}/`} class="more">Meet our medical reviewer →</a></p>
+						</section>
+					)
+				}
+
+				<section aria-labelledby="your-data">
+					<h2 id="your-data">Your data</h2>
+					<p>
+						Personal information is kept for a maximum of 7 days to deliver your results. Your email is kept longer only if you opt in to reminders.
+						You can delete your data at any time from your results page or by emailing <a href="mailto:support@eyecheck.app">support@eyecheck.app</a>.
+						Read our <a href={`${routes.privacy}/`}>privacy policy</a>.
+					</p>
+				</section>
+
+				{
+					sources.length > 0 && (
+						<section aria-labelledby="sources">
+							<h2 id="sources">Sources</h2>
+							<ol class="sources">
+								{sources.map((s, i) => <li id={`source-${i + 1}`}>{s.text}</li>)}
+							</ol>
+						</section>
+					)
+				}
+			</div>
+		</div>
 	</div>
 </Layout>
+
+<style>
+	.crumb a {
+		color: var(--muted);
+		text-decoration: none;
+	}
+	.crumb span {
+		color: var(--ink);
+	}
+	.head {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		max-width: 860px;
+		padding-top: 20px;
+		padding-bottom: 32px;
+	}
+	.summary {
+		color: var(--ink);
+		font-size: 18px;
+		line-height: 28px;
+	}
+	.byline {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px 18px;
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.byline span + span::before {
+		content: '·';
+		margin-right: 18px;
+		margin-left: -12px;
+	}
+	.is-isnt {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px;
+		margin-top: 6px;
+	}
+	.is-isnt .card {
+		flex: 1 1 300px;
+	}
+	.layout {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 40px;
+		padding-bottom: 64px;
+	}
+	.toc {
+		flex: 0 1 220px;
+		align-self: flex-start;
+		padding-top: 10px;
+		border-top: 2px solid var(--ink);
+	}
+	@media (min-width: 821px) {
+		.toc {
+			position: sticky;
+			top: 96px;
+		}
+	}
+	.prose {
+		flex: 999 1 560px;
+		min-width: 0;
+		max-width: 760px;
+		display: flex;
+		flex-direction: column;
+		gap: 40px;
+		color: var(--slate);
+		font-size: 17px;
+		line-height: 28px;
+	}
+	.prose section {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+	.prose h2 {
+		font-size: 26px;
+		line-height: 32px;
+		/* Added to the site-wide 88px scroll padding, so an "On this page" link lands just below the sticky header. */
+		scroll-margin-top: 16px;
+	}
+	.prose ul,
+	.prose ol {
+		margin: 0;
+		padding-left: 22px;
+	}
+	.prose li + li {
+		margin-top: 6px;
+	}
+	.prose strong {
+		color: var(--ink);
+	}
+	.leads {
+		list-style: none;
+		padding-left: 0 !important;
+	}
+	.table-scroll {
+		overflow-x: auto;
+		border: 1px solid var(--line);
+		border-radius: 12px;
+	}
+	.table-scroll:focus-visible {
+		outline: 3px solid var(--blue);
+		outline-offset: 2px;
+	}
+	.table-scroll table {
+		min-width: 640px;
+		font-size: 15px;
+		line-height: 23px;
+	}
+	/* The box supplies the outer border. */
+	.table-scroll :is(th, td) {
+		border-top: 0;
+		border-left: 0;
+	}
+	.table-scroll tr > :last-child {
+		border-right: 0;
+	}
+	.table-scroll tbody tr:last-child > * {
+		border-bottom: 0;
+	}
+	.table-scroll tbody th {
+		background: transparent;
+		font-weight: 600;
+		white-space: nowrap;
+	}
+	.badge {
+		display: inline-block;
+		padding: 2px 10px;
+		border-radius: 999px;
+		background: var(--lens);
+		color: var(--ink);
+		font-size: 13px;
+		font-weight: 600;
+	}
+	.diagram {
+		margin: 8px 0 0;
+		padding: 20px;
+		border-radius: 16px;
+		background: var(--surface-2);
+	}
+	.diagram svg {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 12px 24px;
+	}
+	sup a {
+		text-decoration: none;
+		font-weight: 600;
+	}
+	.sources {
+		font-size: 15px;
+		line-height: 23px;
+	}
+	.sources li {
+		scroll-margin-top: 16px;
+	}
+</style>
