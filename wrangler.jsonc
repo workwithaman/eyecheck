@@ -1,0 +1,12 @@
+// Deploys the static build (./dist) as Workers static assets. No adapter and no "main": the site is built by Node
+// (npm run build), so build-time fetches to Sanity and the backend work. Keep "name" as the existing Worker.
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "eyecheck",
+	"compatibility_date": "2026-10-01",
+	"assets": {
+		"directory": "./dist",
+		"not_found_handling": "404-page",
+		"html_handling": "auto-trailing-slash"
+	}
+}
