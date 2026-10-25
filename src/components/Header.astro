@@ -6,6 +6,9 @@ interface Props {
 }
 
 const { active = '' } = Astro.props;
+// Marks the Donate buttons as the current page on /donation/.
+const onDonation = Astro.url.pathname === routes.donation;
+const heart = 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z';
 ---
 
 <div class="trust">
@@ -128,13 +131,26 @@ const { active = '' } = Astro.props;
 			<a href={routes.blog} class:list={['link', { current: active === 'blog' }]}>Blog</a>
 			<a href={routes.about} class:list={['link', { current: active === 'about' }]}>About</a>
 
-			<div class="nav-cta"><a href={routes.start} class="btn solid">Start free eye test</a></div>
+			<div class="nav-cta">
+				<a href={routes.start} class="btn solid">Start free eye test</a>
+				<a href={routes.donation} class="donate" data-cta="header-donate" aria-current={onDonation ? 'page' : undefined}>
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={heart} /></svg>
+					Donate
+				</a>
+			</div>
 		</nav>
 
-		<a href={routes.start} class="btn solid cta">
-			<span class="long">Start free eye test</span><span class="short">Start test</span>
-			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-		</a>
+		<div class="ctas">
+			{/* Desktop only; on mobile Donate sits in the open menu, under Start free eye test. */}
+			<a href={routes.donation} class="donate" data-cta="header-donate" aria-current={onDonation ? 'page' : undefined}>
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={heart} /></svg>
+				Donate
+			</a>
+			<a href={routes.start} class="btn solid cta">
+				<span class="long">Start free eye test</span><span class="short">Start test</span>
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+			</a>
+		</div>
 
 		<button type="button" class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav" data-burger>
 			<svg class="i-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
@@ -149,7 +165,7 @@ const { active = '' } = Astro.props;
 		const items = [...header.querySelectorAll<HTMLElement>('[data-menu]')];
 		const burger = header.querySelector<HTMLButtonElement>('[data-burger]');
 		// Hover only drives the menus on the desktop bar with a real pointer.
-		const hoverable = window.matchMedia('(hover: hover) and (min-width: 960px)');
+		const hoverable = window.matchMedia('(hover: hover) and (min-width: 1180px)');
 		let timer: number | undefined;
 
 		const setOpen = (item: HTMLElement, open: boolean) => {
@@ -255,7 +271,8 @@ const { active = '' } = Astro.props;
 		position: relative;
 		display: flex;
 		align-items: center;
-		gap: 40px;
+		/* Gaps and logo size leave room for Donate + Start free eye test without shrinking either button. */
+		gap: 24px;
 		height: 72px;
 	}
 	.logo {
@@ -264,14 +281,14 @@ const { active = '' } = Astro.props;
 	}
 	.logo img {
 		display: block;
-		height: 40px;
+		height: 34px;
 		width: auto;
 	}
 
 	.nav {
 		display: flex;
 		flex: 1;
-		gap: 28px;
+		gap: 18px;
 		height: 100%;
 		font-size: 15px;
 	}
@@ -526,10 +543,42 @@ const { active = '' } = Astro.props;
 		font-size: 13px;
 	}
 
+	.ctas {
+		flex: 0 0 auto;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 10px;
+	}
 	.cta {
 		flex: 0 0 auto;
 		min-height: 46px;
 		padding: 0 22px;
+	}
+	/* Secondary (outline) button, the same height as Start free eye test. */
+	.donate {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		min-height: 46px;
+		padding: 0 20px;
+		border: 1.5px solid var(--lens-line);
+		border-radius: var(--radius-pill);
+		background: var(--surface);
+		color: var(--blue);
+		font-size: 15px;
+		font-weight: 600;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+	.donate:hover {
+		background: var(--lens);
+	}
+	.link:focus-visible,
+	.donate:focus-visible {
+		outline: 2px solid var(--blue);
+		outline-offset: 2px;
 	}
 	.short,
 	.nav-cta,
@@ -537,19 +586,16 @@ const { active = '' } = Astro.props;
 		display: none;
 	}
 
-	@media (max-width: 1159px) {
-		.bar,
-		.nav {
-			gap: 20px;
-		}
+	@media (max-width: 1279px) {
 		/* The wide panel is clamped to the page here, so it no longer lines up with its trigger. */
 		.wide .caret {
 			display: none;
 		}
 	}
 
-	/* Below 960px the nav becomes an accordion; panels turn into plain link lists. */
-	@media (max-width: 959px) {
+	/* Below 1180px the nav becomes an accordion; panels turn into plain link lists. The desktop row (nav, Donate and
+	   Start free eye test) needs about 1150px, so tablets get the compact bar with the menu button. */
+	@media (max-width: 1179px) {
 		.trust-items span:nth-child(n + 2),
 		.trust-links {
 			display: none;
@@ -572,7 +618,8 @@ const { active = '' } = Astro.props;
 			font-size: 14px;
 		}
 		.cta svg,
-		.long {
+		.long,
+		.ctas .donate {
 			display: none;
 		}
 		.short {
@@ -690,10 +737,13 @@ const { active = '' } = Astro.props;
 			font-size: 15px;
 		}
 		.nav-cta {
-			display: block;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
 			padding: 14px 18px;
 		}
-		.nav-cta .btn {
+		.nav-cta .btn,
+		.nav-cta .donate {
 			width: 100%;
 			min-height: 50px;
 		}
