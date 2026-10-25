@@ -9,7 +9,8 @@ export const site = {
 	peopleScreened: liveStats.peopleScreened,
 	peopleReferred: liveStats.peopleReferred,
 	statsNote: 'Data updated October 2025. Based on anonymised screening results.',
-	legalEntity: '[Legal entity, country]',
+	// The company that runs EyeCheck.app, shown in the footer legal line.
+	company: { name: 'Potential Dynamics Pte Ltd', country: 'Singapore', uen: '202516281E', url: 'https://www.potentialdynamics.org' },
 	// The home page video. Details match the YouTube listing; they also feed the VideoObject schema.
 	video: {
 		id: 'fom8Sd_yakE',
@@ -171,6 +172,8 @@ export const footerColumns = [
 			{ title: 'Medical review', href: routes.medicalReview },
 			{ title: 'Blog', href: routes.blog },
 			{ title: 'Help & FAQ', href: routes.help },
+			{ title: 'Contact', href: `${routes.about}/#contact` },
+			{ title: 'support@eyecheck.app', href: 'mailto:support@eyecheck.app' },
 		],
 	},
 ];

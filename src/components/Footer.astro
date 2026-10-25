@@ -3,6 +3,14 @@ import { site, routes, footerColumns, legalLinks } from '../data/site';
 import { socialLinks } from '../data/social';
 
 const year = new Date().getFullYear();
+// A reviewer still in [brackets] is a placeholder, so the "Medically reviewed" badge is hidden.
+const reviewer = site.reviewer.includes('[') ? '' : site.reviewer;
+// Internal page links get a trailing slash, so they don't take an extra redirect hop. Anchors and mailto links are left alone.
+const slash = (href: string) => (href.startsWith('/') && !href.includes('#') && !href.endsWith('/') ? `${href}/` : href);
+// Shown only once an accessibility statement page exists. TODO: optional short accessibility statement page.
+const hasAccessibility = Object.keys(import.meta.glob('../pages/accessibility.astro')).length > 0;
+// TODO: render a "Cookie settings" button that reopens the consent banner once GA4 or AdSense (and the banner) are added.
+const hasConsentBanner = false;
 ---
 
 <footer>
@@ -15,13 +23,15 @@ const year = new Date().getFullYear();
 					<span>One email in 12 months. Nothing else. Unsubscribe any time.</span>
 				</div>
 			</div>
-			<!-- TODO: point this form at the reminder signup endpoint -->
-			<form>
+			{/* Sends {"email": "..."} as JSON to POST /reminder/subscribe, the same payload the old site's results page used. */}
+			<form novalidate data-endpoint="/reminder/subscribe" data-success="Thanks! We’ll remind you in 12 months.">
 				<label for="reminder-email">
 					Email address
-					<input type="email" id="reminder-email" name="email" autocomplete="email" required />
+					<input type="email" id="reminder-email" name="email" autocomplete="email" required aria-describedby="reminder-email-error" />
 				</label>
 				<button type="submit" class="btn solid">Remind me</button>
+				<p class="field-error" id="reminder-email-error" hidden></p>
+				<p class="field-error" role="alert" data-form-error hidden></p>
 			</form>
 		</div>
 	</div>
@@ -33,16 +43,22 @@ const year = new Date().getFullYear();
 					<img src="/images/logo-white.svg" alt="EyeCheck" width="1103" height="160" loading="lazy" />
 				</a>
 				<span>Free vision screening anyone can use, so eye problems are caught early.</span>
-				<a href={routes.medicalReview} class="reviewed">
-					<span class="avatar"></span>
-					<span class="who">
-						<b>
-							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.8" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
-							Medically reviewed
-						</b>
-						<span>by {site.reviewer}</span>
-					</span>
-				</a>
+				{
+					reviewer && (
+						<a href={slash(routes.medicalReview)} class="reviewed">
+							<span class="avatar" />
+							<span class="who">
+								<b>
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.8" aria-hidden="true">
+										<path d="M5 12l5 5 9-10" />
+									</svg>
+									Medically reviewed
+								</b>
+								<span>by {reviewer}</span>
+							</span>
+						</a>
+					)
+				}
 				{/* Only profiles with a URL in site.social are shown, so no icon links to "#". */}
 				{
 					socialLinks.some((s) => s.href) && (
@@ -66,7 +82,7 @@ const year = new Date().getFullYear();
 						<div>
 							<b>{col.title}</b>
 							{col.links.map((l) => (
-								<a href={l.href}>{l.title}</a>
+								<a href={slash(l.href)}>{l.title}</a>
 							))}
 						</div>
 					))
@@ -83,9 +99,20 @@ const year = new Date().getFullYear();
 		</div>
 
 		<div class="legal">
-			<span>© {year} EyeCheck.app · {site.legalEntity}</span>
+			<span>
+				© {year} EyeCheck.app · Developed by <a href={site.company.url} target="_blank" rel="noopener">{site.company.name}</a>, {site.company.country} · UEN{' '}
+				{site.company.uen}
+			</span>
 			<div>
-				{legalLinks.map((l) => <a href={l.href}>{l.title}</a>)}
+				{legalLinks.map((l) => <a href={slash(l.href)}>{l.title}</a>)}
+				{
+					hasConsentBanner && (
+						<button type="button" class="link-button" data-cookie-settings>
+							Cookie settings
+						</button>
+					)
+				}
+				{hasAccessibility && <a href="/accessibility/">Accessibility</a>}
 			</div>
 		</div>
 	</div>
@@ -311,4 +338,43 @@ const year = new Date().getFullYear();
 	.legal a {
 		color: #b7c0d1;
 	}
+	.link-button {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: #b7c0d1;
+		font: inherit;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+	.field-error {
+		flex-basis: 100%;
+		margin: 0;
+		color: var(--ink);
+		font-size: 14px;
+		line-height: 20px;
+		font-weight: 500;
+	}
+	.field-error::before {
+		content: '! ';
+		color: var(--blue);
+		font-weight: 700;
+	}
+	input[aria-invalid='true'] {
+		border-color: var(--ink);
+		outline: 1px solid var(--ink);
+	}
+	.reminder :global(.form-done) {
+		flex: 1 1 420px;
+		padding: 14px 20px;
+		border-radius: 14px;
+		background: var(--surface);
+		color: var(--ink);
+		font-size: 16px;
+		font-weight: 500;
+	}
 </style>
+
+<script>
+	import '../scripts/api-form';
+</script>

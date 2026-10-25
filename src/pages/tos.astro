@@ -1,8 +1,9 @@
 ---
+import { getEntry } from 'astro:content';
 import LegalPage from '../components/LegalPage.astro';
 
-// The wireframes draw only the privacy policy; these sections are placeholders.
-const sections = [1, 2, 3, 4, 5].map((n) => ({ heading: `${n}. [Section]`, body: '[Legal text]' }));
+// Text lives in src/content/legal/tos.md.
+const entry = (await getEntry('legal', 'tos'))!;
 ---
 
-<LegalPage title="Terms of Service" crumb="Terms of service" summary="[Plain-language summary box]" sections={sections} />
+<LegalPage entry={entry} crumb="Terms of service" />

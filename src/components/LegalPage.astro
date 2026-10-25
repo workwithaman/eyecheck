@@ -1,40 +1,171 @@
 ---
+// Renders a legal page from the "legal" Markdown collection: dates, summary box, "Sections" nav built from the H2s, and the body.
+import type { CollectionEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import { routes } from '../data/site';
 
 interface Props {
-	title: string;
+	entry: CollectionEntry<'legal'>;
+	// Breadcrumb label, e.g. "Privacy policy".
 	crumb: string;
-	summary: string;
-	sections: { heading: string; tocLabel?: string; body: string }[];
 }
 
-const { title, crumb, summary, sections } = Astro.props;
+const { entry, crumb } = Astro.props;
+const { title, effectiveDate, lastUpdated, summary, description } = entry.data;
+
+// HTML comments in the Markdown hold TODO notes for the team; strip them so they never reach the published page.
+const html = (entry.rendered?.html ?? '').replace(/<!--[\s\S]*?-->/g, '');
+const sections = (entry.rendered?.metadata?.headings ?? []).filter((h) => h.depth === 2);
+
+const formatDate = (iso: string) =>
+	new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+// Summary bullets are plain text; email addresses in them become mailto links.
+const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const linkEmails = (s: string) => escape(s).replace(/([\w.+-]+@[\w-]+\.[\w.]+[a-z])/gi, '<a href="mailto:$1">$1</a>');
+
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://eyecheck.app').href;
+const schema = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'WebPage',
+			name: title,
+			url: pageUrl,
+			description,
+			dateModified: lastUpdated,
+			publisher: { '@id': 'https://eyecheck.app/#organization' },
+		},
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://eyecheck.app/' },
+				{ '@type': 'ListItem', position: 2, name: crumb, item: pageUrl },
+			],
+		},
+	],
+};
 ---
 
-<Layout title={`${title} | EyeCheck.app`}>
+<Layout title={`${title} | EyeCheck.app`} description={description}>
+	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 	<div class="inner">
-		<div class="wrap crumb">Home › {crumb}</div>
-		<section class="wrap" style="padding-top:20px;padding-bottom:28px;display:flex;flex-direction:column;gap:10px;max-width:860px;margin-left:auto;margin-right:auto">
+		<nav aria-label="Breadcrumb" class="wrap crumb"><a href={routes.home}>Home</a> › <span>{crumb}</span></nav>
+		<header class="wrap head">
 			<h1>{title}</h1>
-			<span class="note">Effective [DATE] · Last updated [DATE]</span>
-			<p class="muted">{summary}</p>
-		</section>
-
-		<section class="wrap" style="display:flex;flex-wrap:wrap;gap:40px;padding-bottom:56px">
-			<nav class="toc" aria-label="Sections" style="flex:0 1 220px;border-top:2px solid var(--ink);padding-top:10px">
-				<span class="eyebrow">Sections</span>
-				{sections.map((s, i) => <a href={`#section-${i + 1}`}>{s.tocLabel ?? s.heading}</a>)}
-			</nav>
-			<div style="flex:999 1 560px;min-width:0;max-width:720px;display:flex;flex-direction:column;gap:22px">
-				{
-					sections.map((s, i) => (
-						<>
-							<h2 id={`section-${i + 1}`}>{s.heading}</h2>
-							<p class="muted">{s.body}</p>
-						</>
-					))
-				}
+			<p class="dates">
+				Effective <time datetime={effectiveDate}>{formatDate(effectiveDate)}</time> · Last updated <time datetime={lastUpdated}>{formatDate(lastUpdated)}</time>
+			</p>
+			<div class="summary">
+				<h2 class="summary-title">Summary</h2>
+				<ul>
+					{summary.map((s) => <li set:html={linkEmails(s)} />)}
+				</ul>
 			</div>
-		</section>
+		</header>
+
+		<div class="wrap layout">
+			<nav class="toc" aria-label="Sections">
+				<span class="eyebrow">Sections</span>
+				{sections.map((h) => <a href={`#${h.slug}`}>{h.text}</a>)}
+			</nav>
+			<div class="legal-body" set:html={html} />
+		</div>
 	</div>
 </Layout>
+
+<style>
+	.crumb a {
+		color: var(--muted);
+		text-decoration: none;
+	}
+	.crumb span {
+		color: var(--ink);
+	}
+	.head {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		max-width: 860px;
+		padding-top: 20px;
+		padding-bottom: 32px;
+	}
+	.dates {
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.summary {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 20px 24px;
+		border-radius: 16px;
+		background: var(--lens);
+		color: var(--ink);
+	}
+	.summary-title {
+		font-size: 18px;
+		line-height: 24px;
+	}
+	.summary ul {
+		margin: 0;
+		padding-left: 20px;
+		font-size: 16px;
+		line-height: 25px;
+	}
+	.summary li + li {
+		margin-top: 6px;
+	}
+	.layout {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 40px;
+		padding-bottom: 64px;
+	}
+	.toc {
+		flex: 0 1 220px;
+		align-self: flex-start;
+		padding-top: 10px;
+		border-top: 2px solid var(--ink);
+	}
+	@media (min-width: 821px) {
+		.toc {
+			position: sticky;
+			top: 96px;
+		}
+	}
+	.legal-body {
+		flex: 999 1 560px;
+		min-width: 0;
+		max-width: 720px;
+		color: var(--slate);
+		font-size: 16px;
+		line-height: 26px;
+	}
+	.legal-body :global(h2) {
+		margin: 36px 0 12px;
+		color: var(--ink);
+		font-size: 24px;
+		line-height: 30px;
+		/* Added to the site-wide 88px scroll padding, so a section link lands just below the sticky header. */
+		scroll-margin-top: 16px;
+	}
+	.legal-body :global(h2:first-child) {
+		margin-top: 0;
+	}
+	.legal-body :global(p),
+	.legal-body :global(ul),
+	.legal-body :global(ol) {
+		margin: 0 0 14px;
+	}
+	.legal-body :global(ul),
+	.legal-body :global(ol) {
+		padding-left: 22px;
+	}
+	.legal-body :global(li + li) {
+		margin-top: 6px;
+	}
+	.legal-body :global(strong) {
+		color: var(--ink);
+	}
+</style>
