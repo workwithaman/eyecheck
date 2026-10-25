@@ -1,11 +1,15 @@
-// Deploys the static build (./dist) as Workers static assets. No adapter and no "main": the site is built by Node
-// (npm run build), so build-time fetches to Sanity and the backend work. Keep "name" as the existing Worker.
+// Deploys the static build (./dist) as Workers static assets, with a small Worker in front (src/worker.ts) that only
+// adds noindex on the *.workers.dev staging host. There is no Astro adapter: the site is built by Node (npm run build),
+// so build-time fetches to Sanity and the backend work. Keep "name" as the existing Worker.
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "eyecheck",
+	"main": "src/worker.ts",
 	"compatibility_date": "2026-10-01",
 	"assets": {
 		"directory": "./dist",
+		"binding": "ASSETS",
+		"run_worker_first": true,
 		"not_found_handling": "404-page",
 		"html_handling": "auto-trailing-slash"
 	}

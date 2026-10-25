@@ -16,3 +16,9 @@
 /resources/shapes.pdf       /downloads/eyecheck-shapes-card.pdf       301
 /terms-of-service           /tos/                                     301
 /terms-of-service/          /tos/                                     301
+
+# Old live-site payment pages (301, permanent).
+/payment                    /screening/                               301
+/payment/                   /screening/                               301
+/payment-success            /screening/                               301
+/payment-success/           /screening/                               301

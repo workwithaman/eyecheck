@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /temp/
+Disallow: /result/
+Disallow: /testimonial-approve/
+
+Sitemap: https://eyecheck.app/sitemap-index.xml

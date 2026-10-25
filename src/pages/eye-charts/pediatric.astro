@@ -56,7 +56,7 @@ const faqs = [
 	},
 	{
 		q: 'Can teachers use this in class?',
-		a: `Yes. Teachers can use the card to practise shapes with a class. To screen a whole class, see <a href="${routes.schools}/">EyeCheck for schools</a>.`,
+		a: `Yes. Teachers can use the card to practise shapes with a class. To screen a whole class, see <a href="${routes.schools}">EyeCheck for schools</a>.`,
 	},
 	{
 		q: 'Is this a full eye chart?',
@@ -66,10 +66,10 @@ const faqs = [
 const plain = (html: string) => html.replace(/<[^>]+>/g, '');
 
 const others = [
-	{ title: 'Tumbling E chart', href: `${routes.chartTumblingE}/`, img: '/images/eye-charts.svg' },
-	{ title: 'Snellen chart', href: `${routes.chartSnellen}/`, img: '/images/test-visual-acuity.svg' },
-	{ title: '10-foot chart', href: `${routes.chart10Feet}/`, img: '/images/eye-charts.svg' },
-	{ title: 'Kids online eye test', href: `${routes.start}/`, img: '/images/result-check.svg' },
+	{ title: 'Tumbling E chart', href: `${routes.chartTumblingE}`, img: '/images/eye-charts.svg' },
+	{ title: 'Snellen chart', href: `${routes.chartSnellen}`, img: '/images/test-visual-acuity.svg' },
+	{ title: '10-foot chart', href: `${routes.chart10Feet}`, img: '/images/eye-charts.svg' },
+	{ title: 'Kids online eye test', href: `${routes.start}`, img: '/images/result-check.svg' },
 ];
 
 const sections = [
@@ -115,7 +115,7 @@ const schema = {
 	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 	<div class="inner">
 		<nav aria-label="Breadcrumb" class="wrap crumb">
-			<a href={routes.home}>Home</a> › <a href={`${routes.eyeCharts}/`}>Eye charts</a> › <span>Pediatric chart</span>
+			<a href={routes.home}>Home</a> › <a href={`${routes.eyeCharts}`}>Eye charts</a> › <span>Pediatric chart</span>
 		</nav>
 
 		<section class="wrap hero">
@@ -131,7 +131,7 @@ const schema = {
 				<div class="card download">
 					<div class="actions">
 						<a href={pdf} class="btn solid" download target="_blank" rel="noopener">Download the shapes card (PDF)</a>
-						<a href={`${routes.start}/`} class="btn">Start the online test for kids</a>
+						<a href={`${routes.start}`} class="btn">Start the online test for kids</a>
 					</div>
 					<span class="note">PDF · 1 page · 93 KB</span>
 					<p class="small">This card is for practising the shapes. The online test does the actual screening.</p>
@@ -229,8 +229,8 @@ const schema = {
 							</p>
 						</div>
 						<p class="links">
-							<a href={`${routes.lazyEye}/`} class="more">Lazy eye test →</a>
-							<a href={`${routes.colorBlindKids}/`} class="more">Colour blind test for kids →</a>
+							<a href={`${routes.lazyEye}`} class="more">Lazy eye test →</a>
+							<a href={`${routes.colorBlindKids}`} class="more">Colour blind test for kids →</a>
 						</p>
 					</section>
 

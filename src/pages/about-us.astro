@@ -63,7 +63,7 @@ const schema = {
 			'@id': new URL('/#organization', origin).href,
 			name: 'EyeCheck.app',
 			url: origin,
-			logo: new URL('/icon-512.png', origin).href,
+			logo: 'https://eyecheck.app/og-square-1200.png',
 			email: contact.email,
 			telephone: contact.phone,
 			address: {
@@ -172,7 +172,7 @@ const schema = {
 						</span>
 						<h3>{reviewerName || 'Our medical reviewer'}</h3>
 						<span class="muted">{site.reviewerRole}</span>
-						<a href={`${routes.medicalReview}/`}>View profile</a>
+						<a href={`${routes.medicalReview}`}>View profile</a>
 					</div>
 					<div class="card person">
 						<span class="logo-tile">
@@ -233,7 +233,7 @@ const schema = {
 					Our tests are based on clinically validated screening methods and reviewed by a qualified optometrist. Each eye gets a clear
 					Pass or Refer result, and we’re open about what an online screening can and can’t tell you.
 				</p>
-				<a href={`${routes.howWeTest}/`} class="btn" style="align-self:flex-start">How we test</a>
+				<a href={`${routes.howWeTest}`} class="btn" style="align-self:flex-start">How we test</a>
 			</div>
 		</section>
 

@@ -67,3 +67,8 @@ Because posts are fetched at build time, publishing in Sanity only shows on the 
 3. Publish a post and check that a new build starts in Cloudflare.
 
 Until the hook is set up, push any commit to `main` (or retry the latest deployment in Cloudflare) to pick up new posts.
+
+## Before launch
+
+- TODO: Delete src/pages/temp/ before launch.
+

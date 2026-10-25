@@ -1,4 +1,5 @@
 ---
+import { getImage } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import PostCover from '../../components/PostCover.astro';
 import { routes, site } from '../../data/site';
@@ -29,6 +30,14 @@ const imageUrl = post.image
 		? sanityImageUrl(post.image.src, 1200)
 		: new URL(typeof post.image.src === 'string' ? post.image.src : post.image.src.src, origin).href
 	: undefined;
+// Social sharing image: the cover cropped to 1200x630 as a JPEG (Sanity's CDN, or Astro for a local fallback cover).
+let ogImage: { url: string; width: number; height: number } | undefined;
+if (post.image?.remote && typeof post.image.src === 'string') {
+	ogImage = { url: `${post.image.src}?w=1200&h=630&fit=crop&fm=jpg`, width: 1200, height: 630 };
+} else if (post.image && typeof post.image.src !== 'string') {
+	const og = await getImage({ src: post.image.src, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+	ogImage = { url: new URL(og.src, origin).href, width: 1200, height: 630 };
+}
 const schema = {
 	'@context': 'https://schema.org',
 	'@graph': [
@@ -56,7 +65,7 @@ const schema = {
 };
 ---
 
-<Layout title={`${post.title} | EyeCheck.app`} description={post.description} active="blog">
+<Layout title={`${post.title} | EyeCheck.app`} description={post.description} active="blog" ogType="article" ogImage={ogImage}>
 	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 	<div class="inner">
 		<nav aria-label="Breadcrumb" class="wrap crumb"><a href={routes.home}>Home</a> › <a href={routes.blog}>Blog</a> › <span>{post.category}</span></nav>
@@ -91,7 +100,7 @@ const schema = {
 					<aside class="cta" aria-label="Check your eyes">
 						<p class="cta-title">Check your eyes in under 5 minutes</p>
 						<div class="cta-actions">
-							<a href={`${routes.start}/`} class="btn solid">Start free eye test</a>
+							<a href={`${routes.start}`} class="btn solid">Start free eye test</a>
 							{post.cta && <a href={post.cta.href} class="more">{post.cta.text} →</a>}
 						</div>
 					</aside>

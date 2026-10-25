@@ -37,15 +37,15 @@ const updatedText = new Date(`${updatedIso}T00:00:00Z`).toLocaleDateString('en-G
 const tests = [
 	{
 		name: 'Visual acuity',
-		href: `${routes.visualAcuity}/`,
+		href: `${routes.visualAcuity}`,
 		status: 'live',
 		measures: 'How clearly each eye sees detail at a distance.',
 		method: 'Picture shapes for ages 3–7; Landolt C rings (a ring with a gap in one of four directions) for ages 8 and up, viewed from 3 m.',
 		limits: 'Doesn’t check eye pressure, eye health or the need for a specific prescription.',
 	},
-	{ name: 'Astigmatism', href: `${routes.astigmatism}/`, status: confirm.testStatus.astigmatism },
-	{ name: 'Colour vision', href: `${routes.colorBlind}/`, status: confirm.testStatus.colour },
-	{ name: 'Near vision', href: `${routes.readingGlasses}/`, status: confirm.testStatus.near },
+	{ name: 'Astigmatism', href: `${routes.astigmatism}`, status: confirm.testStatus.astigmatism },
+	{ name: 'Colour vision', href: `${routes.colorBlind}`, status: confirm.testStatus.colour },
+	{ name: 'Near vision', href: `${routes.readingGlasses}`, status: confirm.testStatus.near },
 ];
 
 const calibration = [
@@ -257,7 +257,7 @@ const schema = {
 							</p>
 						)
 					}
-					{!showReview && <p><a href={`${routes.medicalReview}/`} class="more">Meet our medical reviewer →</a></p>}
+					{!showReview && <p><a href={`${routes.medicalReview}`} class="more">Meet our medical reviewer →</a></p>}
 				</section>
 
 				<section aria-labelledby="technology">
@@ -271,9 +271,9 @@ const schema = {
 						communities that don’t have easy access to an eye doctor.
 					</p>
 					<p class="links">
-						<a href={`${routes.schools}/`} class="more">Screening for schools →</a>
-						<a href={`${routes.charities}/`} class="more">Charity support →</a>
-						<a href={`${routes.start}/`} class="btn solid">Start a free eye test</a>
+						<a href={`${routes.schools}`} class="more">Screening for schools →</a>
+						<a href={`${routes.charities}`} class="more">Charity support →</a>
+						<a href={`${routes.start}`} class="btn solid">Start a free eye test</a>
 					</p>
 				</section>
 
@@ -285,7 +285,7 @@ const schema = {
 								Our tests and health content are reviewed by {reviewerName}, {confirm.review.credentials}. Content is reviewed {confirm.review.frequency}{' '}
 								and whenever a test changes.
 							</p>
-							<p><a href={`${routes.medicalReview}/`} class="more">Meet our medical reviewer →</a></p>
+							<p><a href={`${routes.medicalReview}`} class="more">Meet our medical reviewer →</a></p>
 						</section>
 					)
 				}
@@ -295,7 +295,7 @@ const schema = {
 					<p>
 						Personal information is kept for a maximum of 7 days to deliver your results. Your email is kept longer only if you opt in to reminders.
 						You can delete your data at any time from your results page or by emailing <a href="mailto:support@eyecheck.app">support@eyecheck.app</a>.
-						Read our <a href={`${routes.privacy}/`}>privacy policy</a>.
+						Read our <a href={`${routes.privacy}`}>privacy policy</a>.
 					</p>
 				</section>
 

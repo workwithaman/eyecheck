@@ -86,7 +86,7 @@ const schema = {
 							<h3>{p.title}</h3>
 							<p class="muted excerpt">{shorten(p.summary, 120)}</p>
 							<span class="note">
-								<time datetime={isoDate(p.publishedAt)}>{formatDate(p.publishedAt)}</time> · {p.readMinutes} min read
+								By {p.author} · <time datetime={isoDate(p.publishedAt)}>{formatDate(p.publishedAt)}</time> · {p.readMinutes} min read
 							</span>
 						</a>
 					))
@@ -114,7 +114,7 @@ const schema = {
 				card.hidden = !match;
 				if (match) shown++;
 			});
-			if (count) count.textContent = `${shown} ${shown === 1 ? 'article' : 'articles'} shown`;
+			if (count) count.textContent = `${shown} ${shown === 1 ? 'article' : 'articles'}`;
 		});
 	});
 </script>
