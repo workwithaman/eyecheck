@@ -136,6 +136,9 @@ const schema = {
 		font: inherit;
 		font-size: 14px;
 		cursor: pointer;
+	}
+	/* Only inactive chips: the global .chip.on supplies the selected colours. */
+	.chip:not(.on) {
 		background: var(--surface);
 	}
 	.chip:focus-visible {
