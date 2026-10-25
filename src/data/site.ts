@@ -145,8 +145,7 @@ export const footerColumns = [
 		title: 'Company',
 		links: [
 			{ title: 'About us', href: routes.about },
-			{ title: 'How we test', href: routes.howWeTest },
-			{ title: 'Medical review', href: routes.medicalReview },
+			{ title: 'Disclaimer', href: `${routes.terms}#disclaimer` },
 			{ title: 'Blog', href: routes.blog },
 			{ title: 'Help & FAQ', href: routes.help },
 			{ title: 'Contact', href: `${routes.about}#contact` },
