@@ -9,3 +9,10 @@
 /blog/tech-revolution/              /how-we-test/                       301
 /blog/tech-access-eye-care          /how-we-test/                       301
 /blog/tech-access-eye-care/         /how-we-test/                       301
+
+# Old site resources (301, permanent).
+/resources                  /eye-charts/                              301
+/resources/                 /eye-charts/                              301
+/resources/shapes.pdf       /downloads/eyecheck-shapes-card.pdf       301
+/terms-of-service           /tos/                                     301
+/terms-of-service/          /tos/                                     301

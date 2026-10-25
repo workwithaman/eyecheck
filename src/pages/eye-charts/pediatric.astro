@@ -1,46 +1,437 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
-import { routes } from '../../data/site';
+import FaqItem from '../../components/FaqItem.astro';
+import { routes, site } from '../../data/site';
+import shapesCard from '../../assets/eye-charts/shapes-card.jpg';
+
+// TODO CONFIRM WITH ANDY / REVIEWER: every value in this object. Empty values hide the element or section they feed.
+const confirm = {
+	// Date shown as "Last updated" and used as lastReviewed, as YYYY-MM-DD. Empty = the build date.
+	updated: '',
+	// TODO CONFIRM WITH REVIEWER: age thresholds (e.g. AAPOS/AAP referral criteria) with a citation.
+	// The section renders only when both rows and a source are filled. Never publish numbers without sign-off.
+	ageExpectations: [] as { age: string; expectation: string }[],
+	ageSource: { text: '', url: '' },
+};
+
+// TODO: switch the title back to "Pediatric Eye Chart for Preschoolers (Free PDF)" when a sized chart PDF exists.
+const title = 'Shapes Card for Preschool Eye Tests (Free PDF) | EyeCheck.app';
+const description =
+	'Free printable shapes card for children aged 3 and up who can’t read letters yet. Practise the shapes, then screen your child’s vision online with EyeCheck.';
+const pdf = '/downloads/eyecheck-shapes-card.pdf';
+
+// A value still in [brackets] is a placeholder, so it counts as unset.
+const known = (value: string) => (value && !value.includes('[') ? value : '');
+const reviewer = known(site.reviewer);
+const showAges = confirm.ageExpectations.length > 0 && Boolean(confirm.ageSource.text && confirm.ageSource.url);
+
+const updatedIso = confirm.updated || new Date().toISOString().slice(0, 10);
+const updatedText = new Date(`${updatedIso}T00:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+const steps = [
+	{ lead: 'Practise the shapes up close.', text: 'Point to each shape and name it together until your child knows all four.' },
+	{ lead: 'Set up the screen.', text: 'A laptop or desktop at least 33 cm (13″), with your child 3 m (10 ft) away.' },
+	{ lead: 'Cover one eye.', text: 'Use a patch or a parent’s hand. Don’t press on the eye.' },
+	{ lead: 'Make it a game.', text: 'Praise every answer, and keep sessions short.' },
+	{ lead: 'Swap eyes.', text: 'Then do the other eye. Stop and try another day if your child is tired or upset.' },
+];
+
+// TODO CONFIRM WITH REVIEWER: red-flag list wording.
+const redFlags = [
+	'An eye that turns in, out, up or down',
+	'Squinting, tilting the head or covering one eye to see',
+	'Sitting very close to screens or holding things close to the face',
+	'Rubbing the eyes a lot, or watery or red eyes',
+	'A family history of lazy eye (amblyopia) or squint (strabismus)',
+	'A Refer result from EyeCheck',
+];
+
+// Answers are HTML; the FAQPage schema gets the same text with tags removed.
+const faqs = [
+	{ q: 'What age can a child use this card?', a: 'From about age 3, once they can name or point to the four shapes.' },
+	{
+		q: 'My child won’t keep the patch on. What can I do?',
+		a: 'Try a parent’s hand over the eye or a fun sticker patch, keep sessions short, and make it a game. If it isn’t working, stop and try another day.',
+	},
+	{
+		q: 'Can teachers use this in class?',
+		a: `Yes. Teachers can use the card to practise shapes with a class. To screen a whole class, see <a href="${routes.schools}/">EyeCheck for schools</a>.`,
+	},
+	{
+		q: 'Is this a full eye chart?',
+		a: 'No. It’s a practice card for the four shapes used in EyeCheck’s online test for ages 3–7. The online test does the screening.',
+	},
+];
+const plain = (html: string) => html.replace(/<[^>]+>/g, '');
+
+const others = [
+	{ title: 'Tumbling E chart', href: `${routes.chartTumblingE}/`, img: '/images/eye-charts.svg' },
+	{ title: 'Snellen chart', href: `${routes.chartSnellen}/`, img: '/images/test-visual-acuity.svg' },
+	{ title: '10-foot chart', href: `${routes.chart10Feet}/`, img: '/images/eye-charts.svg' },
+	{ title: 'Kids online eye test', href: `${routes.start}/`, img: '/images/result-check.svg' },
+];
+
+const sections = [
+	{ id: 'how-to-test', label: 'How to test at home' },
+	{ id: 'age-expectations', label: 'What a 3–5 year old should see', hidden: !showAges },
+	{ id: 'when-to-book', label: 'When to book an eye exam' },
+	{ id: 'faq', label: 'FAQ' },
+	{ id: 'other-charts', label: 'Other printable charts' },
+].filter((s) => !s.hidden);
+
+const pageUrl = 'https://eyecheck.app/eye-charts/pediatric/';
+const schema = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'MedicalWebPage',
+			name: 'Shapes Card for Preschool Eye Tests (Free PDF)',
+			url: pageUrl,
+			description,
+			lastReviewed: updatedIso,
+			audience: { '@type': 'PeopleAudience', suggestedMinAge: 3 },
+			publisher: { '@id': 'https://eyecheck.app/#organization' },
+			...(reviewer && { reviewedBy: { '@type': 'Person', name: reviewer.split(',')[0].trim() } }),
+		},
+		{ '@type': 'DigitalDocument', name: 'EyeCheck shapes card', url: `https://eyecheck.app${pdf}`, encodingFormat: 'application/pdf' },
+		{
+			'@type': 'FAQPage',
+			mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: plain(f.a) } })),
+		},
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://eyecheck.app/' },
+				{ '@type': 'ListItem', position: 2, name: 'Eye charts', item: 'https://eyecheck.app/eye-charts/' },
+				{ '@type': 'ListItem', position: 3, name: 'Pediatric chart', item: pageUrl },
+			],
+		},
+	],
+};
 ---
 
-<Layout title={"Pediatric Eye Chart for Preschoolers (Free PDF) | EyeCheck.app"} active="charts">
+<Layout title={title} description={description} active="charts">
+	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 	<div class="inner">
-	<div class="wrap crumb">Home › Eye charts › Pediatric chart</div>
-	<section class="wrap" style="padding-top:20px;padding-bottom:36px;display:flex;flex-wrap:wrap;gap:32px">
-	  <div class="ph" style="flex:1 1 380px;height:520px">[Shapes chart preview (apple, house, circle, square)]</div>
-	  <div style="flex:1 1 380px;display:flex;flex-direction:column;gap:16px">
-	    <h1>Pediatric Eye Chart for Preschoolers (Free PDF)</h1>
-	    <p class="muted">[Answer-first: a picture-shape chart for children who can’t read letters yet, from about age 3. Includes a matching card.]</p>
-	    <div class="card">
-	      <span class="eyebrow">Download</span>
-	      <div style="display:flex;flex-wrap:wrap;gap:10px"><a href="#" class="btn solid">Chart · Letter</a><a href="#" class="btn solid">Chart · A4</a><a href="#" class="btn">Matching card</a></div>
-	      <span class="note">Print at 100% · 10 ft distance · [file size]</span>
-	    </div>
-	    <span class="note">[Avatar] Reviewed by [NAME], OD · Last reviewed [DATE]</span>
-	  </div>
-	</section>
-	
-	<section class="sec" style="background:var(--surface-2)"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:28px">
-	  <div style="display:flex;flex-direction:column;gap:10px"><h2>How to test a preschooler’s vision at home</h2><p class="muted">[Make it a game; practise shapes up close first; patch one eye]</p><div class="ph" style="height:150px">[Illustration: parent + child + chart]</div></div>
-	  <div style="display:flex;flex-direction:column;gap:10px"><h2>What a 3–5 year old should be able to see</h2><p class="muted">[Age-based expectations, cited]</p></div>
-	  <div style="display:flex;flex-direction:column;gap:10px"><h2>When to book a children’s eye exam</h2><p class="muted">[Red flags; link to /lazy-eye-test and /color-blind-test/kids]</p></div>
-	</div></section>
-	
-	<section class="sec"><div class="wrap narrow" style="display:flex;flex-direction:column;gap:8px">
-	  <h2 style="margin-bottom:12px">Pediatric eye chart FAQ</h2>
-	  <div class="faq"><span>What age can a child use an eye chart?</span><span>+</span></div>
-	  <div class="faq"><span>My child won’t keep the patch on. What can I do?</span><span>+</span></div>
-	  <div class="faq"><span>Can teachers use this chart in class?</span><span>+</span></div>
-	</div></section>
-	
-	<section class="sec" style="background:var(--surface-2)"><div class="wrap" style="display:flex;flex-direction:column;gap:20px">
-	  <h2>Other printable charts</h2>
-	  <div class="grid3">
-	    <a href={routes.chartTumblingE} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Thumb]</div><h3>Tumbling E chart</h3></a>
-	    <a href={routes.chartSnellen} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Thumb]</div><h3>Snellen chart</h3></a>
-	    <a href={routes.chart10Feet} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Thumb]</div><h3>10-foot chart</h3></a>
-	    <a href={routes.start} class="card" style="text-decoration:none"><div class="ph" style="height:110px">[Online test]</div><h3>Kids online eye test</h3></a>
-	  </div>
-	</div></section>
+		<nav aria-label="Breadcrumb" class="wrap crumb">
+			<a href={routes.home}>Home</a> › <a href={`${routes.eyeCharts}/`}>Eye charts</a> › <span>Pediatric chart</span>
+		</nav>
+
+		<section class="wrap hero">
+			<div class="preview">
+				<Image src={shapesCard} alt="Shapes card showing a triangle, heart, circle and square" width={520} densities={[1, 2]} loading="eager" />
+			</div>
+			<div class="hero-copy">
+				<h1>Shapes Card for Preschool Eye Tests (Free PDF)</h1>
+				<p class="summary">
+					A picture-shape card for children who can’t read letters yet, from about age 3. Practise the four shapes (triangle, heart, circle and
+					square) so your child is ready for EyeCheck’s online shapes test.
+				</p>
+				<div class="card download">
+					<div class="actions">
+						<a href={pdf} class="btn solid" download target="_blank" rel="noopener">Download the shapes card (PDF)</a>
+						<a href={`${routes.start}/`} class="btn">Start the online test for kids</a>
+					</div>
+					<span class="note">PDF · 1 page · 93 KB</span>
+					<p class="small">This card is for practising the shapes. The online test does the actual screening.</p>
+				</div>
+				<p class="byline">
+					<span>Last updated <time datetime={updatedIso}>{updatedText}</time></span>
+					{reviewer && <span>Reviewed by {reviewer}</span>}
+				</p>
+			</div>
+		</section>
+
+		<section class="sec tinted">
+			<div class="wrap layout">
+				<nav class="toc" aria-label="On this page">
+					<span class="eyebrow">On this page</span>
+					{sections.map((s) => <a href={`#${s.id}`}>{s.label}</a>)}
+				</nav>
+
+				<div class="prose">
+					<section aria-labelledby="how-to-test">
+						<h2 id="how-to-test">How to test a preschooler’s vision at home</h2>
+						<ol class="steps">
+							{steps.map((s) => <li><strong>{s.lead}</strong> {s.text}</li>)}
+						</ol>
+						<figure class="diagram">
+							<svg viewBox="0 0 560 220" role="img" aria-label="A parent helps a child cover one eye while looking at a screen 3 metres away">
+								<g fill="none" stroke="#2463EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+									<!-- Screen with shapes -->
+									<rect x="24" y="40" width="140" height="96" rx="8" />
+									<path d="M94 136v20M66 160h56" />
+									<path d="M52 104l14 -26l14 26z" />
+									<circle cx="108" cy="92" r="12" />
+									<rect x="128" y="80" width="22" height="22" />
+									<!-- Dimension arrow -->
+									<path d="M182 176h196" />
+									<path d="M192 168l-10 8l10 8M368 168l10 8l-10 8" />
+									<!-- Child: head, body, legs, hand over one eye -->
+									<circle cx="412" cy="112" r="16" />
+									<path d="M412 128v44M412 172l-12 34M412 172l12 34M412 142l-14 -8l-8 -22" />
+									<path d="M385 108h10" stroke-width="5" />
+									<!-- Parent: kneeling behind, hand on the child's shoulder -->
+									<circle cx="490" cy="62" r="20" />
+									<path d="M490 82v74M490 156l-24 50M490 156l20 50M490 104l-40 22l-26 14" />
+								</g>
+								<g fill="#101828" font-family="inherit" font-size="16" text-anchor="middle">
+									<text x="280" y="164" font-weight="600" font-size="18">3 m (10 ft)</text>
+									<text x="94" y="188">Screen 33 cm (13″) or larger</text>
+								</g>
+							</svg>
+						</figure>
+					</section>
+
+					{
+						showAges && (
+							<section aria-labelledby="age-expectations">
+								<h2 id="age-expectations">What a 3–5 year old should be able to see</h2>
+								<div class="table-scroll" role="region" aria-label="What a 3–5 year old should be able to see" tabindex="0">
+									<table>
+										<thead>
+											<tr>
+												<th scope="col">Age</th>
+												<th scope="col">Expected vision</th>
+											</tr>
+										</thead>
+										<tbody>
+											{confirm.ageExpectations.map((r) => (
+												<tr>
+													<td>{r.age}</td>
+													<td>{r.expectation}</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
+								<p class="small">
+									Source: <a href={confirm.ageSource.url}>{confirm.ageSource.text}</a>
+								</p>
+							</section>
+						)
+					}
+
+					<section aria-labelledby="when-to-book">
+						<h2 id="when-to-book">When to book a children’s eye exam</h2>
+						<p>Book an eye exam if you notice any of these:</p>
+						<ul>
+							{redFlags.map((f) => <li>{f}</li>)}
+						</ul>
+						<div class="callout" role="note">
+							<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+								<circle cx="12" cy="12" r="10"></circle><path d="M12 11v6M12 7.5v.01"></path>
+							</svg>
+							<p>
+								See a doctor urgently if a photo shows a white or unusual reflection in your child’s pupil, or if your child’s eye suddenly turns or
+								their vision suddenly changes.
+							</p>
+						</div>
+						<p class="links">
+							<a href={`${routes.lazyEye}/`} class="more">Lazy eye test →</a>
+							<a href={`${routes.colorBlindKids}/`} class="more">Colour blind test for kids →</a>
+						</p>
+					</section>
+
+					<section aria-labelledby="faq">
+						<h2 id="faq">Shapes card FAQ</h2>
+						<div>
+							{faqs.map((f) => <FaqItem q={f.q} a={f.a} />)}
+						</div>
+					</section>
+				</div>
+			</div>
+		</section>
+
+		<section class="sec" aria-labelledby="other-charts">
+			<div class="wrap stack">
+				<h2 id="other-charts">Other printable charts</h2>
+				<div class="grid3 others">
+					{
+						others.map((o) => (
+							<a href={o.href} class="card other">
+								<span class="thumb">
+									<img src={o.img} alt="" width="64" height="64" loading="lazy" />
+								</span>
+								<h3>{o.title}</h3>
+							</a>
+						))
+					}
+				</div>
+			</div>
+		</section>
 	</div>
 </Layout>
+
+<style>
+	.crumb a {
+		color: var(--muted);
+		text-decoration: none;
+	}
+	.crumb span {
+		color: var(--ink);
+	}
+	.hero {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 40px;
+		padding-top: 20px;
+		padding-bottom: 48px;
+	}
+	.preview {
+		flex: 1 1 340px;
+		max-width: 480px;
+	}
+	.preview :global(img) {
+		display: block;
+		width: 100%;
+		height: auto;
+		background: #fff;
+		border: 1px solid var(--line);
+		border-radius: 12px;
+	}
+	.hero-copy {
+		flex: 1 1 380px;
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+	}
+	.summary {
+		color: var(--ink);
+		font-size: 18px;
+		line-height: 28px;
+	}
+	.download {
+		gap: 12px;
+	}
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+	.small {
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 21px;
+	}
+	.byline {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px 18px;
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.byline span + span::before {
+		content: '·';
+		margin-right: 18px;
+		margin-left: -12px;
+	}
+	.tinted {
+		background: var(--surface-2);
+	}
+	.layout {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 40px;
+	}
+	.toc {
+		flex: 0 1 220px;
+		align-self: flex-start;
+		padding-top: 10px;
+		border-top: 2px solid var(--ink);
+	}
+	@media (min-width: 821px) {
+		.toc {
+			position: sticky;
+			top: 96px;
+		}
+	}
+	.prose {
+		flex: 999 1 560px;
+		min-width: 0;
+		max-width: 760px;
+		display: flex;
+		flex-direction: column;
+		gap: 44px;
+		color: var(--slate);
+		font-size: 17px;
+		line-height: 28px;
+	}
+	.prose section {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+	h2[id] {
+		font-size: 26px;
+		line-height: 32px;
+		/* Added to the site-wide 88px scroll padding, so an "On this page" link lands just below the sticky header. */
+		scroll-margin-top: 16px;
+	}
+	.prose ul,
+	.prose ol {
+		margin: 0;
+		padding-left: 22px;
+	}
+	.prose li + li {
+		margin-top: 8px;
+	}
+	.prose strong {
+		color: var(--ink);
+	}
+	.diagram {
+		margin: 8px 0 0;
+		padding: 20px;
+		border-radius: 16px;
+		background: var(--surface);
+	}
+	.diagram svg {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+	.callout {
+		display: flex;
+		gap: 12px;
+		align-items: flex-start;
+		padding: 16px 18px;
+		border-radius: 12px;
+		background: var(--lens);
+		color: var(--ink);
+	}
+	.callout svg {
+		flex: none;
+		margin-top: 3px;
+		color: var(--blue);
+	}
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px 24px;
+	}
+	.table-scroll {
+		overflow-x: auto;
+	}
+	.stack {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+	.other {
+		align-items: flex-start;
+		gap: 12px;
+		text-decoration: none;
+	}
+	.thumb {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 110px;
+		border-radius: 10px;
+		background: var(--lens);
+	}
+</style>
