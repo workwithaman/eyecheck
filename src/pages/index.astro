@@ -5,6 +5,7 @@ import { posts as allPosts, formatDate, isoDate } from '../data/posts';
 import { socialLinks, socialProfiles } from '../data/social';
 import { testimonials } from '../data/live';
 import StatsBand from '../components/StatsBand.astro';
+import SdgGoals from '../components/SdgGoals.astro';
 
 const title = 'Free Online Eye Test & Eye Test App | EyeCheck.app';
 const description =
@@ -17,39 +18,6 @@ const slides = [
 	{ label: 'PDF report', alt: 'Preview of the PDF vision screening report showing eye test results' },
 	{ label: 'classroom tablets', alt: 'Elementary school children using a tablet in a classroom for school vision screening' },
 ].map((s, i) => ({ ...s, src: `/images/hero/slide-${i + 1}.jpg` }));
-
-// UN Sustainable Development Goals. `colour` is the UN's colour for each goal (card top border only; too low-contrast
-// for small text). `proof` is plain text; `link` is a link instead. The Goal 3 figures are the build-time /statistics numbers.
-const goals = [
-	{
-		n: 3,
-		colour: '#4C9F38',
-		title: 'Good health and well-being',
-		text: 'Catches vision problems early, before they affect daily life, so people know when to see an eye doctor.',
-		proof: `${site.peopleScreened} people screened · ${site.peopleReferred} referred`,
-	},
-	{
-		n: 4,
-		colour: '#C5192D',
-		title: 'Quality education',
-		text: 'Undetected vision problems hold children back in class. Schools can screen a whole class for free.',
-		link: { text: 'Free classroom screening →', href: routes.schools },
-	},
-	{
-		n: 8,
-		colour: '#A21942',
-		title: 'Decent work and economic growth',
-		text: 'Good vision helps people work safely and well. A quick check shows adults when it’s time for a full exam.',
-		proof: 'Free for adults · about 5 minutes',
-	},
-	{
-		n: 10,
-		colour: '#DD1367',
-		title: 'Reduced inequalities',
-		text: 'No app, no appointment and no cost, so families far from an eye clinic can still get screened.',
-		link: { text: 'For charities and community programmes →', href: routes.charities },
-	},
-];
 
 // The three latest blog posts.
 const posts = allPosts.slice(0, 3).map((p) => ({
@@ -308,35 +276,7 @@ const schema = [
 					caught at home or at school, wherever someone lives.
 				</p>
 			</div>
-			<div class="sdg-grid">
-				{
-					goals.map((g) => (
-						<article class="sdg-card" style={`border-top-color: ${g.colour}`}>
-							<div class="sdg-top">
-								{/* Official icon, unaltered. */}
-								<img
-									src={`/images/sdg/sdg${g.n}.png`}
-									alt={`UN Sustainable Development Goal ${g.n}: ${g.title}`}
-									width="64"
-									height="64"
-									loading="lazy"
-								/>
-								<span class="sdg-label">Goal {g.n}</span>
-							</div>
-							<h3>{g.title}</h3>
-							<p class="sdg-text">{g.text}</p>
-							<div class="sdg-proof">{g.link ? <a href={g.link.href}>{g.link.text}</a> : <b>{g.proof}</b>}</div>
-						</article>
-					))
-				}
-			</div>
-			<div class="sdg-foot">
-				<p>
-					SDG icons courtesy of the United Nations. The content of this page has not been approved by the United Nations and does not
-					reflect the views of the United Nations or its officials or Member States.
-				</p>
-				<a href="https://sdgs.un.org/goals" target="_blank" rel="noopener">About the 17 goals ↗</a>
-			</div>
+			<SdgGoals />
 		</div>
 	</section>
 
@@ -857,87 +797,6 @@ const schema = [
 	.sdg-lead {
 		flex: 1 1 360px;
 		max-width: 460px;
-	}
-	/* 4 across on desktop, 2 on tablet, 1 on phone. */
-	.sdg-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-		gap: 20px;
-	}
-	.sdg-card {
-		display: flex;
-		flex-direction: column;
-		gap: 14px;
-		padding: 24px;
-		border: 1px solid var(--line);
-		border-top: 6px solid;
-		border-radius: 16px;
-		background: var(--surface);
-	}
-	.sdg-top {
-		display: flex;
-		align-items: center;
-		gap: 14px;
-	}
-	.sdg-top img {
-		flex: 0 0 auto;
-		width: 64px;
-		height: 64px;
-		border-radius: 6px;
-	}
-	.sdg-label {
-		color: var(--slate);
-		font-family: var(--font-mono);
-		font-size: 12px;
-		line-height: 16px;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-	}
-	.sdg-text {
-		font-size: 15px;
-		line-height: 24px;
-	}
-	/* Pinned to the bottom, with room for two lines, so the proof rows (and their top borders) line up across a row of
-	   cards even when one proof line wraps. */
-	.sdg-proof {
-		margin-top: auto;
-		min-height: 55px;
-		padding-top: 14px;
-		border-top: 1px solid var(--line);
-		font-size: 14px;
-		line-height: 20px;
-	}
-	.sdg-proof b {
-		color: var(--ink);
-		font-weight: 600;
-	}
-	.sdg-proof a {
-		color: var(--blue);
-		font-weight: 600;
-		text-decoration: none;
-	}
-	.sdg-proof a:hover {
-		text-decoration: underline;
-	}
-	.sdg-foot {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: space-between;
-		gap: 8px 24px;
-		padding-top: 18px;
-		border-top: 1px solid var(--line);
-	}
-	.sdg-foot p {
-		max-width: 760px;
-		color: var(--muted);
-		font-size: 13px;
-		line-height: 20px;
-	}
-	.sdg-foot a {
-		font-size: 14px;
-		font-weight: 600;
-		text-decoration: none;
 	}
 
 	/* Creator (Andy Teo) */

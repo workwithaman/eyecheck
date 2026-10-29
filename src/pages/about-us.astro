@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import ApiForm from '../components/ApiForm.astro';
+import SdgGoals from '../components/SdgGoals.astro';
 import { routes, site, founderSchema } from '../data/site';
 import { socialProfiles } from '../data/social';
 import storyImage from '../assets/our-story.webp';
@@ -24,13 +25,6 @@ const values = [
 	{ title: 'Accessibility', text: 'Healthcare technology available and affordable, whatever your location or income.' },
 	{ title: 'Precision', text: 'Accurate, reliable results through rigorous testing and continuous improvement.' },
 	{ title: 'Excellence', text: 'High standards, from product development to customer service.' },
-];
-
-const goals = [
-	{ n: 3, title: 'Good health and well-being' },
-	{ n: 4, title: 'Quality education' },
-	{ n: 8, title: 'Decent work and economic growth' },
-	{ n: 10, title: 'Reduced inequalities' },
 ];
 
 const contact = {
@@ -208,25 +202,25 @@ const schema = {
 					}
 				</div>
 				<p class="note">{site.statsNote}</p>
-				<div class="goals">
-					<ul>
-						{
-							goals.map((g) => (
-								<li>
-									<img src={`/images/sdg/sdg${g.n}.png`} alt={`SDG ${g.n}: ${g.title}`} width="88" height="88" loading="lazy" />
-								</li>
-							))
-						}
-					</ul>
-					<p class="muted">
-						We support UN SDG 3 (health), 4 (education), 8 (decent work) and 10 (reduced inequalities). Icons courtesy of the United
-						Nations.
-					</p>
-				</div>
 			</div>
 		</section>
 
-		<section class="sec">
+		{/* Sections alternate from here: Our impact (grey), Global Goals (white), accuracy (grey), contact (white). */}
+		<section class="sec" aria-labelledby="sdg-heading">
+			<div class="wrap sdg">
+				<div class="sdg-head">
+					<span class="eyebrow">UN Sustainable Development Goals</span>
+					<h2 id="sdg-heading">Our commitment to the Global Goals</h2>
+					<p class="muted">
+						Free, early eye screening supports four of the UN Sustainable Development Goals: health, education, decent work and reduced
+						inequalities.
+					</p>
+				</div>
+				<SdgGoals iconSize={56} minCard={230} />
+			</div>
+		</section>
+
+		<section class="sec band-2">
 			<div class="wrap narrow stack">
 				<h2>How we keep our tests accurate</h2>
 				<p class="muted">
@@ -237,7 +231,7 @@ const schema = {
 			</div>
 		</section>
 
-		<section id="contact" class="sec band-2">
+		<section id="contact" class="sec">
 			<div class="wrap narrow stack">
 				<h2>Contact us</h2>
 				<div class="contact-details">
@@ -379,30 +373,18 @@ const schema = {
 		font-weight: 600;
 		letter-spacing: -0.02em;
 	}
-	.goals {
+	.sdg {
 		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 16px 24px;
-		margin-top: 8px;
+		flex-direction: column;
+		gap: 32px;
 	}
-	.goals ul {
+	.sdg-head {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 12px;
-		margin: 0;
-		padding: 0;
-		list-style: none;
+		flex-direction: column;
+		gap: 10px;
 	}
-	.goals img {
-		display: block;
-		width: 88px;
-		height: 88px;
-		border-radius: 8px;
-	}
-	.goals p {
-		flex: 1 1 280px;
-		font-size: 15px;
+	.sdg-head p {
+		max-width: 720px;
 	}
 	.contact-details {
 		display: grid;
@@ -410,7 +392,8 @@ const schema = {
 		gap: 16px;
 		padding: 20px 22px;
 		border-radius: 16px;
-		background: var(--surface);
+		/* The contact section is white, so the details box takes the light band colour. */
+		background: var(--surface-2);
 	}
 	.contact-details div {
 		display: flex;
