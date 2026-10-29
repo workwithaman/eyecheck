@@ -18,11 +18,37 @@ const slides = [
 	{ label: 'classroom tablets', alt: 'Elementary school children using a tablet in a classroom for school vision screening' },
 ].map((s, i) => ({ ...s, src: `/images/hero/slide-${i + 1}.jpg` }));
 
+// UN Sustainable Development Goals. `colour` is the UN's colour for each goal (card top border only; too low-contrast
+// for small text). `proof` is plain text; `link` is a link instead. The Goal 3 figures are the build-time /statistics numbers.
 const goals = [
-	{ n: 3, title: 'Good health and well-being', text: 'Accessible screening supports early detection of vision issues.' },
-	{ n: 4, title: 'Quality education', text: 'Fixing vision problems removes a barrier to learning.' },
-	{ n: 8, title: 'Decent work and economic growth', text: 'Better vision health supports productivity and employment.' },
-	{ n: 10, title: 'Reduced inequalities', text: 'Free screening for underserved communities narrows the gap in care.' },
+	{
+		n: 3,
+		colour: '#4C9F38',
+		title: 'Good health and well-being',
+		text: 'Catches vision problems early, before they affect daily life, so people know when to see an eye doctor.',
+		proof: `${site.peopleScreened} people screened · ${site.peopleReferred} referred`,
+	},
+	{
+		n: 4,
+		colour: '#C5192D',
+		title: 'Quality education',
+		text: 'Undetected vision problems hold children back in class. Schools can screen a whole class for free.',
+		link: { text: 'Free classroom screening →', href: routes.schools },
+	},
+	{
+		n: 8,
+		colour: '#A21942',
+		title: 'Decent work and economic growth',
+		text: 'Good vision helps people work safely and well. A quick check shows adults when it’s time for a full exam.',
+		proof: 'Free for adults · about 5 minutes',
+	},
+	{
+		n: 10,
+		colour: '#DD1367',
+		title: 'Reduced inequalities',
+		text: 'No app, no appointment and no cost, so families far from an eye clinic can still get screened.',
+		link: { text: 'For charities and community programmes →', href: routes.charities },
+	},
 ];
 
 // The three latest blog posts.
@@ -270,31 +296,47 @@ const schema = [
 		</div>
 	</section>
 
-	<section class="sec">
-		<div class="wrap stack">
-			<div class="head goals-head">
-				<span class="eyebrow">Global goals</span>
-				<h2>Our commitment to the UN Sustainable Development Goals</h2>
-				<p>EyeCheck.app promotes equal access to early eye screening for every child.</p>
+	<section class="sec" aria-labelledby="sdg-title">
+		<div class="wrap sdg">
+			<div class="sdg-intro">
+				<div class="sdg-heading">
+					<span class="eyebrow">UN Sustainable Development Goals</span>
+					<h2 id="sdg-title">Early eye screening for every child, everywhere</h2>
+				</div>
+				<p class="sdg-lead">
+					EyeCheck.app supports four of the UN Sustainable Development Goals. A free test in the browser means vision problems can be
+					caught at home or at school, wherever someone lives.
+				</p>
 			</div>
-			<ul class="goals">
+			<div class="sdg-grid">
 				{
 					goals.map((g) => (
-						<li>
-							<img src={`/images/sdg/sdg${g.n}.png`} alt={`SDG ${g.n} icon: ${g.title}`} width="64" height="64" loading="lazy" />
-							<span>
-								<b>
-									SDG {g.n} · {g.title}
-								</b>
-								<span>{g.text}</span>
-							</span>
-						</li>
+						<article class="sdg-card" style={`border-top-color: ${g.colour}`}>
+							<div class="sdg-top">
+								{/* Official icon, unaltered. */}
+								<img
+									src={`/images/sdg/sdg${g.n}.png`}
+									alt={`UN Sustainable Development Goal ${g.n}: ${g.title}`}
+									width="64"
+									height="64"
+									loading="lazy"
+								/>
+								<span class="sdg-label">Goal {g.n}</span>
+							</div>
+							<h3>{g.title}</h3>
+							<p class="sdg-text">{g.text}</p>
+							<div class="sdg-proof">{g.link ? <a href={g.link.href}>{g.link.text}</a> : <b>{g.proof}</b>}</div>
+						</article>
 					))
 				}
-			</ul>
-			<p class="meta">
-				SDG icons courtesy of the United Nations. Learn more at <a href="https://sdgs.un.org/goals">sdgs.un.org/goals</a>.
-			</p>
+			</div>
+			<div class="sdg-foot">
+				<p>
+					SDG icons courtesy of the United Nations. The content of this page has not been approved by the United Nations and does not
+					reflect the views of the United Nations or its officials or Member States.
+				</p>
+				<a href="https://sdgs.un.org/goals" target="_blank" rel="noopener">About the 17 goals ↗</a>
+			</div>
 		</div>
 	</section>
 
@@ -793,41 +835,109 @@ const schema = [
 		align-self: flex-start;
 	}
 
-	/* UN goals */
-	.goals-head {
-		max-width: 720px;
+	/* UN Sustainable Development Goals */
+	.sdg {
+		display: flex;
+		flex-direction: column;
+		gap: 32px;
 	}
-	.goals {
+	.sdg-intro {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 16px 48px;
+	}
+	.sdg-heading {
+		flex: 1 1 460px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.sdg-lead {
+		flex: 1 1 360px;
+		max-width: 460px;
+	}
+	/* 4 across on desktop, 2 on tablet, 1 on phone. */
+	.sdg-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-		gap: 24px;
-		margin: 0;
-		padding: 0;
-		list-style: none;
+		gap: 20px;
 	}
-	.goals li {
+	.sdg-card {
 		display: flex;
-		align-items: flex-start;
+		flex-direction: column;
+		gap: 14px;
+		padding: 24px;
+		border: 1px solid var(--line);
+		border-top: 6px solid;
+		border-radius: 16px;
+		background: var(--surface);
+	}
+	.sdg-top {
+		display: flex;
+		align-items: center;
 		gap: 14px;
 	}
-	.goals img {
+	.sdg-top img {
 		flex: 0 0 auto;
 		width: 64px;
 		height: 64px;
-		border-radius: 8px;
+		border-radius: 6px;
 	}
-	.goals li > span {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
+	.sdg-label {
 		color: var(--slate);
-		font-size: 14px;
-		line-height: 21px;
+		font-family: var(--font-mono);
+		font-size: 12px;
+		line-height: 16px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
 	}
-	.goals b {
+	.sdg-text {
+		font-size: 15px;
+		line-height: 24px;
+	}
+	/* Pinned to the bottom, with room for two lines, so the proof rows (and their top borders) line up across a row of
+	   cards even when one proof line wraps. */
+	.sdg-proof {
+		margin-top: auto;
+		min-height: 55px;
+		padding-top: 14px;
+		border-top: 1px solid var(--line);
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.sdg-proof b {
 		color: var(--ink);
-		font-size: 16px;
 		font-weight: 600;
+	}
+	.sdg-proof a {
+		color: var(--blue);
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.sdg-proof a:hover {
+		text-decoration: underline;
+	}
+	.sdg-foot {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px 24px;
+		padding-top: 18px;
+		border-top: 1px solid var(--line);
+	}
+	.sdg-foot p {
+		max-width: 760px;
+		color: var(--muted);
+		font-size: 13px;
+		line-height: 20px;
+	}
+	.sdg-foot a {
+		font-size: 14px;
+		font-weight: 600;
+		text-decoration: none;
 	}
 
 	/* Creator (Andy Teo) */
