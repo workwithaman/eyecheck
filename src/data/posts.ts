@@ -1,4 +1,5 @@
 // The blog posts the site builds: Sanity content plus the SEO slugs and overrides from blogMap.ts.
+// A local src/content/blog/<newSlug>.md replaces the Sanity post's title, text and fields; the cover and cta still come from blogMap.
 import { toHTML } from '@portabletext/to-html';
 import type { ImageMetadata } from 'astro';
 import { blogMap, redirectedSlugs, type BlogMapEntry } from './blogMap';
@@ -7,6 +8,8 @@ import { sanityPosts, sanityImageUrl, type SanityPost } from './sanity';
 export interface Post {
 	slug: string;
 	title: string;
+	// The full <title> tag when set, without the " | EyeCheck.app" suffix.
+	seoTitle?: string;
 	category: string;
 	description: string;
 	summary: string;
@@ -22,6 +25,66 @@ export interface Post {
 }
 
 const covers = import.meta.glob<{ default: ImageMetadata }>('../assets/blog/*', { eager: true });
+
+interface LocalModule {
+	frontmatter: {
+		title: string;
+		seoTitle?: string;
+		description: string;
+		summary: string;
+		author: string;
+		category: string;
+		publishedAt: string | Date;
+		updatedAt: string | Date;
+	};
+	compiledContent: () => string | Promise<string>;
+	getHeadings: () => { depth: number; slug: string; text: string }[];
+}
+
+// Top-level files only, so nothing in src/content/blog/_drafts/ is built.
+const localModules = import.meta.glob<LocalModule>('../content/blog/*.md', { eager: true });
+const dateString = (d: string | Date) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d));
+
+// HTML comments are notes for editors. External links open in a new tab, as in the Sanity renderer. Tables scroll sideways on small screens.
+const tidyHtml = (html: string) =>
+	html
+		.replace(/<!--[\s\S]*?-->\s*/g, '')
+		.replace(/<a href="(https?:\/\/[^"]+)"/g, (tag, href: string) => (href.includes('eyecheck.app') ? tag : `${tag} target="_blank" rel="noopener"`))
+		.replace(/<table>/g, '<div class="table-wrap"><table>')
+		.replace(/<\/table>/g, '</table></div>');
+
+// Keyed by file name, which is the post's newSlug.
+const localPosts = new Map(
+	await Promise.all(
+		Object.entries(localModules).map(async ([file, mod]) => {
+			const fm = mod.frontmatter;
+			const html = tidyHtml(await mod.compiledContent());
+			// Words of text, not Markdown syntax or link URLs.
+			const words = html
+				.replace(/<[^>]+>/g, ' ')
+				.split(/\s+/)
+				.filter((w) => /[a-z0-9]/i.test(w)).length;
+			const post = {
+				title: fm.title,
+				seoTitle: fm.seoTitle,
+				description: fm.description,
+				summary: fm.summary,
+				author: fm.author,
+				category: fm.category,
+				publishedAt: dateString(fm.publishedAt),
+				updatedAt: dateString(fm.updatedAt),
+				readMinutes: Math.max(1, Math.ceil(words / 200)),
+				html,
+				// Astro's heading slugs, so the contents links match the h2 ids.
+				toc: mod
+					.getHeadings()
+					.filter((h) => h.depth === 2)
+					.map((h) => ({ id: h.slug, text: h.text })),
+			};
+			return [file.split('/').pop()!.replace(/\.md$/, ''), post] as const;
+		}),
+	),
+);
 
 const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const blockText = (block: any) => (block?.children ?? []).map((c: any) => c.text ?? '').join('');
@@ -85,7 +148,7 @@ function build(post: SanityPost, entry?: BlogMapEntry): Post {
 		.filter(Boolean).length;
 
 	const slug = entry?.newSlug ?? post.slug;
-	const local = entry?.cover ? covers[`../assets/blog/${entry.cover}`]?.default : undefined;
+	const fallbackCover = entry?.cover ? covers[`../assets/blog/${entry.cover}`]?.default : undefined;
 	const image: Post['image'] = post.mainImage?.url
 		? {
 				src: post.mainImage.url,
@@ -94,9 +157,13 @@ function build(post: SanityPost, entry?: BlogMapEntry): Post {
 				height: post.mainImage.height ?? 800,
 				remote: true,
 			}
-		: local
-			? { src: local, alt: entry?.coverAlt ?? '', width: local.width, height: local.height, remote: false }
+		: fallbackCover
+			? { src: fallbackCover, alt: entry?.coverAlt ?? '', width: fallbackCover.width, height: fallbackCover.height, remote: false }
 			: null;
+
+	// The local Markdown version, when there is one. Its summary comes from front matter and its body renders in full.
+	const local = entry && localPosts.get(entry.newSlug);
+	if (local) return { slug, ...local, featured: !!entry.featured, image, cta: entry.cta };
 
 	return {
 		slug,

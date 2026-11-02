@@ -1,7 +1,7 @@
 import { testLink } from './tests';
 
 // New SEO slugs for existing Sanity posts. Each mapped post is built at /blog/<newSlug>/.
-// NOTE: the article bodies are the old Sanity text for now; full rewrites for these keywords will replace them in Sanity later.
+// A rewritten article in src/content/blog/<newSlug>.md replaces the Sanity text (see posts.ts); the others are still the old Sanity text.
 export interface BlogMapEntry {
 	newSlug: string;
 	// null = no Sanity post yet: the page is not built, listed or added to the sitemap.
@@ -25,12 +25,10 @@ export const blogMap: BlogMapEntry[] = [
 		sanitySlug: 'screen-time-and-eye-health',
 		category: 'Screen time',
 		cover: 'child-screen-time.jpeg',
-		coverAlt: 'Young child lying on a sofa watching a tablet',
+		coverAlt: 'Young boy lying on a sofa with his chin in his hands, watching a tablet propped up on a cushion',
 		featured: true,
-		h1: 'The 20-20-20 Rule: How to Reduce Eye Strain From Screens',
-		description:
-			'The 20-20-20 rule: every 20 minutes, look at something 20 feet away for 20 seconds. How it reduces digital eye strain for adults and children.',
-		cta: testLink('astigmatism-test', 'Try the astigmatism test'),
+		// Title, description and body come from src/content/blog/20-20-20-rule.md.
+		cta: testLink('visual-acuity-test', 'Try the visual acuity test'),
 	},
 	{
 		newSlug: 'pediatric-vision-screening',

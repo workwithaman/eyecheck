@@ -62,7 +62,7 @@ const schema = {
 };
 ---
 
-<Layout title={`${post.title} | EyeCheck.app`} description={post.description} active="blog" ogType="article" ogImage={ogImage}>
+<Layout title={post.seoTitle ?? `${post.title} | EyeCheck.app`} description={post.description} active="blog" ogType="article" ogImage={ogImage}>
 	<script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 	<div class="inner">
 		<nav aria-label="Breadcrumb" class="wrap crumb"><a href={routes.home}>Home</a> › <a href={routes.blog}>Blog</a> › <span>{post.category}</span></nav>
@@ -219,6 +219,41 @@ const schema = {
 		margin-bottom: 6px;
 	}
 	.prose :global(strong) {
+		color: var(--ink);
+	}
+	/* Callouts ("Key takeaways" and similar): the first line is the bold title. */
+	.prose :global(blockquote) {
+		margin: 24px 0;
+		padding: 16px 20px;
+		border-left: 4px solid var(--blue);
+		border-radius: 12px;
+		background: var(--lens);
+	}
+	.prose :global(blockquote > :last-child) {
+		margin-bottom: 0;
+	}
+	.prose :global(blockquote > p:first-child) {
+		margin-bottom: 8px;
+		color: var(--ink);
+		font-weight: 600;
+	}
+	.prose :global(blockquote li) {
+		color: var(--ink);
+	}
+	/* Wide tables scroll inside their own box on small screens instead of widening the page. */
+	.prose :global(.table-wrap) {
+		overflow-x: auto;
+		margin: 0 0 20px;
+		border: 1px solid var(--line);
+		border-radius: 12px;
+	}
+	.prose :global(.table-wrap table) {
+		min-width: 480px;
+		margin: 0;
+		border-style: hidden;
+		color: var(--slate);
+	}
+	.prose :global(.table-wrap th) {
 		color: var(--ink);
 	}
 	.prose :global(figure) {
